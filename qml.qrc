@@ -1,0 +1,25 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>GaugeTab/ColorZoneTable/ColorZoneRow.qml</file>
+        <file>GaugeTab/ColorZoneTable/ColorZoneTable.qml</file>
+        <file>GaugeTab/GradTable/GradRow.qml</file>
+        <file>GaugeTab/GradTable/GradTable.qml</file>
+        <file>GaugeTab/TextGradTable/TextGradRow.qml</file>
+        <file>GaugeTab/TextGradTable/TextGradTable.qml</file>
+        <file>GaugeTab/GaugeTab.qml</file>
+        <file>StyledControls/StyledComboBox.qml</file>
+        <file>StyledControls/StyledRadioButton.qml</file>
+        <file>StyledControls/StyledSwitch.qml</file>
+        <file>StyledControls/StyledTabButton.qml</file>
+        <file>StyledControls/StyledRadioButtonWithText.qml</file>
+        <file>StyledControls/StyledSwitchWithText.qml</file>
+        <file>GeneralTab.qml</file>
+        <file>GaugeTabBar.qml</file>
+        <file>GaugeToolBar.qml</file>
+        <file>StyledControls/StyledToolBarButton.qml</file>
+        <file>Dialogs/SingleSelectionDialog.qml</file>
+        <file>Dialogs/MultiSelectionDialog.qml</file>
+        <file>DefaultImage.png</file>
+    </qresource>
+</RCC>
