@@ -6,6 +6,7 @@ import QtQuick.Shapes 1.15
 import QtQuick.Layouts 1.15
 import "GaugeTab"
 import "StyledControls"
+import "PreviewPopup"
 
 
 ApplicationWindow {

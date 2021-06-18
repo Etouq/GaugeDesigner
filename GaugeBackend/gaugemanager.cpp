@@ -1,4 +1,5 @@
 #include "gaugemanager.h"
+#include <QQmlContext>
 
 GaugeManager::GaugeManager(QObject *parent) : QObject(parent)
 {
@@ -8,7 +9,7 @@ GaugeManager::GaugeManager(QObject *parent) : QObject(parent)
 
 void GaugeManager::changeAircraft(const AircraftDefinition &aircraft)
 {
-    if (aircraft.type == AircraftDefinition::AircraftType::JET)//jet
+    if (aircraft.type == AircraftDefinition::AircraftType::JET)
     {
         JetDefinition jet = aircraft.currentType.value<JetDefinition>();
         n1Gauge.setDefinition(jet.n1Gauge);
@@ -71,6 +72,69 @@ void GaugeManager::connectGaugeSignals(const AircraftInterface &aircraft)
     connect(&egtGauge, &GaugeInterface::gaugeUpdated, &aircraft, &AircraftInterface::updateEgtGauge);
 }
 
+double GaugeManager::spoilersAngle() const
+{
+    return d_spoilersAngle;
+}
+
+const QString &GaugeManager::spoilersValue() const
+{
+    return d_spoilersValue;
+}
+
+bool GaugeManager::showSpoilersText() const
+{
+    return d_showSpoilersText;
+}
+
+double GaugeManager::flapsAngle() const
+{
+    return d_currFlapsAngle;
+}
+
+const QString &GaugeManager::flapsValue() const
+{
+    return d_flapsValue;
+}
+
+bool GaugeManager::showFlapsText() const
+{
+    return d_showFlapsText;
+}
+
+double GaugeManager::trimTransformValue() const
+{
+    return d_trimTransformValue;
+}
+
+void GaugeManager::updateMiscAnimations()
+{
+    if (d_Incrementing)
+    {
+        if (d_currPct < 1)
+            d_currPct += 0.001;
+        else
+        {
+            d_Incrementing = false;
+            d_currPct -= 0.001;
+        }
+    }
+    else
+    {
+        if (d_currPct > 0)
+            d_currPct -= 0.001;
+        else
+        {
+            d_Incrementing = true;
+            d_currPct += 0.001;
+        }
+    }
+
+    updateSpoilersAnim();
+    updateFlapsAnim();
+    updateTrimAnim();
+}
+
 void GaugeManager::createDefaults()
 {
     QVector<ColorZone> colorVec = { ColorZone{ .start = 0, .end = 100, .color = QColor(0, 128, 0) }, ColorZone{ .start = 100, .end = 110, .color = QColor(255, 0, 0) } };
@@ -123,4 +187,126 @@ void GaugeManager::createDefaults()
 
     egtGauge.setDefinition(RawGaugeDefinition{ .title = "EGT", .unitString = "ºC", .minValue = 1218.0 / 1.8, .maxValue = 1618.0 / 1.8, .colorZones = colorVec, .grads = gradVec, .textGrads = textGradVec, .textIncrement = 1, .textNumDigits = 0, .forceTextColor = false, .textForcedColor = QColor(), .hasMinRedBlink = false, .minRedBlinkThreshold = 0, .hasMaxRedBlink = false, .maxRedBlinkThreshold = 0, .noText = false, .unit = Units::CELSIUS });
 
+}
+
+void GaugeManager::loadAircraftPreview(const AircraftDefinition &aircraft)
+{
+    if (aircraft.type == AircraftDefinition::AircraftType::JET)
+    {
+        JetDefinition jet = aircraft.currentType.value<JetDefinition>();
+        if(aircraft.numEngines == 1)
+        {
+            n1Gauge.setGaugeParameters(jet.n1Gauge, 195, 345);
+            n2Gauge.setGaugeParameters(jet.n2Gauge, 225, 315);
+            ittGauge.setGaugeParameters(jet.ittGauge, 225, 315);
+
+        }
+        else if(aircraft.numEngines == 2)
+        {
+            n1Gauge.setGaugeParameters(jet.n1Gauge, 225, 315);
+            n2Gauge.setGaugeParameters(jet.n2Gauge, 225, 315);
+            ittGauge.setGaugeParameters(jet.ittGauge, 225, 315);
+        }
+        else
+        {
+            n1Gauge.setGaugeParameters(jet.n1Gauge, 120);
+            n2Gauge.setGaugeParameters(jet.n2Gauge, 120);
+            ittGauge.setGaugeParameters(jet.ittGauge, 120);
+        }
+
+    }
+    else if(aircraft.type == AircraftDefinition::AircraftType::PROP)
+    {
+        PropDefinition prop = aircraft.currentType.value<PropDefinition>();
+        if (aircraft.numEngines == 1)
+        {
+            rpmGauge.setGaugeParameters(prop.rpmGauge, 195, 345);
+            secondGauge.setGaugeParameters(prop.secondGauge, 195, 345);
+        }
+        else
+        {
+            rpmGauge.setGaugeParameters(prop.rpmGauge, 225, 315);
+            secondGauge.setGaugeParameters(prop.secondGauge, 225, 315);
+        }
+
+        egtGauge.setGaugeParameters(prop.egtGauge, 120);
+
+    }
+    else if(aircraft.type == AircraftDefinition::AircraftType::TURBOPROP)
+    {
+        TurbopropDefinition turboprop = aircraft.currentType.value<TurbopropDefinition>();
+        n1Gauge.setGaugeParameters(turboprop.n1Gauge, 225, 315);
+        trqGauge.setGaugeParameters(turboprop.trqGauge, 225, 315);
+
+        if (aircraft.numEngines == 1)
+        {
+            ittGauge.setGaugeParameters(turboprop.ittGauge, 225, 315);
+            rpmGauge.setGaugeParameters(turboprop.rpmGauge, 225, 315);
+        }
+        else
+        {
+            ittGauge.setGaugeParameters(turboprop.ittGauge, 120);
+            rpmGauge.setGaugeParameters(turboprop.rpmGauge, 120);
+        }
+
+        egtGauge.setGaugeParameters(turboprop.egtGauge, 120);
+
+    }
+    else
+        return;
+
+    fuelQtyGauge.setGaugeParameters(aircraft.fuelQtyGauge, 120);
+    fuelFlowGauge.setGaugeParameters(aircraft.fuelFlowGauge, 120);
+    oilTempGauge.setGaugeParameters(aircraft.oilTempGauge, 120);
+    oilPressGauge.setGaugeParameters(aircraft.oilPressGauge, 120);
+
+    emit gaugesLoaded();
+}
+
+void GaugeManager::updateSpoilersAnim()
+{
+    d_spoilersAngle = -60.0 * d_currPct;
+    emit spoilersAngleChanged();
+
+    int pctValue = lround(d_currPct * 100.0);
+    bool newShowSpoilersText = pctValue > 0;
+
+    if(d_showSpoilersText != newShowSpoilersText)
+    {
+        d_showSpoilersText = newShowSpoilersText;
+        emit showSpoilersTextChanged();
+    }
+    if (d_showSpoilersText)
+    {
+        d_spoilersValue = QString::number(pctValue) + "%";
+        emit spoilersValueChanged();
+    }
+}
+
+void GaugeManager::updateFlapsAnim()
+{
+    d_currFlapsAngle = 70.0 * d_currPct - 10.0;
+    emit flapsAngleChanged();
+    int roundedAngle = lround(d_currFlapsAngle);
+    bool newShowFlapsText = roundedAngle != 0;
+    if(d_showFlapsText != newShowFlapsText)
+    {
+        d_showFlapsText = newShowFlapsText;
+        emit showFlapsTextChanged();
+    }
+    if(d_showFlapsText)
+    {
+        QString newFlapsValue = QString::number(roundedAngle) + "º";
+        if(d_flapsValue != newFlapsValue)
+        {
+            d_flapsValue = newFlapsValue;
+            emit flapsValueChanged();
+        }
+    }
+}
+
+void GaugeManager::updateTrimAnim()
+{
+    d_trimTransformValue = d_currPct * 120.0 - 60.0;
+    emit trimTransformValueChanged();
 }

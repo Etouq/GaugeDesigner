@@ -49,6 +49,7 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("converter", &unitConverter);
     engine.rootContext()->setContextProperty("aircraftInterface", &planeInterface);
     engine.rootContext()->setContextProperty("aircraftManager", &aircraftManager);
+    engine.rootContext()->setContextProperty("gaugeInterface", &gaugeInterface);
     engine.rootContext()->setContextProperty("netInterface", &netInterface);
 
     engine.load("qrc:/main.qml");
@@ -57,6 +58,7 @@ int main(int argc, char *argv[])
     QObject::connect(&aircraftManager, &AircraftManager::changeAircraft, &planeInterface, &AircraftInterface::setAircraft);
     QObject::connect(&planeInterface, &AircraftInterface::updateAircraft, &gaugeInterface, &GaugeManager::changeAircraft);
     QObject::connect(&planeInterface, &AircraftInterface::createDefaultGauges, &gaugeInterface, &GaugeManager::createDefaults);
+    QObject::connect(&planeInterface, &AircraftInterface::loadAircraftPreview, &gaugeInterface, &GaugeManager::loadAircraftPreview);
 
     QObject::connect(&netManager, &NetworkManager::connectedChanged, &netInterface, &NetworkInterface::setConnectedState);
     QObject::connect(&netManager, &NetworkManager::serverInitFinished, &netInterface, &NetworkInterface::setAddressAndPort);

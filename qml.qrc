@@ -21,5 +21,25 @@
         <file>Dialogs/SingleSelectionDialog.qml</file>
         <file>Dialogs/MultiSelectionDialog.qml</file>
         <file>DefaultImage.png</file>
+        <file>PreviewPopup/PreviewPopup.qml</file>
+        <file>PreviewPopup/gauges/AileronTrimGauge.qml</file>
+        <file>PreviewPopup/gauges/CircularGauge.qml</file>
+        <file>PreviewPopup/gauges/ElevatorTrimGauge.qml</file>
+        <file>PreviewPopup/gauges/FlapsGauge.qml</file>
+        <file>PreviewPopup/gauges/FlapsSpoilersGauge.qml</file>
+        <file>PreviewPopup/gauges/FuelDoubleTankGauge.qml</file>
+        <file>PreviewPopup/gauges/FuelSingleTankGauge.qml</file>
+        <file>PreviewPopup/gauges/FuelText.qml</file>
+        <file>PreviewPopup/gauges/RudderTrimGauge.qml</file>
+        <file>PreviewPopup/gauges/TrimGauges.qml</file>
+        <file>PreviewPopup/gauges/VerticalDoubleGauge.qml</file>
+        <file>PreviewPopup/gauges/VerticalGauge.qml</file>
+        <file>PreviewPopup/JetDouble.qml</file>
+        <file>PreviewPopup/JetQuad.qml</file>
+        <file>PreviewPopup/JetSingle.qml</file>
+        <file>PreviewPopup/PropDouble.qml</file>
+        <file>PreviewPopup/PropSingle.qml</file>
+        <file>PreviewPopup/TurbopropDouble.qml</file>
+        <file>PreviewPopup/TurbopropSingle.qml</file>
     </qresource>
 </RCC>

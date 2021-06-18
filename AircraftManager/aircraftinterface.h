@@ -14,6 +14,8 @@ class AircraftInterface : public QObject
     QString imagePath = ":/DefaultImage.png";
 
 
+
+
 public:
     explicit AircraftInterface(QObject *parent = nullptr);
 
@@ -246,6 +248,11 @@ public:
         emit aircraftSaved(def);
     }
 
+    Q_INVOKABLE void createPreview()
+    {
+        emit loadAircraftPreview(def);
+    }
+
 signals:
     void updateQml();
     void updateImage();
@@ -254,6 +261,7 @@ signals:
     void createDefaultGauges();
     void updateAircraft(const AircraftDefinition &aircraft);
     void aircraftSaved(const AircraftDefinition &aircraft);
+    void loadAircraftPreview(const AircraftDefinition &aircraft);
 
 public slots:
     void updateN1Gauge(const GaugeDefinition &gauge)

@@ -5,7 +5,7 @@ Button {
     id: root
     height: 20
     opacity: enabled ? 1 : 0.38
-    width: textContent.contentWidth + 20
+    width: textContent.contentWidth + 15
 
     contentItem: Item {
         anchors.fill: parent

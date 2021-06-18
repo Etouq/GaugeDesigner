@@ -5,6 +5,7 @@ import QtQuick.Dialogs 1.3
 import QtQml 2.15
 import "StyledControls"
 import "Dialogs"
+import "PreviewPopup"
 
 Rectangle {
     id: root
@@ -101,6 +102,10 @@ Rectangle {
         }
     }
 
+    PreviewPopup {
+        id: previewWindow
+    }
+
 
     Row {
         anchors.fill: parent
@@ -179,7 +184,7 @@ Rectangle {
         }
         StyledToolBarButton {
             id: deleteClientButton
-            text: "Delete Client"
+            text: "Delete from Client"
             enabled: netInterface.connected
             ToolTip {
                 text: "Delete aircraft from client storage"
@@ -215,6 +220,27 @@ Rectangle {
             onClicked: {
                 sendDialog.open();
             }
+        }
+        StyledToolBarButton {
+            id: previewButton
+            text: "Preview"
+            enabled: everythingValid
+            ToolTip {
+                text: "Create preview of the current gauge settings (also saves)"
+                visible: parent.hovered
+                delay: 500
+            }
+            onClicked: {
+                root.saveDataClicked();
+                saveButton.text = "Save"
+                if (!previewWindow.visible)
+                    previewWindow.show();
+                else
+                    previewWindow.raise();
+                previewWindow.requestActivate();
+                aircraftInterface.createPreview();
+            }
+
         }
     }
 
