@@ -26,6 +26,7 @@ SOURCES += \
         UnitConverter/converttolongstring.cpp \
         UnitConverter/converttoshortstring.cpp \
         UnitConverter/unitconverter.cpp \
+        binaryutil.cpp \
         main.cpp
 
 RESOURCES += qml.qrc
