@@ -6,7 +6,6 @@ import "../StyledControls"
 Window {
     id: root
     width: height / 3
-    //height: 840
     height: 0.95 * Screen.desktopAvailableHeight
 
     flags: Qt.WindowTitleHint | Qt.CustomizeWindowHint | Qt.Dialog | Qt.WindowCloseButtonHint
