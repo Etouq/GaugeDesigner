@@ -1,14 +1,8 @@
 #include "aircraftmanager.h"
-#include "aircraftinitializer.h"
 
 AircraftManager::AircraftManager(QObject *parent) : QObject(parent)
 {
     AircraftFile::readAllAircraftFiles(allAircrafts);
-
-    /*AircraftInitializer::initAircraft(allAircrafts);
-
-    for (auto it = allAircrafts.begin(); it != allAircrafts.end(); it++)
-        AircraftFile::saveAircraftToFile(it.value());*/
 }
 
 void AircraftManager::copyAircraft(const QString &name)
