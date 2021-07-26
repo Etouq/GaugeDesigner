@@ -1,4 +1,5 @@
 #include "networkmanager.ih"
+#include <QBuffer>
 
 void NetworkManager::sendAircraftToClient(const QVector<AircraftDefinition> &list)
 {
@@ -9,8 +10,14 @@ void NetworkManager::sendAircraftToClient(const QVector<AircraftDefinition> &lis
                 imagePath = ":/DefaultImage.png";
 
             QImage img(imagePath);
-            DataIdentifiers id = DataIdentifiers::SAVE_AIRCRAFT;
-            tcpSocket->write(reinterpret_cast<char *>(&id), sizeof(id));
-            AircraftFile::writeAircraftToStream(*tcpSocket, list[i], img);
+
+            DesignerIds id = DesignerIds::SAVE_AIRCRAFT;
+
+            QByteArray buff(reinterpret_cast<char *>(&id), sizeof(id));
+            QBuffer bufferStream(&buff);
+            bufferStream.open(QIODevice::WriteOnly | QIODevice::Append);
+            AircraftFile::writeAircraftToStream(bufferStream, list[i], img);
+
+            tcpSocket->write(buff);
         }
 }

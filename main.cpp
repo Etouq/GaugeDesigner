@@ -61,6 +61,7 @@ int main(int argc, char *argv[])
     QObject::connect(&planeInterface, &AircraftInterface::loadAircraftPreview, &gaugeInterface, &GaugeManager::loadAircraftPreview);
 
     QObject::connect(&netManager, &NetworkManager::connectedChanged, &netInterface, &NetworkInterface::setConnectedState);
+    QObject::connect(&netManager, &NetworkManager::versionError, &netInterface, &NetworkInterface::showErrorPopup);
     QObject::connect(&netManager, &NetworkManager::serverInitFinished, &netInterface, &NetworkInterface::setAddressAndPort);
     QObject::connect(&netInterface, &NetworkInterface::removeClientAircraft, &netManager, &NetworkManager::removeClientAircraft);
     QObject::connect(&netInterface, &NetworkInterface::loadClientAircraft, &netManager, &NetworkManager::loadClientAircraft);

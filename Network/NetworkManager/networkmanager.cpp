@@ -59,8 +59,11 @@ void NetworkManager::newIncomingConnection()
 
     connectionStateChanged(tcpSocket->state());
 
-    DataIdentifiers id = DataIdentifiers::GAUGE_DESIGNER_SERVER;
-    tcpSocket->write(reinterpret_cast<char *>(&id), sizeof(id));
+    SharedServerIds id = SharedServerIds::GAUGE_DESIGNER_SERVER;
+
+    QByteArray dataToSend(reinterpret_cast<const char *>(&id), sizeof(id));
+    dataToSend.append(reinterpret_cast<const char *>(&latestGaugeNetworkVersion), sizeof(latestGaugeNetworkVersion));
+    tcpSocket->write(dataToSend);
 }
 
 void NetworkManager::connectionStateChanged(QAbstractSocket::SocketState socketState)

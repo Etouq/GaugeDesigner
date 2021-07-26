@@ -14,6 +14,8 @@ class NetworkManager : public QObject
     QTcpServer tcpServer;
     QTcpSocket *tcpSocket;
 
+    const uint8_t latestGaugeNetworkVersion = 1;
+
 public:
     explicit NetworkManager(QObject *parent = nullptr);
 
@@ -24,6 +26,8 @@ signals:
     void receivedFileList(const QStringList &list);
     void receivedAircraft(const AircraftDefinition &aircraft);
     void serverInitFinished(const QString &address, int port);
+
+    void versionError(const QString &msg);
 
 public slots:
     void connectionStateChanged(QAbstractSocket::SocketState socketState);

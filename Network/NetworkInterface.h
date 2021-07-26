@@ -34,9 +34,13 @@ signals:
     void removeClientAircraft(const QStringList &list);
     void loadClientAircraft(const QStringList &list);
 
+    void showPopupError(const QString &msg);
+
 public slots:
     void setAddressAndPort(const QString &addr, int prt) { d_address = addr; d_port = prt; emit addressChanged(); emit portChanged(); }
     void setConnectedState(bool connect) { d_connected = connect; emit connectedChanged(); }
+
+    void showErrorPopup(const QString &msg) { emit showPopupError(msg); }
 
 };
 

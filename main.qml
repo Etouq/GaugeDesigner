@@ -213,10 +213,21 @@ ApplicationWindow {
 
     }
 
+    Connections {
+        target: netInterface
+        function onShowPopupError(msg) {
+            errorPopup.text = msg;
+            errorPopup.open();
+        }
+    }
 
 
-
-
+    MessageDialog {
+        id: errorPopup
+        icon: StandardIcon.Critical
+        title: "Error"
+        standardButtons: StandardButton.Ok
+    }
 
 
 

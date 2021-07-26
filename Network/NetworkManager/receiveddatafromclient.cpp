@@ -11,6 +11,31 @@ void NetworkManager::receivedDataFromClient()
         tcpSocket->read(reinterpret_cast<char *>(&id), sizeof(id));
         switch (id)
         {
+            case ClientIds::CLIENT_NETWORK_VERSION:
+            {
+                if (tcpSocket->bytesAvailable() < sizeof(latestGaugeNetworkVersion))
+                {
+                    tcpSocket->rollbackTransaction();
+                    reading = false;
+                    break;
+                }
+                uint8_t clientVersion = 0;
+                tcpSocket->read(reinterpret_cast<char *>(&clientVersion), sizeof(clientVersion));
+                tcpSocket->commitTransaction();
+                if (latestGaugeNetworkVersion < clientVersion)
+                {
+                    tcpSocket->disconnectFromHost();
+                    emit versionError("The network data transfer version of the Flight Display Companion is newer than the one used by this application. Either update this application or revert the Flight Display Companion to the last working version.");
+                    return;
+                }
+                if (latestGaugeNetworkVersion > clientVersion)
+                {
+                    tcpSocket->disconnectFromHost();
+                    emit versionError("The network data transfer version of the Flight Display Companion is older than the one used by this application. Either update the Flight Display Companion or revert this application to the last working version.");
+                    return;
+                }
+                break;
+            }
             case ClientIds::LOAD_AIRCRAFT:
             {
                 int64_t byteSize = 0;
