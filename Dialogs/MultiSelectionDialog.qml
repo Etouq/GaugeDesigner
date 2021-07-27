@@ -145,15 +145,6 @@ Dialog {
 
 
                         }
-
-                        onDoubleClicked: {
-                            for (let i = 0; i < aircraftNames.count; i++)
-                                aircraftNames.set(i, { "selected": i == index });
-
-                            anyItemsSelected = true;
-                            lastSelectedIndex = index;
-                            root.accept();
-                        }
                     }
 
                     Rectangle {

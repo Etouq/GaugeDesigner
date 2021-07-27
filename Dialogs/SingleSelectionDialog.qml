@@ -99,13 +99,6 @@ Dialog {
 
                             lastSelectedIndex = index;
                         }
-                        onDoubleClicked: {
-                            if (mouse.button != Qt.LeftButton)
-                                return;
-
-                            lastSelectedIndex = index;
-                            root.accept();
-                        }
                     }
 
                     Rectangle {
