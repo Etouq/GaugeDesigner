@@ -1,14 +1,16 @@
 #ifndef BINARYUTIL_H
 #define BINARYUTIL_H
 
-#include <QString>
-#include <QByteArray>
-#include <QIODevice>
-#include <QColor>
+
 #include <QVector>
 #include "AircraftManager/definitions/basetypes.h"
 #include "UnitConverter/units.h"
 #include <cstdint>
+
+class QString;
+class QByteArray;
+class QIODevice;
+class QColor;
 
 namespace BinaryUtil
 {

@@ -1,12 +1,15 @@
 #include "aircraftfile.h"
-#include <QFile>
-#include <QDataStream>
+
 #include <QBuffer>
-#include <algorithm>
-#include <QDir>
 #include <QCoreApplication>
-#include <QStandardPaths>
+#include <QDataStream>
+#include <QDir>
+#include <QFile>
+#include <QImage>
 #include <QSettings>
+#include <QStandardPaths>
+
+#include "AircraftManager/definitions/aircraftDefinition.h"
 
 QString AircraftFile::createFileName(const AircraftDefinition &aircraft)
 {
@@ -76,7 +79,7 @@ void AircraftFile::readAircraftFromStream(QIODevice &data, AircraftDefinition &a
 
 void AircraftFile::readAircraftFromStream(QIODevice &data, AircraftDefinition &aircraft, QImage &image)
 {
-    //read image
+    // read image
     int64_t imgSize = 0;
     data.read(reinterpret_cast<char *>(&imgSize), sizeof(imgSize));
 
@@ -86,7 +89,7 @@ void AircraftFile::readAircraftFromStream(QIODevice &data, AircraftDefinition &a
     imgData.setVersion(QDataStream::Qt_5_15);
     imgData >> image;
 
-    //read aircraft
+    // read aircraft
     aircraft = AircraftDefinition::fromBinary(data, latestVersion);
 }
 
@@ -103,19 +106,19 @@ void AircraftFile::writeAircraftToStream(QIODevice &data, const AircraftDefiniti
 
 void AircraftFile::writeAircraftToStream(QIODevice &data, const AircraftDefinition &aircraft, const QImage &image)
 {
-    //write image
+    // write image
     QByteArray buff;
     QDataStream imgStream(&buff, QIODevice::WriteOnly);
     imgStream.setVersion(QDataStream::Qt_5_15);
     imgStream << image;
 
-    //image size
+    // image size
     int64_t imgSize = buff.size();
     buff.prepend(reinterpret_cast<char *>(&imgSize), sizeof(imgSize));
 
     buff.append(aircraft.toBinary());
 
-    //total size (so it is not read before completely received)
+    // total size (so it is not read before completely received)
     int64_t size = buff.size();
     buff.prepend(reinterpret_cast<char *>(&size), sizeof(size));
 
@@ -144,26 +147,3 @@ void AircraftFile::removeAircraft(const QString &name)
     dir.cd("Thumbnails");
     dir.remove(filename + ".png");
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

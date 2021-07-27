@@ -2,7 +2,6 @@
 #define _UNITCONVERTER_H_
 
 #include <QObject>
-#include <QString>
 #include <QVector>
 
 class UnitConverter : public QObject

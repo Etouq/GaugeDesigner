@@ -33,16 +33,7 @@ struct JetDefinition
 
     QByteArray toBinary() const;
 
-    static JetDefinition fromBinary(QIODevice &data, FileVersion version)
-    {
-        switch (version)
-        {
-            case FileVersion::V1:
-            default:
-                return fromBinaryV1(data, version);
-                break;
-        }
-    }
+    static JetDefinition fromBinary(QIODevice &data, FileVersion version);
 
 private:
     static JetDefinition fromBinaryV1(QIODevice &data, FileVersion version);

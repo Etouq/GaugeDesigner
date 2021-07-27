@@ -65,6 +65,17 @@ QByteArray GaugeDefinition::toBinary() const
     return ret;
 }
 
+GaugeDefinition GaugeDefinition::fromBinary(QIODevice &data, FileVersion version)
+{
+    switch (version)
+    {
+        case FileVersion::V1:
+        default:
+            return fromBinaryV1(data);
+            break;
+    }
+}
+
 
 GaugeDefinition GaugeDefinition::fromBinaryV1(QIODevice &data)
 {

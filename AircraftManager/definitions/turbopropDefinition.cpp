@@ -25,6 +25,17 @@ QByteArray TurbopropDefinition::toBinary() const
     return ret;
 }
 
+TurbopropDefinition TurbopropDefinition::fromBinary(QIODevice &data, FileVersion version)
+{
+    switch (version)
+    {
+        case FileVersion::V1:
+        default:
+            return fromBinaryV1(data, version);
+            break;
+    }
+}
+
 TurbopropDefinition TurbopropDefinition::fromBinaryV1(QIODevice &data, FileVersion version)
 {
     TurbopropDefinition ret;

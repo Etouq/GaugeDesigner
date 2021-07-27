@@ -1,10 +1,12 @@
 #include "aircraftinterface.h"
+
 #include <QFileDialog>
+#include <QFile>
 #include <QSettings>
+#include "FileManager/aircraftfile.h"
 
 AircraftInterface::AircraftInterface(QObject *parent) : QObject(parent)
 {
-
 }
 
 void AircraftInterface::selectImage()
@@ -18,6 +20,30 @@ void AircraftInterface::selectImage()
         emit updateImage();
         emit imageChanged();
     }
+}
+
+void AircraftInterface::setAircraft(const AircraftDefinition &aircraft)
+{
+    def = aircraft;
+    imagePath = AircraftFile::getImagePath(def.name);
+    if (!QFile(imagePath).exists())
+        imagePath = ":/DefaultImage.png";
+
+    emit updateQml();
+    emit updateAircraft(aircraft);
+    emit updateComplete();
+}
+
+void AircraftInterface::saveAircraft()
+{
+    QImage temp(imagePath);
+    AircraftFile::saveAircraftWithImage(def, temp);
+    emit aircraftSaved(def);
+}
+
+void AircraftInterface::createPreview()
+{
+    emit loadAircraftPreview(def);
 }
 
 void AircraftInterface::newAircraft()
@@ -35,5 +61,3 @@ void AircraftInterface::newAircraft()
     emit createDefaultGauges();
     emit updateComplete();
 }
-
-

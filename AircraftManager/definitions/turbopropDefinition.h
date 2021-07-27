@@ -41,16 +41,7 @@ struct TurbopropDefinition
 
     QByteArray toBinary() const;
 
-    static TurbopropDefinition fromBinary(QIODevice &data, FileVersion version)
-    {
-        switch (version)
-        {
-            case FileVersion::V1:
-            default:
-                return fromBinaryV1(data, version);
-                break;
-        }
-    }
+    static TurbopropDefinition fromBinary(QIODevice &data, FileVersion version);
 
 private:
     static TurbopropDefinition fromBinaryV1(QIODevice &data, FileVersion version);

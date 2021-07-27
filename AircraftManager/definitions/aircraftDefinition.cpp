@@ -232,4 +232,27 @@ QByteArray AircraftDefinition::toNetworkData() const
     return ret;
 }
 
+AircraftDefinition AircraftDefinition::fromBinary(QIODevice &data, FileVersion version)
+{
+    switch (version)
+    {
+        case FileVersion::V1:
+        default:
+            return fromBinaryV1(data, version);
+            break;
+    }
+}
+
+bool AircraftDefinition::operator==(const AircraftDefinition &rhs) const { return name == rhs.name; }
+
+bool AircraftDefinition::operator!=(const AircraftDefinition &rhs) const { return name != rhs.name; }
+
+bool AircraftDefinition::operator<(const AircraftDefinition &rhs) const { return name < rhs.name; }
+
+bool AircraftDefinition::operator<=(const AircraftDefinition &rhs) const { return name <= rhs.name; }
+
+bool AircraftDefinition::operator>(const AircraftDefinition &rhs) const { return name > rhs.name; }
+
+bool AircraftDefinition::operator>=(const AircraftDefinition &rhs) const { return name >= rhs.name; }
+
 

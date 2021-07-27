@@ -58,23 +58,14 @@ struct AircraftDefinition
 
     QByteArray toNetworkData() const;
 
-    static AircraftDefinition fromBinary(QIODevice &data, FileVersion version)
-    {
-        switch (version)
-        {
-            case FileVersion::V1:
-            default:
-                return fromBinaryV1(data, version);
-                break;
-        }
-    }
+    static AircraftDefinition fromBinary(QIODevice &data, FileVersion version);
 
-    bool operator==(const AircraftDefinition &rhs) const { return name == rhs.name; }
-    bool operator!=(const AircraftDefinition &rhs) const { return name != rhs.name; }
-    bool operator<(const AircraftDefinition &rhs) const { return name < rhs.name; }
-    bool operator<=(const AircraftDefinition &rhs) const { return name <= rhs.name; }
-    bool operator>(const AircraftDefinition &rhs) const { return name > rhs.name; }
-    bool operator>=(const AircraftDefinition &rhs) const { return name >= rhs.name; }
+    bool operator==(const AircraftDefinition &rhs) const;
+    bool operator!=(const AircraftDefinition &rhs) const;
+    bool operator<(const AircraftDefinition &rhs) const;
+    bool operator<=(const AircraftDefinition &rhs) const;
+    bool operator>(const AircraftDefinition &rhs) const;
+    bool operator>=(const AircraftDefinition &rhs) const;
 
 private:
     static AircraftDefinition fromBinaryV1(QIODevice &data, FileVersion version);

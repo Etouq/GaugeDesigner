@@ -80,6 +80,13 @@ void GaugeInterface::setGaugeParameters(const GaugeDefinition &gaugeDef, double 
     emit engineRedBlinkChanged();
 }
 
+void GaugeInterface::setDefinition(const GaugeDefinition &newDef)
+{
+    def = newDef;
+    emit updateGauge();
+    emit gaugeUpdated(def);
+}
+
 void GaugeInterface::updateEngine(double newVal)
 {
 
@@ -141,23 +148,6 @@ void GaugeInterface::updateEngine(double newVal)
     }
 }
 
-double GaugeInterface::getStartAngle() const
-{
-    return d_startAngle;
-}
-double GaugeInterface::getEndAngle() const
-{
-    return d_endAngle;
-}
-
-bool GaugeInterface::needsExtraWide() const
-{
-    for (int i = 0; i < def.textGrads.size(); i++)
-        if (def.textGrads[i].gradText.size() > 4)
-            return true;
-    return false;
-}
-
 double GaugeInterface::engineAngle() const
 {
     return d_engineAngle;
@@ -177,6 +167,11 @@ const QColor &GaugeInterface::engineColor() const
 bool GaugeInterface::engineRedBlink() const
 {
     return d_engineRedBlink;
+}
+
+void GaugeInterface::updateComplete()
+{
+    emit gaugeUpdated(def);
 }
 
 void GaugeInterface::updateEngineAnimation()
@@ -208,4 +203,5 @@ void GaugeInterface::updateEngineAnimation()
     updateEngine(d_currValue);
 
 }
+
 

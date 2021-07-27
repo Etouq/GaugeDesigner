@@ -23,6 +23,17 @@ QByteArray PropDefinition::toBinary() const
     return ret;
 }
 
+PropDefinition PropDefinition::fromBinary(QIODevice &data, FileVersion version)
+{
+    switch (version)
+    {
+        case FileVersion::V1:
+        default:
+            return fromBinaryV1(data, version);
+            break;
+    }
+}
+
 PropDefinition PropDefinition::fromBinaryV1(QIODevice &data, FileVersion version)
 {
     PropDefinition ret;

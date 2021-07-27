@@ -1,7 +1,12 @@
 #include "binaryutil.h"
 
-//to binary converters
-//fundamental types
+#include <QByteArray>
+#include <QColor>
+#include <QIODevice>
+#include <QString>
+
+// to binary converters
+// fundamental types
 QByteArray BinaryUtil::toBinary(int8_t val)
 {
     return QByteArray(reinterpret_cast<char *>(&val), sizeof(val));
@@ -50,7 +55,7 @@ QByteArray BinaryUtil::toBinary(double dbl)
 }
 
 
-//basic types
+// basic types
 QByteArray BinaryUtil::toBinary(const QString &str)
 {
     QByteArray bytes = str.toUtf8();
@@ -64,9 +69,8 @@ QByteArray BinaryUtil::toBinary(const QColor &col)
     uint8_t red = col.red();
     uint8_t green = col.green();
     uint8_t blue = col.blue();
-    return QByteArray(reinterpret_cast<char *>(&red), sizeof(red)) +
-           QByteArray(reinterpret_cast<char *>(&green), sizeof(green)) +
-           QByteArray(reinterpret_cast<char *>(&blue), sizeof(blue));
+    return QByteArray(reinterpret_cast<char *>(&red), sizeof(red)) + QByteArray(reinterpret_cast<char *>(&green), sizeof(green))
+           + QByteArray(reinterpret_cast<char *>(&blue), sizeof(blue));
 }
 
 QByteArray BinaryUtil::toBinary(Units unit)
@@ -75,7 +79,7 @@ QByteArray BinaryUtil::toBinary(Units unit)
 }
 
 
-//struct types
+// struct types
 QByteArray BinaryUtil::toBinary(const ColorZone &zone)
 {
     return toBinary(zone.start) + toBinary(zone.end) + toBinary(zone.color);
@@ -92,7 +96,7 @@ QByteArray BinaryUtil::toBinary(const TextGradDef &textGrad)
 }
 
 
-//vector types
+// vector types
 QByteArray BinaryUtil::toBinary(const QVector<ColorZone> &vec)
 {
     uint8_t size = vec.size();
@@ -128,8 +132,8 @@ QByteArray BinaryUtil::toBinary(const QVector<TextGradDef> &vec)
 
 
 
-//read functions
-//fundamental types
+// read functions
+// fundamental types
 int8_t BinaryUtil::readInt8_t(QIODevice &data)
 {
     int8_t val = 0;
@@ -200,7 +204,7 @@ double BinaryUtil::readDouble(QIODevice &data)
 }
 
 
-//basic types
+// basic types
 QString BinaryUtil::readString(QIODevice &data)
 {
     uint8_t size = readUint8_t(data);
@@ -224,24 +228,24 @@ Units BinaryUtil::readUnit(QIODevice &data)
 }
 
 
-//struct types
+// struct types
 ColorZone BinaryUtil::readColorZone(QIODevice &data)
 {
-    return ColorZone{ readDouble(data), readDouble(data), readColor(data) };
+    return ColorZone { readDouble(data), readDouble(data), readColor(data) };
 }
 
 GradDef BinaryUtil::readGrad(QIODevice &data)
 {
-    return GradDef{ readDouble(data), readBool(data), readColor(data) };
+    return GradDef { readDouble(data), readBool(data), readColor(data) };
 }
 
 TextGradDef BinaryUtil::readTextGrad(QIODevice &data)
 {
-    return TextGradDef{ readDouble(data), readString(data) };
+    return TextGradDef { readDouble(data), readString(data) };
 }
 
 
-//vector types
+// vector types
 void BinaryUtil::readColorZoneVec(QIODevice &data, QVector<ColorZone> &vec)
 {
     uint8_t size = readUint8_t(data);

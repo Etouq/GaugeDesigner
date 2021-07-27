@@ -39,16 +39,7 @@ struct PropDefinition
 
     QByteArray toBinary() const;
 
-    static PropDefinition fromBinary(QIODevice &data, FileVersion version)
-    {
-        switch (version)
-        {
-            case FileVersion::V1:
-            default:
-                return fromBinaryV1(data, version);
-                break;
-        }
-    }
+    static PropDefinition fromBinary(QIODevice &data, FileVersion version);
 
 private:
     static PropDefinition fromBinaryV1(QIODevice &data, FileVersion version);

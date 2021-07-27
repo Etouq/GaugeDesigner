@@ -1,5 +1,7 @@
 #include "networkmanager.ih"
 #include <QBuffer>
+#include <QImage>
+#include "AircraftManager/definitions/aircraftDefinition.h"
 
 void NetworkManager::sendAircraftToClient(const QVector<AircraftDefinition> &list)
 {

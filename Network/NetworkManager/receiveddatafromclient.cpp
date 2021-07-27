@@ -1,4 +1,7 @@
+#include <QImage>
+
 #include "networkmanager.ih"
+#include "AircraftManager/definitions/aircraftDefinition.h"
 
 void NetworkManager::receivedDataFromClient()
 {
@@ -25,13 +28,15 @@ void NetworkManager::receivedDataFromClient()
                 if (latestGaugeNetworkVersion < clientVersion)
                 {
                     tcpSocket->disconnectFromHost();
-                    emit versionError("The network data transfer version of the Flight Display Companion is newer than the one used by this application. Either update this application or revert the Flight Display Companion to the last working version.");
+                    emit versionError("The network data transfer version of the Flight Display Companion is newer than the one used by this application. "
+                                      "Either update this application or revert the Flight Display Companion to the last working version.");
                     return;
                 }
                 if (latestGaugeNetworkVersion > clientVersion)
                 {
                     tcpSocket->disconnectFromHost();
-                    emit versionError("The network data transfer version of the Flight Display Companion is older than the one used by this application. Either update the Flight Display Companion or revert this application to the last working version.");
+                    emit versionError("The network data transfer version of the Flight Display Companion is older than the one used by this application. "
+                                      "Either update the Flight Display Companion or revert this application to the last working version.");
                     return;
                 }
                 break;
@@ -107,10 +112,5 @@ void NetworkManager::receivedDataFromClient()
                 tcpSocket->commitTransaction();
                 break;
         }
-
     }
-
-
-
-
 }

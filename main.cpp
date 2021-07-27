@@ -8,7 +8,8 @@
 #include "AircraftManager/aircraftinterface.h"
 #include "AircraftManager/aircraftmanager.h"
 #include "Network/NetworkManager/networkmanager.h"
-#include "Network/NetworkInterface.h"
+#include "Network/networkinterface.h"
+#include "FileManager/aircraftfile.h"
 #include <QtQml>
 
 

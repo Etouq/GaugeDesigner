@@ -2,11 +2,12 @@
 #define GAUGEMANAGER_H
 
 #include <QObject>
+
 #include "gaugeinterface.h"
-#include "AircraftManager/definitions/aircraftDefinition.h"
-#include "AircraftManager/aircraftinterface.h"
 
 class QQmlContext;
+class AircraftInterface;
+struct AircraftDefinition;
 
 class GaugeManager : public QObject
 {
@@ -57,10 +58,10 @@ public:
     void connectGaugeSignals(const AircraftInterface &aircraft);
 
     double spoilersAngle() const;
-    const QString& spoilersValue() const;
+    const QString &spoilersValue() const;
     bool showSpoilersText() const;
     double flapsAngle() const;
-    const QString& flapsValue() const;
+    const QString &flapsValue() const;
     bool showFlapsText() const;
 
     double trimTransformValue() const;
@@ -81,7 +82,7 @@ signals:
     void trimTransformValueChanged();
 
 public slots:
-    void changeAircraft(const AircraftDefinition& aircraft);
+    void changeAircraft(const AircraftDefinition &aircraft);
     void createDefaults();
     void loadAircraftPreview(const AircraftDefinition &aircraft);
 
@@ -91,4 +92,4 @@ public slots:
     void updateTrimAnim();
 };
 
-#endif // GAUGEMANAGER_H
+#endif   // GAUGEMANAGER_H

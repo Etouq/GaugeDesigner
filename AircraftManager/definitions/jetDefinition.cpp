@@ -19,6 +19,17 @@ QByteArray JetDefinition::toBinary() const
     return ret;
 }
 
+JetDefinition JetDefinition::fromBinary(QIODevice &data, FileVersion version)
+{
+    switch (version)
+    {
+        case FileVersion::V1:
+        default:
+            return fromBinaryV1(data, version);
+            break;
+    }
+}
+
 
 JetDefinition JetDefinition::fromBinaryV1(QIODevice &data, FileVersion version)
 {

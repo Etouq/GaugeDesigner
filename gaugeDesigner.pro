@@ -14,14 +14,20 @@ SOURCES += \
         AircraftManager/definitions/jetDefinition.cpp \
         AircraftManager/definitions/propDefinition.cpp \
         AircraftManager/definitions/turbopropDefinition.cpp \
+        AircraftManager/interfacegetters.cpp \
+        AircraftManager/interfacesetters.cpp \
+        AircraftManager/interfaceupdategauges.cpp \
         FileManager/aircraftfile.cpp \
+        GaugeBackend/gaugegetters.cpp \
         GaugeBackend/gaugeinterface.cpp \
         GaugeBackend/gaugemanager.cpp \
+        GaugeBackend/gaugesetters.cpp \
         Network/NetworkManager/loadclientaircraft.cpp \
         Network/NetworkManager/networkmanager.cpp \
         Network/NetworkManager/receiveddatafromclient.cpp \
         Network/NetworkManager/removeclientaircraft.cpp \
         Network/NetworkManager/sendaircrafttoclient.cpp \
+        Network/networkinterface.cpp \
         UnitConverter/converttolongstring.cpp \
         UnitConverter/converttoshortstring.cpp \
         UnitConverter/unitconverter.cpp \
@@ -53,10 +59,10 @@ HEADERS += \
     FileManager/aircraftfile.h \
     GaugeBackend/gaugeinterface.h \
     GaugeBackend/gaugemanager.h \
-    Network/NetworkInterface.h \
     Network/NetworkManager/dataIdentifiers.h \
     Network/NetworkManager/networkmanager.h \
     Network/NetworkManager/networkmanager.ih \
+    Network/networkinterface.h \
     UnitConverter/unitconverter.h \
     UnitConverter/units.h \
     binaryutil.h
