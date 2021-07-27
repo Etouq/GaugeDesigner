@@ -269,9 +269,9 @@ void GaugeManager::createDefaults()
                 GradDef { .gradPos = 70, .isBig = false, .gradColor = QColor(255, 255, 255) },
                 GradDef { .gradPos = 80, .isBig = true, .gradColor = QColor(255, 255, 255) },
                 GradDef { .gradPos = 90, .isBig = false, .gradColor = QColor(255, 255, 255) } };
-    textGradVec = { TextGradDef { .textGradPos = 0, .gradText = "0" },   TextGradDef { .textGradPos = 20, .gradText = "20" },
+    textGradVec = { TextGradDef { .textGradPos = 0, .gradText = "E" },   TextGradDef { .textGradPos = 20, .gradText = "20" },
                     TextGradDef { .textGradPos = 40, .gradText = "40" }, TextGradDef { .textGradPos = 60, .gradText = "60" },
-                    TextGradDef { .textGradPos = 80, .gradText = "80" }, TextGradDef { .textGradPos = 100, .gradText = "100" } };
+                    TextGradDef { .textGradPos = 80, .gradText = "80" }, TextGradDef { .textGradPos = 100, .gradText = "F" } };
 
     fuelQtyGauge.setDefinition(RawGaugeDefinition { .title = "FUEL QTY",
                                                     .unitString = "KG",

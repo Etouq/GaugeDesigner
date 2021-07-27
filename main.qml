@@ -15,7 +15,7 @@ ApplicationWindow {
     height: 500
     visible: true
     color: "black"
-    title: "Gauge Designer"
+    title: "Gauge Designer (1.0)"
 
 
     property real maxScaleFactor: Math.min(Screen.desktopAvailableWidth / 630, Screen.desktopAvailableHeight / 500)
