@@ -151,7 +151,7 @@ struct ActiveAirplaneSettings
     bool fuelFlowByVolume = false;
     int8_t numEngines = 1;
     int8_t numTanks = 1;
-    int8_t type = 0; // 0: jet, 1: prop, 2: turboprop
+    int8_t type = 0;   // 0: jet, 1: prop, 2: turboprop
 };
 
 QByteArray AircraftDefinition::toNetworkData() const
@@ -243,16 +243,32 @@ AircraftDefinition AircraftDefinition::fromBinary(QIODevice &data, FileVersion v
     }
 }
 
-bool AircraftDefinition::operator==(const AircraftDefinition &rhs) const { return name == rhs.name; }
+bool AircraftDefinition::operator==(const AircraftDefinition &rhs) const
+{
+    return name == rhs.name;
+}
 
-bool AircraftDefinition::operator!=(const AircraftDefinition &rhs) const { return name != rhs.name; }
+bool AircraftDefinition::operator!=(const AircraftDefinition &rhs) const
+{
+    return name != rhs.name;
+}
 
-bool AircraftDefinition::operator<(const AircraftDefinition &rhs) const { return name < rhs.name; }
+bool AircraftDefinition::operator<(const AircraftDefinition &rhs) const
+{
+    return name < rhs.name;
+}
 
-bool AircraftDefinition::operator<=(const AircraftDefinition &rhs) const { return name <= rhs.name; }
+bool AircraftDefinition::operator<=(const AircraftDefinition &rhs) const
+{
+    return name <= rhs.name;
+}
 
-bool AircraftDefinition::operator>(const AircraftDefinition &rhs) const { return name > rhs.name; }
+bool AircraftDefinition::operator>(const AircraftDefinition &rhs) const
+{
+    return name > rhs.name;
+}
 
-bool AircraftDefinition::operator>=(const AircraftDefinition &rhs) const { return name >= rhs.name; }
-
-
+bool AircraftDefinition::operator>=(const AircraftDefinition &rhs) const
+{
+    return name >= rhs.name;
+}

@@ -43,9 +43,8 @@ struct PropDefinition
 
 private:
     static PropDefinition fromBinaryV1(QIODevice &data, FileVersion version);
-
 };
 
 Q_DECLARE_METATYPE(PropDefinition)
 
-#endif // PROPDEFINITION_H
+#endif   // PROPDEFINITION_H

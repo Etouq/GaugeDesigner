@@ -16,8 +16,7 @@ public:
     Q_INVOKABLE static QString getSectionHeader(int type);
 
     Q_INVOKABLE static QVector<int> getAllowedUnits(int type);
-
 };
 
 
-#endif // _UNITCONVERTER_H_
+#endif   // _UNITCONVERTER_H_

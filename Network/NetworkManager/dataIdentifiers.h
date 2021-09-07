@@ -17,7 +17,7 @@ enum class DesignerIds : uint8_t
     SAVE_AIRCRAFT
 };
 
-//used for communication from client to server
+// used for communication from client to server
 enum class ClientIds : uint8_t
 {
     CLIENT_NETWORK_VERSION,
@@ -31,4 +31,4 @@ enum class ClientIds : uint8_t
 };
 
 
-#endif // DATAIDENTIFIERS_H
+#endif   // DATAIDENTIFIERS_H

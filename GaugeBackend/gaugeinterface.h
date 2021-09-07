@@ -1,16 +1,17 @@
 #ifndef GAUGELOADER_H
 #define GAUGELOADER_H
 
-#include <QObject>
-
 #include "AircraftManager/definitions/gaugeDefinition.h"
+
+#include <QObject>
 
 class GaugeInterface : public QObject
 {
     Q_OBJECT
 
     Q_PROPERTY(double engineAngle READ engineAngle NOTIFY engineAngleChanged)
-    Q_PROPERTY(double engineTransformValue READ engineTransformValue NOTIFY engineTransformValueChanged)
+    Q_PROPERTY(
+      double engineTransformValue READ engineTransformValue NOTIFY engineTransformValueChanged)
     Q_PROPERTY(QString engineValue READ engineValue NOTIFY engineValueChanged)
     Q_PROPERTY(QColor engineColor READ engineColor NOTIFY engineColorChanged)
     Q_PROPERTY(bool engineRedBlink READ engineRedBlink NOTIFY engineRedBlinkChanged)
@@ -143,7 +144,6 @@ signals:
     void engineValueChanged();
     void engineColorChanged();
     void engineRedBlinkChanged();
-
 };
 
 #endif   // GAUGELOADER_H

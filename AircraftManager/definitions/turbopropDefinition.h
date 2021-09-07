@@ -45,9 +45,8 @@ struct TurbopropDefinition
 
 private:
     static TurbopropDefinition fromBinaryV1(QIODevice &data, FileVersion version);
-
 };
 
 Q_DECLARE_METATYPE(TurbopropDefinition)
 
-#endif // TURBOPROPDEFINITION_H
+#endif   // TURBOPROPDEFINITION_H

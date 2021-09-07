@@ -9,7 +9,7 @@ void NetworkManager::loadClientAircraft(const QStringList &list)
     for (int idx = 0; idx < size; idx++)
         dataToSend += BinaryUtil::toBinary(list[idx]);
 
-    int64_t totalSize = dataToSend.size(); // size in bytes
+    int64_t totalSize = dataToSend.size();   // size in bytes
     dataToSend.prepend(BinaryUtil::toBinary(totalSize));
 
     DesignerIds id = DesignerIds::LOAD_AIRCRAFT_LIST;

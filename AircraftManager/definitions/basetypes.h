@@ -20,8 +20,8 @@ struct ColorZone
 struct GradDef
 {
     double gradPos = 0;
-    bool isBig = false; // only used for circular gauge (for now)
-    QColor gradColor = "white"; // to allow for colorlines
+    bool isBig = false;           // only used for circular gauge (for now)
+    QColor gradColor = "white";   // to allow for colorlines
 };
 
 struct TextGradDef
@@ -30,4 +30,4 @@ struct TextGradDef
     QString gradText;
 };
 
-#endif // BASETYPES_H
+#endif   // BASETYPES_H

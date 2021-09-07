@@ -1,5 +1,7 @@
 #include "aircraftfile.h"
 
+#include "AircraftManager/definitions/aircraftDefinition.h"
+
 #include <QBuffer>
 #include <QCoreApplication>
 #include <QDataStream>
@@ -8,8 +10,6 @@
 #include <QImage>
 #include <QSettings>
 #include <QStandardPaths>
-
-#include "AircraftManager/definitions/aircraftDefinition.h"
 
 QString AircraftFile::createFileName(const AircraftDefinition &aircraft)
 {
@@ -77,7 +77,9 @@ void AircraftFile::readAircraftFromStream(QIODevice &data, AircraftDefinition &a
     aircraft = AircraftDefinition::fromBinary(data, version);
 }
 
-void AircraftFile::readAircraftFromStream(QIODevice &data, AircraftDefinition &aircraft, QImage &image)
+void AircraftFile::readAircraftFromStream(QIODevice &data,
+                                          AircraftDefinition &aircraft,
+                                          QImage &image)
 {
     // read image
     int64_t imgSize = 0;
@@ -104,7 +106,9 @@ void AircraftFile::writeAircraftToStream(QIODevice &data, const AircraftDefiniti
     data.write(buff);
 }
 
-void AircraftFile::writeAircraftToStream(QIODevice &data, const AircraftDefinition &aircraft, const QImage &image)
+void AircraftFile::writeAircraftToStream(QIODevice &data,
+                                         const AircraftDefinition &aircraft,
+                                         const QImage &image)
 {
     // write image
     QByteArray buff;

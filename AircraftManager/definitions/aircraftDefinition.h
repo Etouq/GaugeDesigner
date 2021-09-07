@@ -1,11 +1,12 @@
 #ifndef AIRCRAFTDEFINITION_H
 #define AIRCRAFTDEFINITION_H
 
-#include <QVariant>
 #include "gaugeDefinition.h"
 #include "jetDefinition.h"
 #include "propDefinition.h"
 #include "turbopropDefinition.h"
+
+#include <QVariant>
 
 struct AircraftDefinition
 {
@@ -21,7 +22,7 @@ struct AircraftDefinition
 
     QVariant currentType;
 
-    QString name = ""; // used as identifier so needs to be unique
+    QString name = "";   // used as identifier so needs to be unique
 
     GaugeDefinition fuelQtyGauge;
     GaugeDefinition fuelFlowGauge;
@@ -69,7 +70,6 @@ struct AircraftDefinition
 
 private:
     static AircraftDefinition fromBinaryV1(QIODevice &data, FileVersion version);
-
 };
 
-#endif // AIRCRAFTDEFINITION_H
+#endif   // AIRCRAFTDEFINITION_H

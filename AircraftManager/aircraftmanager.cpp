@@ -1,6 +1,8 @@
 #include "aircraftmanager.h"
-#include "FileManager/aircraftfile.h"
+
 #include "AircraftManager/definitions/aircraftDefinition.h"
+#include "FileManager/aircraftfile.h"
+
 #include <QImage>
 
 AircraftManager::AircraftManager(QObject *parent) : QObject(parent)

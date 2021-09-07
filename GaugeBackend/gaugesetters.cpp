@@ -20,7 +20,7 @@ void GaugeInterface::setNumColorZones(int count)
 
 void GaugeInterface::setColorZoneAt(int idx, double start, double end, const QString &color)
 {
-    def.colorZones[idx] = ColorZone { .start = start, .end = end, .color = color };
+    def.colorZones[idx] = ColorZone{ .start = start, .end = end, .color = color };
 }
 
 void GaugeInterface::setNumGrads(int count)
@@ -30,7 +30,7 @@ void GaugeInterface::setNumGrads(int count)
 
 void GaugeInterface::setGradAt(int idx, double pos, bool isBig, const QString &color)
 {
-    def.grads[idx] = GradDef { .gradPos = pos, .isBig = isBig, .gradColor = color };
+    def.grads[idx] = GradDef{ .gradPos = pos, .isBig = isBig, .gradColor = color };
 }
 
 void GaugeInterface::setNumTextGrads(int count)
@@ -40,7 +40,7 @@ void GaugeInterface::setNumTextGrads(int count)
 
 void GaugeInterface::setTextGradAt(int idx, double pos, const QString &text)
 {
-    def.textGrads[idx] = TextGradDef { .textGradPos = pos, .gradText = text };
+    def.textGrads[idx] = TextGradDef{ .textGradPos = pos, .gradText = text };
 }
 
 void GaugeInterface::setTextIncrement(double textIncrement, int numDecimals)

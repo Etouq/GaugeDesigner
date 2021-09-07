@@ -1,18 +1,20 @@
 #include "aircraftinterface.h"
 
-#include <QFileDialog>
-#include <QFile>
-#include <QSettings>
 #include "FileManager/aircraftfile.h"
 
-AircraftInterface::AircraftInterface(QObject *parent) : QObject(parent)
-{
-}
+#include <QFile>
+#include <QFileDialog>
+#include <QSettings>
+
+AircraftInterface::AircraftInterface(QObject *parent) : QObject(parent) {}
 
 void AircraftInterface::selectImage()
 {
     QString lastUsedPath = QSettings().value("lastUsedImagePath", "C:/").toString();
-    QString fileName = QFileDialog::getOpenFileName(nullptr, "Open File", lastUsedPath, "Images (*.png *.jpeg *.jpg)");
+    QString fileName = QFileDialog::getOpenFileName(nullptr,
+                                                    "Open File",
+                                                    lastUsedPath,
+                                                    "Images (*.png *.jpeg *.jpg)");
     if (!fileName.isEmpty())
     {
         QSettings().setValue("lastUsedImagePath", fileName);

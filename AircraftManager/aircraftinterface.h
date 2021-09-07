@@ -1,8 +1,9 @@
 #ifndef AIRCRAFTINTERFACE_H
 #define AIRCRAFTINTERFACE_H
 
-#include <QObject>
 #include "definitions/aircraftDefinition.h"
+
+#include <QObject>
 
 class AircraftInterface : public QObject
 {
@@ -10,8 +11,6 @@ class AircraftInterface : public QObject
 
     AircraftDefinition def;
     QString imagePath = ":/DefaultImage.png";
-
-
 
 
 public:
@@ -50,15 +49,15 @@ public:
     Q_INVOKABLE bool getNoColors() const;
     Q_INVOKABLE bool getDynamicBarberpole() const;
 
-    //jet specific
+    // jet specific
     Q_INVOKABLE bool getHasApu() const;
     Q_INVOKABLE bool getEgtReplacesItt() const;
 
-    //prop + turboprop specific
+    // prop + turboprop specific
     Q_INVOKABLE bool getHasEgt() const;
     Q_INVOKABLE bool getUsePropRpm() const;
 
-    //prop specific
+    // prop specific
     Q_INVOKABLE bool getSecondIsLoad() const;
     Q_INVOKABLE double getMaxHp() const;
 
@@ -91,21 +90,20 @@ public:
     Q_INVOKABLE void setNoColors(bool value);
     Q_INVOKABLE void setDynamicBarberpole(bool value);
 
-    //jet specific
+    // jet specific
     Q_INVOKABLE void setHasApu(bool value);
     Q_INVOKABLE void setEgtReplacesItt(bool value);
 
-    //prop + turboprop specific
+    // prop + turboprop specific
     Q_INVOKABLE void setHasEgt(bool value);
     Q_INVOKABLE void setUsePropRpm(bool value);
 
-    //prop specific
+    // prop specific
     Q_INVOKABLE void setSecondIsLoad(bool value);
     Q_INVOKABLE void setMaxHp(double value);
 
 
-
-    Q_INVOKABLE void selectImage(); // open image selection
+    Q_INVOKABLE void selectImage();   // open image selection
 
     void setAircraft(const AircraftDefinition &aircraft);
 
@@ -145,7 +143,6 @@ public slots:
     void updateOilPressGauge(const GaugeDefinition &gauge);
 
     void updateEgtGauge(const GaugeDefinition &gauge);
-
 };
 
-#endif // AIRCRAFTINTERFACE_H
+#endif   // AIRCRAFTINTERFACE_H

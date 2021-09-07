@@ -1,16 +1,17 @@
 #ifndef GAUGEDEFINITION_H
 #define GAUGEDEFINITION_H
 
-#include <cstdint>
-#include <QByteArray>
-#include <QColor>
-#include <QString>
-#include <QVector>
-#include <QMetaType>
-#include <QIODevice>
 #include "UnitConverter/units.h"
 #include "basetypes.h"
 #include "binaryutil.h"
+
+#include <QByteArray>
+#include <QColor>
+#include <QIODevice>
+#include <QMetaType>
+#include <QString>
+#include <QVector>
+#include <cstdint>
 
 // used to allow for designated initialization
 struct RawGaugeDefinition
@@ -67,9 +68,8 @@ struct GaugeDefinition
 
 private:
     static GaugeDefinition fromBinaryV1(QIODevice &data);
-
 };
 
 Q_DECLARE_METATYPE(GaugeDefinition)
 
-#endif // GAUGEDEFINITION_H
+#endif   // GAUGEDEFINITION_H

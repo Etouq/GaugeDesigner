@@ -37,9 +37,8 @@ struct JetDefinition
 
 private:
     static JetDefinition fromBinaryV1(QIODevice &data, FileVersion version);
-
 };
 
 Q_DECLARE_METATYPE(JetDefinition)
 
-#endif // JETDEFINITION_H
+#endif   // JETDEFINITION_H

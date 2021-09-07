@@ -1,16 +1,17 @@
 #ifndef AIRCRAFTFILE_H
 #define AIRCRAFTFILE_H
 
+#include "AircraftManager/definitions/basetypes.h"
+
 #include <QMap>
 #include <QObject>
-
-#include "AircraftManager/definitions/basetypes.h"
 
 class QIODevice;
 class QImage;
 struct AircraftDefinition;
 
-// manages saving and loading of local aircraft files and can write them to iodevices for sending over network
+// manages saving and loading of local aircraft files and can write them to iodevices for sending
+// over network
 class AircraftFile
 {
 
@@ -34,9 +35,13 @@ public:
     static void readAircraftFromFile(const QString &fileName, AircraftDefinition &aircraft);
 
     static void readAircraftFromStream(QIODevice &data, AircraftDefinition &aircraft);
-    static void readAircraftFromStream(QIODevice &data, AircraftDefinition &aircraft, QImage &image);   // used for network transfer
+    static void readAircraftFromStream(QIODevice &data,
+                                       AircraftDefinition &aircraft,
+                                       QImage &image);   // used for network transfer
     static void writeAircraftToStream(QIODevice &data, const AircraftDefinition &aircraft);
-    static void writeAircraftToStream(QIODevice &data, const AircraftDefinition &aircraft, const QImage &image);   // used for network transfer
+    static void writeAircraftToStream(QIODevice &data,
+                                      const AircraftDefinition &aircraft,
+                                      const QImage &image);   // used for network transfer
 
     static void removeAircraft(const QString &name);
 

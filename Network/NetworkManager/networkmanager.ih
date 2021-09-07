@@ -1,11 +1,12 @@
 #ifndef NETWORKMANAGER_IH
 #define NETWORKMANAGER_IH
 
-#include "networkmanager.h"
-#include "dataIdentifiers.h"
+#include "AircraftManager/aircraftmanager.h"
 #include "FileManager/aircraftfile.h"
 #include "binaryutil.h"
-#include <QFile>
-#include "AircraftManager/aircraftmanager.h"
+#include "dataIdentifiers.h"
+#include "networkmanager.h"
 
-#endif // NETWORKMANAGER_IH
+#include <QFile>
+
+#endif   // NETWORKMANAGER_IH

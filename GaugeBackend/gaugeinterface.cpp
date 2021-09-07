@@ -1,10 +1,10 @@
 #include "gaugeinterface.h"
 
-GaugeInterface::GaugeInterface(QObject *parent) : QObject(parent)
-{
-}
+GaugeInterface::GaugeInterface(QObject *parent) : QObject(parent) {}
 
-void GaugeInterface::setGaugeParameters(const GaugeDefinition &gaugeDef, double startAngle, double endAngle)
+void GaugeInterface::setGaugeParameters(const GaugeDefinition &gaugeDef,
+                                        double startAngle,
+                                        double endAngle)
 {
     d_isCircular = true;
 
@@ -92,7 +92,9 @@ void GaugeInterface::updateEngine(double newVal)
 
     if (!def.noText)
     {
-        QString newValue = QString::number(round(newVal / def.textIncrement) * def.textIncrement, 'f', def.textNumDigits);
+        QString newValue = QString::number(round(newVal / def.textIncrement) * def.textIncrement,
+                                           'f',
+                                           def.textNumDigits);
 
         if (newValue != d_engineValue)
         {
@@ -127,7 +129,8 @@ void GaugeInterface::updateEngine(double newVal)
     }
 
 
-    bool newBlink = (def.hasMinRedBlink && def.minRedBlinkThreshold >= newVal) || (def.hasMaxRedBlink && def.maxRedBlinkThreshold <= newVal);
+    bool newBlink = (def.hasMinRedBlink && def.minRedBlinkThreshold >= newVal)
+                    || (def.hasMaxRedBlink && def.maxRedBlinkThreshold <= newVal);
     if (newBlink != d_engineRedBlink)
     {
         d_engineRedBlink = newBlink;
@@ -201,7 +204,4 @@ void GaugeInterface::updateEngineAnimation()
         }
     }
     updateEngine(d_currValue);
-
 }
-
-

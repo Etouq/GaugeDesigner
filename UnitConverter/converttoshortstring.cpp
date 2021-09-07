@@ -31,14 +31,14 @@ QString UnitConverter::convertToShortString(int unitInt)
             return "dm³H";
         case Units::KG_PER_HOUR:
             return "KGH";
-        //temperature
+        // temperature
         case Units::FAHRENHEIT:
             return "ºF";
         case Units::KELVIN:
             return "K";
         case Units::RANKINE:
             return "ºR";
-        //pressure
+        // pressure
         case Units::INHG:
             return "InHg";
         case Units::BAR:
@@ -65,12 +65,12 @@ QString UnitConverter::convertToShortString(int unitInt)
             return "cmH₂O";
         case Units::INH2O:
             return "InH₂O";
-        //torque
+        // torque
         case Units::FOOTPOUND:
             return "Ft-lbs";
         case Units::INCHPOUND:
             return "In-lbs";
-        //volume
+        // volume
         case Units::CUBICCM:
             return "cm³";
         case Units::CUBICCM_PER_HOUR:
@@ -134,7 +134,7 @@ QString UnitConverter::convertToShortString(int unitInt)
             return "lbs";
         case Units::LBS_PER_HOUR:
             return "PPH";
-        //volume rate
+        // volume rate
         case Units::LITRES_PER_MINUTE:
             return "LPM";
         case Units::CUBICDM_PER_MINUTE:
@@ -185,7 +185,7 @@ QString UnitConverter::convertToShortString(int unitInt)
         case Units::USGAL_PER_SECOND:
         case Units::UKGAL_PER_SECOND:
             return "GPS";
-        //weight rate
+        // weight rate
         case Units::KG_PER_MINUTE:
             return "KGM";
         case Units::TONNE_PER_MINUTE:
@@ -212,4 +212,3 @@ QString UnitConverter::convertToShortString(int unitInt)
             return "PPS";
     }
 }
-

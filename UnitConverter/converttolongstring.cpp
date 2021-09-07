@@ -31,14 +31,14 @@ QString UnitConverter::convertToLongString(int unitInt)
             return "Cubic dm Per Hour";
         case Units::KG_PER_HOUR:
             return "Kg Per Hour";
-        //temperature
+        // temperature
         case Units::FAHRENHEIT:
             return "Fahrenheit";
         case Units::KELVIN:
             return "Kelvin";
         case Units::RANKINE:
             return "Rankine";
-        //pressure
+        // pressure
         case Units::INHG:
             return "Inch of Mercury";
         case Units::BAR:
@@ -65,12 +65,12 @@ QString UnitConverter::convertToLongString(int unitInt)
             return "Centimetre of H2O";
         case Units::INH2O:
             return "Inch of H2O";
-        //torque
+        // torque
         case Units::FOOTPOUND:
             return "Footpound";
         case Units::INCHPOUND:
             return "Inchpound";
-        //volume
+        // volume
         case Units::CUBICCM:
             return "Cubic cm";
         case Units::CUBICCM_PER_HOUR:
@@ -144,7 +144,7 @@ QString UnitConverter::convertToLongString(int unitInt)
             return "Tonne (UK)";
         case Units::UKTONNE_PER_HOUR:
             return "Tonnes (UK) Per Hour";
-        //volume rate
+        // volume rate
         case Units::LITRES_PER_MINUTE:
             return "Litres Per Minute";
         case Units::CUBICDM_PER_MINUTE:
@@ -201,7 +201,7 @@ QString UnitConverter::convertToLongString(int unitInt)
             return "Gallon (US) Per Second";
         case Units::UKGAL_PER_SECOND:
             return "Gallon (UK) Per Second";
-        //weight rate
+        // weight rate
         case Units::KG_PER_MINUTE:
             return "Kilogram Per Minute";
         case Units::TONNE_PER_MINUTE:

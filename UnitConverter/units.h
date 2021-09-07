@@ -6,21 +6,21 @@
 
 enum class Units : uint8_t
 {
-    //misc
+    // misc
     NONE,
     PERCENT,
     RPM,
-    //temperature
-    CELSIUS, //default
+    // temperature
+    CELSIUS,   // default
     FAHRENHEIT,
     KELVIN,
     RANKINE,
-    //pressure
-    KILOPASCAL, //default
+    // pressure
+    KILOPASCAL,   // default
     INHG,
     BAR,
     PSI,
-    PASCAL_UNIT, // to get around windows pascal preprocesser macro
+    PASCAL_UNIT,   // to get around windows pascal preprocesser macro
     MMHG,
     CMHG,
     ATM,
@@ -30,12 +30,12 @@ enum class Units : uint8_t
     MMH2O,
     CMH2O,
     INH2O,
-    //torque
-    NEWTONMETER, //default
+    // torque
+    NEWTONMETER,   // default
     FOOTPOUND,
     INCHPOUND,
-    //volume
-    LITRES, //default
+    // volume
+    LITRES,   // default
     CUBICCM,
     ML,
     CUBICM,
@@ -49,16 +49,16 @@ enum class Units : uint8_t
     CUBICYD,
     USGAL,
     UKGAL,
-    //weight
-    KG, //default
+    // weight
+    KG,   // default
     TONNE,
     SLUG,
     GRAM,
     LBS,
     USTONNE,
     UKTONNE,
-    //volume rate
-    LITRES_PER_HOUR, //default
+    // volume rate
+    LITRES_PER_HOUR,   // default
     CUBICCM_PER_HOUR,
     ML_PER_HOUR,
     CUBICM_PER_HOUR,
@@ -100,8 +100,8 @@ enum class Units : uint8_t
     CUBICYD_PER_SECOND,
     USGAL_PER_SECOND,
     UKGAL_PER_SECOND,
-    //weight rate
-    KG_PER_HOUR, //default
+    // weight rate
+    KG_PER_HOUR,   // default
     TONNE_PER_HOUR,
     SLUG_PER_HOUR,
     GRAM_PER_HOUR,
@@ -125,4 +125,4 @@ enum class Units : uint8_t
 };
 
 
-#endif //_UNITS_HEADER_
+#endif   //_UNITS_HEADER_

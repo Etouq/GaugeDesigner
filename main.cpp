@@ -1,15 +1,16 @@
-#include <QApplication>
-#include <QColorDialog>
-#include <QQuickView>
-#include <QQmlApplicationEngine>
-#include <QQmlContext>
-#include "UnitConverter/unitconverter.h"
-#include "GaugeBackend/gaugemanager.h"
 #include "AircraftManager/aircraftinterface.h"
 #include "AircraftManager/aircraftmanager.h"
+#include "FileManager/aircraftfile.h"
+#include "GaugeBackend/gaugemanager.h"
 #include "Network/NetworkManager/networkmanager.h"
 #include "Network/networkinterface.h"
-#include "FileManager/aircraftfile.h"
+#include "UnitConverter/unitconverter.h"
+
+#include <QApplication>
+#include <QColorDialog>
+#include <QQmlApplicationEngine>
+#include <QQmlContext>
+#include <QQuickView>
 #include <QtQml>
 
 
@@ -29,7 +30,6 @@ int main(int argc, char *argv[])
     QColorDialog::setCustomColor(8, QColor(0, 0, 0));
 
     AircraftFile::init();
-
 
 
     UnitConverter unitConverter;
@@ -55,20 +55,59 @@ int main(int argc, char *argv[])
 
     engine.load("qrc:/main.qml");
 
-    QObject::connect(&planeInterface, &AircraftInterface::aircraftSaved, &aircraftManager, &AircraftManager::setAircraft);
-    QObject::connect(&aircraftManager, &AircraftManager::changeAircraft, &planeInterface, &AircraftInterface::setAircraft);
-    QObject::connect(&planeInterface, &AircraftInterface::updateAircraft, &gaugeInterface, &GaugeManager::changeAircraft);
-    QObject::connect(&planeInterface, &AircraftInterface::createDefaultGauges, &gaugeInterface, &GaugeManager::createDefaults);
-    QObject::connect(&planeInterface, &AircraftInterface::loadAircraftPreview, &gaugeInterface, &GaugeManager::loadAircraftPreview);
+    QObject::connect(&planeInterface,
+                     &AircraftInterface::aircraftSaved,
+                     &aircraftManager,
+                     &AircraftManager::setAircraft);
+    QObject::connect(&aircraftManager,
+                     &AircraftManager::changeAircraft,
+                     &planeInterface,
+                     &AircraftInterface::setAircraft);
+    QObject::connect(&planeInterface,
+                     &AircraftInterface::updateAircraft,
+                     &gaugeInterface,
+                     &GaugeManager::changeAircraft);
+    QObject::connect(&planeInterface,
+                     &AircraftInterface::createDefaultGauges,
+                     &gaugeInterface,
+                     &GaugeManager::createDefaults);
+    QObject::connect(&planeInterface,
+                     &AircraftInterface::loadAircraftPreview,
+                     &gaugeInterface,
+                     &GaugeManager::loadAircraftPreview);
 
-    QObject::connect(&netManager, &NetworkManager::connectedChanged, &netInterface, &NetworkInterface::setConnectedState);
-    QObject::connect(&netManager, &NetworkManager::versionError, &netInterface, &NetworkInterface::showErrorPopup);
-    QObject::connect(&netManager, &NetworkManager::serverInitFinished, &netInterface, &NetworkInterface::setAddressAndPort);
-    QObject::connect(&netInterface, &NetworkInterface::removeClientAircraft, &netManager, &NetworkManager::removeClientAircraft);
-    QObject::connect(&netInterface, &NetworkInterface::loadClientAircraft, &netManager, &NetworkManager::loadClientAircraft);
-    QObject::connect(&aircraftManager, &AircraftManager::sendAircraftToClient, &netManager, &NetworkManager::sendAircraftToClient);
-    QObject::connect(&netManager, &NetworkManager::receivedAircraft, &aircraftManager, &AircraftManager::setAircraft);
-    QObject::connect(&netManager, &NetworkManager::receivedFileList, &aircraftManager, &AircraftManager::setClientKeys);
+    QObject::connect(&netManager,
+                     &NetworkManager::connectedChanged,
+                     &netInterface,
+                     &NetworkInterface::setConnectedState);
+    QObject::connect(&netManager,
+                     &NetworkManager::versionError,
+                     &netInterface,
+                     &NetworkInterface::showErrorPopup);
+    QObject::connect(&netManager,
+                     &NetworkManager::serverInitFinished,
+                     &netInterface,
+                     &NetworkInterface::setAddressAndPort);
+    QObject::connect(&netInterface,
+                     &NetworkInterface::removeClientAircraft,
+                     &netManager,
+                     &NetworkManager::removeClientAircraft);
+    QObject::connect(&netInterface,
+                     &NetworkInterface::loadClientAircraft,
+                     &netManager,
+                     &NetworkManager::loadClientAircraft);
+    QObject::connect(&aircraftManager,
+                     &AircraftManager::sendAircraftToClient,
+                     &netManager,
+                     &NetworkManager::sendAircraftToClient);
+    QObject::connect(&netManager,
+                     &NetworkManager::receivedAircraft,
+                     &aircraftManager,
+                     &AircraftManager::setAircraft);
+    QObject::connect(&netManager,
+                     &NetworkManager::receivedFileList,
+                     &aircraftManager,
+                     &AircraftManager::setClientKeys);
 
 
     netManager.init();

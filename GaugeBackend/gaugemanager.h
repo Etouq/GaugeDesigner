@@ -1,9 +1,9 @@
 #ifndef GAUGEMANAGER_H
 #define GAUGEMANAGER_H
 
-#include <QObject>
-
 #include "gaugeinterface.h"
+
+#include <QObject>
 
 class QQmlContext;
 class AircraftInterface;

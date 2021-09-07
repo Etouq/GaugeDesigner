@@ -69,7 +69,8 @@ QByteArray BinaryUtil::toBinary(const QColor &col)
     uint8_t red = col.red();
     uint8_t green = col.green();
     uint8_t blue = col.blue();
-    return QByteArray(reinterpret_cast<char *>(&red), sizeof(red)) + QByteArray(reinterpret_cast<char *>(&green), sizeof(green))
+    return QByteArray(reinterpret_cast<char *>(&red), sizeof(red))
+           + QByteArray(reinterpret_cast<char *>(&green), sizeof(green))
            + QByteArray(reinterpret_cast<char *>(&blue), sizeof(blue));
 }
 
@@ -129,7 +130,6 @@ QByteArray BinaryUtil::toBinary(const QVector<TextGradDef> &vec)
 
     return ret;
 }
-
 
 
 // read functions
@@ -231,17 +231,17 @@ Units BinaryUtil::readUnit(QIODevice &data)
 // struct types
 ColorZone BinaryUtil::readColorZone(QIODevice &data)
 {
-    return ColorZone { readDouble(data), readDouble(data), readColor(data) };
+    return ColorZone{ readDouble(data), readDouble(data), readColor(data) };
 }
 
 GradDef BinaryUtil::readGrad(QIODevice &data)
 {
-    return GradDef { readDouble(data), readBool(data), readColor(data) };
+    return GradDef{ readDouble(data), readBool(data), readColor(data) };
 }
 
 TextGradDef BinaryUtil::readTextGrad(QIODevice &data)
 {
-    return TextGradDef { readDouble(data), readString(data) };
+    return TextGradDef{ readDouble(data), readString(data) };
 }
 
 

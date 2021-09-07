@@ -38,9 +38,6 @@ public slots:
 private slots:
     void newIncomingConnection();
     void receivedDataFromClient();
-
-
-
 };
 
-#endif // NETWORKMANAGER_H
+#endif   // NETWORKMANAGER_H
