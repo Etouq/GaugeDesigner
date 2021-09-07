@@ -17,15 +17,10 @@ enum class DesignerIds : uint8_t
     SAVE_AIRCRAFT
 };
 
-// used for communication from client to server
-enum class ClientIds : uint8_t
+enum class ClientToDesignerIds : uint8_t
 {
     CLIENT_NETWORK_VERSION,
-    // simconnect server
     QUIT,
-    CHANGE_AIRCRAFT,
-    START,
-    // gauge designer
     LOAD_AIRCRAFT,
     AIRCRAFT_FILE_LIST
 };

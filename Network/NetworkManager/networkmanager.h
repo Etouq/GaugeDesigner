@@ -14,7 +14,7 @@ class NetworkManager : public QObject
     QTcpServer tcpServer;
     QTcpSocket *tcpSocket;
 
-    const uint8_t latestGaugeNetworkVersion = 1;
+    const uint8_t latestGaugeNetworkVersion = 2;
 
 public:
     explicit NetworkManager(QObject *parent = nullptr);

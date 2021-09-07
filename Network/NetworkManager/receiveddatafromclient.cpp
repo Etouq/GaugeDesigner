@@ -10,11 +10,11 @@ void NetworkManager::receivedDataFromClient()
     while (reading && !tcpSocket->atEnd())
     {
         tcpSocket->startTransaction();
-        ClientIds id = ClientIds::LOAD_AIRCRAFT;
+        ClientToDesignerIds id = ClientToDesignerIds::LOAD_AIRCRAFT;
         tcpSocket->read(reinterpret_cast<char *>(&id), sizeof(id));
         switch (id)
         {
-            case ClientIds::CLIENT_NETWORK_VERSION:
+            case ClientToDesignerIds::CLIENT_NETWORK_VERSION:
             {
                 if (tcpSocket->bytesAvailable() < sizeof(latestGaugeNetworkVersion))
                 {
@@ -30,8 +30,7 @@ void NetworkManager::receivedDataFromClient()
                     tcpSocket->disconnectFromHost();
                     emit versionError("The network data transfer version of the Flight Display "
                                       "Companion is newer than the one used by this application. "
-                                      "Either update this application or revert the Flight Display "
-                                      "Companion to the last working version.");
+                                      "Please update this application.");
                     return;
                 }
                 if (latestGaugeNetworkVersion > clientVersion)
@@ -39,13 +38,12 @@ void NetworkManager::receivedDataFromClient()
                     tcpSocket->disconnectFromHost();
                     emit versionError("The network data transfer version of the Flight Display "
                                       "Companion is older than the one used by this application. "
-                                      "Either update the Flight Display Companion or revert this "
-                                      "application to the last working version.");
+                                      "Please update the Flight Display Companion.");
                     return;
                 }
                 break;
             }
-            case ClientIds::LOAD_AIRCRAFT:
+            case ClientToDesignerIds::LOAD_AIRCRAFT:
             {
                 int64_t byteSize = 0;
                 if (tcpSocket->bytesAvailable() < sizeof(byteSize))
@@ -71,7 +69,7 @@ void NetworkManager::receivedDataFromClient()
                 emit receivedAircraft(aircraft);
                 break;
             }
-            case ClientIds::AIRCRAFT_FILE_LIST:
+            case ClientToDesignerIds::AIRCRAFT_FILE_LIST:
             {
                 int64_t byteSize = 0;
                 if (tcpSocket->bytesAvailable() < sizeof(byteSize))
@@ -106,7 +104,7 @@ void NetworkManager::receivedDataFromClient()
                 emit receivedFileList(names);
                 break;
             }
-            case ClientIds::QUIT:
+            case ClientToDesignerIds::QUIT:
             {
                 tcpSocket->commitTransaction();
                 break;

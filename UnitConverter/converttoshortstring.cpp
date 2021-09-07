@@ -7,8 +7,6 @@ QString UnitConverter::convertToShortString(int unitInt)
     Units unit = Units(unitInt);
     switch (unit)
     {
-        case Units::NONE:
-            return "";
         case Units::PERCENT:
             return "%";
         case Units::RPM:
@@ -210,5 +208,8 @@ QString UnitConverter::convertToShortString(int unitInt)
             return "grS";
         case Units::LBS_PER_SECOND:
             return "PPS";
+        case Units::NONE:
+        default:
+            return "";
     }
 }
