@@ -63,6 +63,11 @@ QByteArray AircraftDefinition::toBinary() const
     ret += BinaryUtil::toBinary(noColors);
     ret += BinaryUtil::toBinary(dynamicBarberpole);
 
+    ret += BinaryUtil::toBinary(defaultVr);
+    ret += BinaryUtil::toBinary(defaultVx);
+    ret += BinaryUtil::toBinary(defaultVy);
+    ret += BinaryUtil::toBinary(defaultVapp);
+
     return ret;
 }
 
@@ -133,102 +138,15 @@ AircraftDefinition AircraftDefinition::fromBinaryV1(QIODevice &data, FileVersion
     return ret;
 }
 
-struct ActiveAirplaneSettings
+AircraftDefinition AircraftDefinition::fromBinaryV2(QIODevice &data, FileVersion version)
 {
-    double secondDivFactor = 1;
-    bool egtReplacesItt = false;
-    bool torqueAsPct = false;
-    bool usePropRpm = false;
-    bool secondIsLoad = false;
-    bool hasApu = false;
-    bool hasFlaps = false;
-    bool hasSpoilers = false;
-    bool hasElevTrim = false;
-    bool hasRudderTrim = false;
-    bool hasAileronTrim = false;
-    bool hasEgt = false;
-    bool fuelQtyByVolume = false;
-    bool fuelFlowByVolume = false;
-    int8_t numEngines = 1;
-    int8_t numTanks = 1;
-    int8_t type = 0;   // 0: jet, 1: prop, 2: turboprop
-};
+    AircraftDefinition ret = fromBinaryV1(data, version);
 
-QByteArray AircraftDefinition::toNetworkData() const
-{
-    ActiveAirplaneSettings temp;
-    temp.hasFlaps = hasFlaps;
-    temp.hasSpoilers = hasSpoilers;
-    temp.hasElevTrim = hasElevatorTrim;
-    temp.hasRudderTrim = hasRudderTrim;
-    temp.hasAileronTrim = hasAileronTrim;
-    temp.fuelQtyByVolume = fuelQtyByVolume;
-    temp.fuelFlowByVolume = fuelFlowByVolume;
-    temp.numEngines = numEngines;
-    temp.numTanks = numTanks;
+    ret.defaultVr = BinaryUtil::readUint16_t(data);
+    ret.defaultVx = BinaryUtil::readUint16_t(data);
+    ret.defaultVy = BinaryUtil::readUint16_t(data);
+    ret.defaultVapp = BinaryUtil::readUint16_t(data);
 
-    switch (type)
-    {
-        case AircraftType::JET:
-        {
-            JetDefinition def = currentType.value<JetDefinition>();
-            temp.secondDivFactor = 1;
-            temp.egtReplacesItt = def.egtReplacesItt;
-            temp.torqueAsPct = false;
-            temp.usePropRpm = false;
-            temp.secondIsLoad = false;
-            temp.hasApu = def.hasApu;
-            temp.hasEgt = false;
-            temp.type = 0;
-            break;
-        }
-        case AircraftType::PROP:
-        {
-            PropDefinition def = currentType.value<PropDefinition>();
-            temp.secondDivFactor = def.secondIsLoad ? 5.5 * def.maxHp : 1;
-            temp.egtReplacesItt = false;
-            temp.torqueAsPct = false;
-            temp.usePropRpm = def.usePropRpm;
-            temp.secondIsLoad = def.secondIsLoad;
-            temp.hasApu = false;
-            temp.hasEgt = def.hasEgt;
-            temp.type = 1;
-            break;
-        }
-        case AircraftType::TURBOPROP:
-        {
-            TurbopropDefinition def = currentType.value<TurbopropDefinition>();
-            temp.secondDivFactor = 1;
-            temp.egtReplacesItt = false;
-            temp.torqueAsPct = def.torqueAsPct;
-            temp.usePropRpm = def.usePropRpm;
-            temp.secondIsLoad = false;
-            temp.hasApu = false;
-            temp.hasEgt = def.hasEgt;
-            temp.type = 2;
-            break;
-        }
-        case AircraftType::INVALID:
-            break;
-    }
-
-    QByteArray ret(BinaryUtil::toBinary(temp.secondDivFactor));
-    ret += BinaryUtil::toBinary(temp.egtReplacesItt);
-    ret += BinaryUtil::toBinary(temp.torqueAsPct);
-    ret += BinaryUtil::toBinary(temp.usePropRpm);
-    ret += BinaryUtil::toBinary(temp.secondIsLoad);
-    ret += BinaryUtil::toBinary(temp.hasApu);
-    ret += BinaryUtil::toBinary(temp.hasFlaps);
-    ret += BinaryUtil::toBinary(temp.hasSpoilers);
-    ret += BinaryUtil::toBinary(temp.hasElevTrim);
-    ret += BinaryUtil::toBinary(temp.hasRudderTrim);
-    ret += BinaryUtil::toBinary(temp.hasAileronTrim);
-    ret += BinaryUtil::toBinary(temp.hasEgt);
-    ret += BinaryUtil::toBinary(temp.fuelQtyByVolume);
-    ret += BinaryUtil::toBinary(temp.fuelFlowByVolume);
-    ret += BinaryUtil::toBinary(temp.numEngines);
-    ret += BinaryUtil::toBinary(temp.numTanks);
-    ret += BinaryUtil::toBinary(temp.type);
     return ret;
 }
 
@@ -237,10 +155,13 @@ AircraftDefinition AircraftDefinition::fromBinary(QIODevice &data, FileVersion v
     switch (version)
     {
         case FileVersion::V1:
-        default:
             return fromBinaryV1(data, version);
             break;
+        case FileVersion::V2:
+            return fromBinaryV2(data, version);
+            break;
     }
+    return AircraftDefinition();
 }
 
 bool AircraftDefinition::operator==(const AircraftDefinition &rhs) const

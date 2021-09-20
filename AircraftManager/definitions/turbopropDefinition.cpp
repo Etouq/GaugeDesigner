@@ -30,10 +30,11 @@ TurbopropDefinition TurbopropDefinition::fromBinary(QIODevice &data, FileVersion
     switch (version)
     {
         case FileVersion::V1:
-        default:
+        case FileVersion::V2:
             return fromBinaryV1(data, version);
             break;
     }
+    return TurbopropDefinition();
 }
 
 TurbopropDefinition TurbopropDefinition::fromBinaryV1(QIODevice &data, FileVersion version)

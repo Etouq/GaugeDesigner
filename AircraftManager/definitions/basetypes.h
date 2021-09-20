@@ -7,7 +7,8 @@
 
 enum class FileVersion : int16_t
 {
-    V1
+    V1,
+    V2
 };
 
 struct ColorZone
