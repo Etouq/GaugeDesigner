@@ -11,7 +11,27 @@ Item {
     clip: true
     height: 200
 
-    signal changeMade()
+    property bool unsavedChanges: false
+
+    // listmodel to check if data changed
+    ListModel {
+        id: lastListModel
+    }
+
+    function checkModelsEqual() {
+        if (lastListModel.count != zoneModel.count)
+            return false;
+
+        for (let i = 0; i < lastListModel.count; ++i) {
+            let savedEntry = lastListModel.get(i);
+            let newEntry = zoneModel.get(i);
+
+            if (savedEntry.start != newEntry.start || savedEntry.end != newEntry.end || savedEntry.color != newEntry.color)
+                return false;
+        }
+
+        return true;
+    }
 
     ColorDialog {
         id: colorDialog
@@ -21,7 +41,7 @@ Item {
             view.itemAtIndex(activeIndex).activeColor = colorDialog.color;
             zoneModel.get(activeIndex).color = colorDialog.color.toString();
             activeIndex = -1;
-            root.changeMade();
+            unsavedChanges = !checkModelsEqual();
         }
         onRejected: {
             activeIndex = -1;
@@ -35,12 +55,14 @@ Item {
             text: "Insert"
             onTriggered: {
                 zoneModel.insert(activeIndex, { "start": 0, "end": 0, "color": "#008000" });
+                unsavedChanges = !checkModelsEqual();
             }
         }
         MenuItem {
             text: "Delete"
             onTriggered: {
                 zoneModel.remove(activeIndex);
+                unsavedChanges = !checkModelsEqual();
             }
         }
         onClosed: activeIndex = -1;
@@ -48,17 +70,31 @@ Item {
 
     function updateModel(gaugeObject) {
         zoneModel.clear();
+        lastListModel.clear();
+
         for (let i = 0; i < gaugeObject.numColorZones(); i++) {
-            zoneModel.append({ "start": gaugeObject.colorZoneStartAt(i), "end": gaugeObject.colorZoneEndAt(i), "color": gaugeObject.colorZoneColorAt(i).toString() })
+            let colorZoneStart = gaugeObject.colorZoneStartAt(i);
+            let colorZoneEnd = gaugeObject.colorZoneEndAt(i);
+            let colorZoneColor = gaugeObject.colorZoneColorAt(i).toString();
+
+            zoneModel.append({ "start": colorZoneStart, "end": colorZoneEnd, "color": colorZoneColor });
+            lastListModel.append({ "start": colorZoneStart, "end": colorZoneEnd, "color": colorZoneColor });
         }
+
+        unsavedChanges = false;
     }
 
     function saveData(gaugeObject) {
         gaugeObject.setNumColorZones(zoneModel.count);
+        lastListModel.clear();
+
         for (let i = 0; i < zoneModel.count; i++) {
             let zone = zoneModel.get(i);
             gaugeObject.setColorZoneAt(i, zone.start, zone.end, zone.color);
+            lastListModel.append({ "start": zone.start, "end": zone.end, "color": zone.color });
         }
+
+        unsavedChanges = false;
     }
 
     signal colorTriggered(int idx)
@@ -72,11 +108,11 @@ Item {
 
     onStartChanged: {
         zoneModel.get(idx).start = val;
-        root.changeMade();
+        unsavedChanges = !checkModelsEqual();
     }
     onEndChanged: {
         zoneModel.get(idx).end = val;
-        root.changeMade();
+        unsavedChanges = !checkModelsEqual();
     }
 
     ListModel {
@@ -193,7 +229,10 @@ Item {
         padding: 2
         enabled: zoneModel.count < 10
 
-        onReleased: zoneModel.append({ "start": 0, "end": 0, "color": "#008000" })
+        onReleased: {
+            zoneModel.append({ "start": 0, "end": 0, "color": "#008000" });
+            unsavedChanges = !checkModelsEqual();
+        }
 
         background: Rectangle {
             anchors.fill: parent
@@ -221,7 +260,10 @@ Item {
 
         enabled: zoneModel.count > 0
 
-        onReleased: zoneModel.remove(zoneModel.count - 1)
+        onReleased: {
+            zoneModel.remove(zoneModel.count - 1);
+            unsavedChanges = !checkModelsEqual();
+        }
 
         background: Rectangle {
             anchors.fill: parent

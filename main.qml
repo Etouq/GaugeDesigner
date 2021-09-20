@@ -4,6 +4,7 @@ import QtQuick.Controls 2.15
 import QtQuick.Dialogs 1.3
 import QtQuick.Shapes 1.15
 import QtQuick.Layouts 1.15
+import "GeneralTab"
 import "GaugeTab"
 import "StyledControls"
 import "PreviewPopup"
@@ -15,7 +16,7 @@ ApplicationWindow {
     height: 500
     visible: true
     color: "black"
-    title: "Gauge Designer (1.0)"
+    title: Qt.application.displayName
 
 
     property real maxScaleFactor: Math.min(Screen.desktopAvailableWidth / 630, Screen.desktopAvailableHeight / 500)
@@ -29,7 +30,7 @@ ApplicationWindow {
     property bool jetValid: generalTab.activeType != 0 || (n1Tab.isValid && n2Tab.isValid && ittTab.isValid)
     property bool propValid: generalTab.activeType != 1 || (rpmTab.isValid && secondTab.isValid && (!generalTab.hasEgt || egtTab.isValid))
     property bool turbopropValid: generalTab.activeType != 2 || (n1Tab.isValid && trqTab.isValid && ittTab.isValid && rpmTab.isValid && (!generalTab.hasEgt || egtTab.isValid))
-    property bool allValid: generalTab.allInputsValid && jetValid && propValid && turbopropValid && fuelQtyTab.isValid && fuelFlowTab.isValid && oilTempTab.isValid && oilPressTab.isValid
+    property bool allValid: generalTab.isValid && jetValid && propValid && turbopropValid && fuelQtyTab.isValid && fuelFlowTab.isValid && oilTempTab.isValid && oilPressTab.isValid
 
     Timer {
         id: refitTimer
@@ -103,84 +104,72 @@ ApplicationWindow {
             currentIndex: gaugeTabBar.activeIndex
             GeneralTab {
                 id: generalTab
-                onChangeMade: toolbar.unsavedChangesMade();
             }
             GaugeTab {
                 id: n1Tab
                 defaultTitle: "N1"
                 unitTypes: [1]
                 gaugeObject: n1Interface
-                onChangeMade: toolbar.unsavedChangesMade();
             }
             GaugeTab {
                 id: n2Tab
                 defaultTitle: "N2"
                 unitTypes: [1]
                 gaugeObject: n2Interface
-                onChangeMade: toolbar.unsavedChangesMade();
             }
             GaugeTab {
                 id: trqTab
                 defaultTitle: "TRQ"
                 unitTypes: [1, 5]
                 gaugeObject: trqInterface
-                onChangeMade: toolbar.unsavedChangesMade();
             }
             GaugeTab {
                 id: ittTab
                 defaultTitle: generalTab.egtReplacesItt ? "EGT" : "ITT"
                 unitTypes: [3]
                 gaugeObject: ittInterface
-                onChangeMade: toolbar.unsavedChangesMade();
             }
             GaugeTab {
                 id: rpmTab
                 defaultTitle: "RPM"
                 unitTypes: [2]
                 gaugeObject: rpmInterface
-                onChangeMade: toolbar.unsavedChangesMade();
             }
             GaugeTab {
                 id: secondTab
                 defaultTitle: generalTab.loadReplacesMan ? "LOAD" : "MAN"
                 unitTypes: generalTab.loadReplacesMan ? [1] : [4]
                 gaugeObject: secondInterface
-                onChangeMade: toolbar.unsavedChangesMade();
             }
             GaugeTab {
                 id: fuelQtyTab
                 defaultTitle: generalTab.numTanks == 1 ? "FUEL QTY" : "L FUEL QTY R"
                 unitTypes: [6, 7]
                 gaugeObject: fuelQtyInterface
-                onChangeMade: toolbar.unsavedChangesMade();
             }
             GaugeTab {
                 id: fuelFlowTab
                 defaultTitle: generalTab.numEngines == 1 ? "FUEL FLOW" : "L FUEL FLOW R"
                 unitTypes: [8, 9, 10, 11, 12, 13]
                 gaugeObject: fuelFlowInterface
-                onChangeMade: toolbar.unsavedChangesMade();
             }
             GaugeTab {
                 id: oilTempTab
                 defaultTitle: generalTab.numEngines == 1 ? "OIL TEMP" : "L OIL TEMP R"
                 unitTypes: [3]
                 gaugeObject: oilTempInterface
-                onChangeMade: toolbar.unsavedChangesMade();
             }
             GaugeTab {
                 id: oilPressTab
                 defaultTitle: generalTab.numEngines == 1 ? "OIL PRESS" : "L OIL PRESS R"
                 unitTypes: [4]
                 gaugeObject: oilPressInterface
-                onChangeMade: toolbar.unsavedChangesMade();
             }
             GaugeTab {
                 id: egtTab
                 defaultTitle: generalTab.numEngines == 1 ? "EGT" : "L EGT R"
                 unitTypes: [3]
                 gaugeObject: egtInterface
-                onChangeMade: toolbar.unsavedChangesMade();
             }
         }
 
@@ -200,13 +189,11 @@ ApplicationWindow {
             width: parent.width
             everythingValid: allValid
 
-            onSaveDataClicked: {
-                saveDataMain();
-            }
+            unsavedChanges: generalTab.unsavedChanges || (generalTab.activeType == 0 ? n1Tab.unsavedChanges || n2Tab.unsavedChanges || ittTab.unsavedChanges : generalTab.activeType == 1 ? rpmTab.unsavedChanges || secondTab.unsavedChanges || (generalTab.hasEgt && egtTab.unsavedChanges) : n1Tab.unsavedChanges || trqTab.unsavedChanges || ittTab.unsavedChanges || rpmTab.unsavedChanges || (generalTab.hasEgt && egtTab.unsavedChanges)) || fuelQtyTab.unsavedChanges || fuelFlowTab.unsavedChanges || oilTempTab.unsavedChanges || oilPressTab.unsavedChanges
 
-            onPositionResetNeeded: {
-                gaugeTabBar.resetPosition();
-            }
+            onSaveDataClicked: saveDataMain()
+
+            onPositionResetNeeded: gaugeTabBar.resetPosition()
         }
 
 

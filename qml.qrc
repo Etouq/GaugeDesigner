@@ -14,7 +14,7 @@
         <file>StyledControls/StyledTabButton.qml</file>
         <file>StyledControls/StyledRadioButtonWithText.qml</file>
         <file>StyledControls/StyledSwitchWithText.qml</file>
-        <file>GeneralTab.qml</file>
+        <file>GeneralTab/GeneralTab.qml</file>
         <file>GaugeTabBar.qml</file>
         <file>GaugeToolBar.qml</file>
         <file>StyledControls/StyledToolBarButton.qml</file>
@@ -41,5 +41,9 @@
         <file>PreviewPopup/PropSingle.qml</file>
         <file>PreviewPopup/TurbopropDouble.qml</file>
         <file>PreviewPopup/TurbopropSingle.qml</file>
+        <file>GaugeTab/TopSection.qml</file>
+        <file>GeneralTab/AirspeedColors.qml</file>
+        <file>GeneralTab/GroupBoxColumn.qml</file>
+        <file>GeneralTab/SwitchColumn.qml</file>
     </qresource>
 </RCC>

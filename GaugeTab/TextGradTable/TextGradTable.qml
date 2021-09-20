@@ -10,16 +10,44 @@ Item {
     property int activeIndex: -1
 
 
-    signal changeMade()
+    property bool unsavedChanges: false
+
+    // listmodel to check if data changed
+    ListModel {
+        id: lastListModel
+    }
+
+    function checkModelsEqual() {
+        if (lastListModel.count != textGradModel.count)
+            return false;
+
+        for (let i = 0; i < lastListModel.count; ++i) {
+            let savedEntry = lastListModel.get(i);
+            let newEntry = textGradModel.get(i);
+
+            if (savedEntry.pos != newEntry.pos || savedEntry.text != newEntry.text)
+                return false;
+        }
+
+        return true;
+    }
 
     signal posChanged(int idx, real val)
     signal textChanged(int idx, string val)
 
     function updateModel(gaugeObject) {
         textGradModel.clear();
+        lastListModel.clear();
+
         for (let i = 0; i < gaugeObject.numTextGrads(); i++) {
-            textGradModel.append({ "pos": gaugeObject.textGradValAt(i), "text": gaugeObject.gradTextAt(i) })
+            let textGradPos = gaugeObject.textGradValAt(i);
+            let textGradText = gaugeObject.gradTextAt(i);
+
+            textGradModel.append({ "pos": textGradPos, "text": textGradText });
+            lastListModel.append({ "pos": textGradPos, "text": textGradText });
         }
+
+        unsavedChanges = false;
     }
 
     function fillModel(_gradDist, _gradStart)
@@ -31,14 +59,20 @@ Item {
                 break;
         }
 
+        unsavedChanges = !checkModelsEqual();
     }
 
     function saveData(gaugeObject) {
         gaugeObject.setNumTextGrads(textGradModel.count);
+        lastListModel.clear();
+
         for (let i = 0; i < textGradModel.count; i++) {
             let textGrad = textGradModel.get(i);
             gaugeObject.setTextGradAt(i, textGrad.pos, textGrad.text);
+            lastListModel.append({ "pos": textGrad.pos, "text": textGrad.text });
         }
+
+        unsavedChanges = false;
     }
 
     Menu {
@@ -47,12 +81,14 @@ Item {
             text: "Insert"
             onTriggered: {
                 textGradModel.insert(activeIndex, { "pos": 0, "text": "0" });
+                unsavedChanges = !checkModelsEqual();
             }
         }
         MenuItem {
             text: "Delete"
             onTriggered: {
                 textGradModel.remove(activeIndex);
+                unsavedChanges = !checkModelsEqual();
             }
         }
         onClosed: activeIndex = -1;
@@ -63,11 +99,11 @@ Item {
 
     onPosChanged: {
         textGradModel.get(idx).pos = val;
-        root.changeMade();
+        unsavedChanges = !checkModelsEqual();
     }
     onTextChanged: {
         textGradModel.get(idx).text = val;
-        root.changeMade();
+        unsavedChanges = !checkModelsEqual();
     }
 
     ListModel {
@@ -170,7 +206,10 @@ Item {
         padding: 2
         enabled: textGradModel.count < 50
 
-        onReleased: textGradModel.append({ "pos": 0, "text": "0" })
+        onReleased: {
+            textGradModel.append({ "pos": 0, "text": "0" });
+            unsavedChanges = !checkModelsEqual();
+        }
 
         background: Rectangle {
             anchors.fill: parent
@@ -198,7 +237,10 @@ Item {
 
         enabled: textGradModel.count > 0
 
-        onReleased: textGradModel.remove(textGradModel.count - 1)
+        onReleased: {
+            textGradModel.remove(textGradModel.count - 1);
+            unsavedChanges = !checkModelsEqual();
+        }
 
         background: Rectangle {
             anchors.fill: parent

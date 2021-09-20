@@ -11,116 +11,85 @@ Item {
     id: root
     width: 630
     height: 450
-    visible: true
 
-    property string defaultTitle: ""
-    property var unitTypes: [0] // 0: none, 1: percent, 2: rpm, 3: temperature, 4: pressure, 5: torque, 6: weight, 7: volume, 8: weight per hour, 9: volume per hour, 10: weight per minute, 11: volume per minute, 12: weight per second, 13: volume per second
+    property alias defaultTitle: topSection.defaultTitle
+    property alias unitTypes: topSection.unitTypes // 0: none, 1: percent, 2: rpm, 3: temperature, 4: pressure, 5: torque, 6: weight, 7: volume, 8: weight per hour, 9: volume per hour, 10: weight per minute, 11: volume per minute, 12: weight per second, 13: volume per second
 
-    property real minVal: 0
-    property real maxVal: 100
 
     property var gaugeObject: null
 
-    property bool isValid: minValField.acceptableInput && minValField.length > 0 && maxValField.acceptableInput && maxValField.length > 0 && (!hasMinBlinkSwitch.checked || (minBlinkVal.acceptableInput && minBlinkVal.length > 0)) && (!hasMaxBlinkSwitch.checked || (maxBlinkVal.acceptableInput && maxBlinkVal.length > 0)) && (noTextSwitch.checked || (incrementVal.acceptableInput && numDecimalsVal.acceptableInput && incrementVal.length > 0 && numDecimalsVal.length > 0))
+    property bool isValid: (!hasMinBlinkSwitch.checked || (minBlinkVal.acceptableInput && minBlinkVal.length > 0)) && (!hasMaxBlinkSwitch.checked || (maxBlinkVal.acceptableInput && maxBlinkVal.length > 0)) && topSection.isValid
+    property bool unsavedChanges: topSection.unsavedChanges || lastMinBlinkChecked != hasMinBlinkSwitch.checked || (!hasMinBlinkSwitch.checked && lastMinBlinkValue != minBlinkVal.text) || lastMaxBlinkChecked != hasMaxBlinkSwitch.checked || (!hasMaxBlinkSwitch.checked && lastMaxBlinkValue != maxBlinkVal.text) || lastForceTextChecked != forceTextColorSwitch.checked || (!forceTextColorSwitch.checked && textForcedColorRect.color != lastForceTextColor) || colorInputTable.unsavedChanges || gradInputTable.unsavedChanges || textGradInputTable.unsavedChanges
 
-    onDefaultTitleChanged: titleText.text = defaultTitle
+
+    // last saved state data
+    property bool lastMinBlinkChecked: false
+    property string lastMinBlinkValue: ""
+    property bool lastMaxBlinkChecked: false
+    property string lastMaxBlinkValue: ""
+    property bool lastForceTextChecked: false
+    property string lastForceTextColor: ""
+
 
     signal changeMade()
 
     Connections {
         target: gaugeObject
         function onUpdateGauge() {
-            titleText.text = gaugeObject.getTitle();
-            titleText.ensureVisible(0);
-            let unitInt = gaugeObject.getUnit();
-            for (let i = 0; i < unitModel.count; i++) {
-                if (unitModel.get(i).unitId === unitInt) {
-                    unitBox.currentIndex = i;
-                    unitBox.contentString = unitModel.get(i).longString
-                }
-            }
-            unitText.text = gaugeObject.getUnitString();
-            unitText.ensureVisible(0);
-            minValField.text = gaugeObject.getMinValue();
-            minValField.ensureVisible(0);
-            maxValField.text = gaugeObject.getMaxValue();
-            maxValField.ensureVisible(0);
-
-            colorInputTable.updateModel(gaugeObject);
-            gradInputTable.updateModel(gaugeObject);
-            textGradInputTable.updateModel(gaugeObject);
-
-            incrementVal.text = gaugeObject.getTextIncrement();
-            incrementVal.ensureVisible(0);
-            numDecimalsVal.text = gaugeObject.getTextNumDigits();
-            numDecimalsVal.ensureVisible(0);
-
-            forceTextColorSwitch.checked = gaugeObject.getForceTextColor();
-            textForcedColorRect.color = gaugeObject.getTextForcedColor();
-
-            hasMinBlinkSwitch.checked = gaugeObject.getHasMinRedBlink();
-            minBlinkVal.text = gaugeObject.getMinRedBlinkThreshold();
-            minBlinkVal.ensureVisible(0);
-            hasMaxBlinkSwitch.checked = gaugeObject.getHasMaxRedBlink();
-            maxBlinkVal.text = gaugeObject.getMaxRedBlinkThreshold();
-            maxBlinkVal.ensureVisible(0);
-
-            noTextSwitch.checked = gaugeObject.getNoText();
+            updateData();
         }
     }
 
-    onMaxValChanged: {
-        gradInputTable.maxValue = maxVal;
-        textGradInputTable.maxValue = maxVal;
-    }
 
-    Component.onCompleted: {
-        unitModel.clear();
-        let hasSections = unitTypes.length > 1;
+    function updateData() {
+        colorInputTable.updateModel(gaugeObject);
+        gradInputTable.updateModel(gaugeObject);
+        textGradInputTable.updateModel(gaugeObject);
 
-        for (let i = 0; i < unitTypes.length; i++) {
-            let units = converter.getAllowedUnits(unitTypes[i]);
-            let sectHeader = hasSections ? converter.getSectionHeader(unitTypes[i]) : "";
+        topSection.updateData();
 
-            for (let j = 0; j < units.length; j++)
-                unitModel.append({ "longString": converter.convertToLongString(units[j]), "unitId": units[j], "shortString": converter.convertToShortString(units[j]), "sect": sectHeader });
-        }
+        forceTextColorSwitch.checked = gaugeObject.getForceTextColor();
+        textForcedColorRect.color = gaugeObject.getTextForcedColor();
 
-        let unitList = converter.getAllowedUnits(unitTypes[0]);
-        unitBox.currentIndex = 0;
-        unitBox.contentString = converter.convertToLongString(unitList[0]);
-        unitText.text = converter.convertToShortString(unitList[0]);
-    }
+        hasMinBlinkSwitch.checked = gaugeObject.getHasMinRedBlink();
+        minBlinkVal.text = gaugeObject.getMinRedBlinkThreshold();
+        minBlinkVal.ensureVisible(0);
+        hasMaxBlinkSwitch.checked = gaugeObject.getHasMaxRedBlink();
+        maxBlinkVal.text = gaugeObject.getMaxRedBlinkThreshold();
+        maxBlinkVal.ensureVisible(0);
 
-    onUnitTypesChanged: {
-        unitModel.clear();
-        let hasSections = unitTypes.length > 1;
-
-        for (let i = 0; i < unitTypes.length; i++) {
-            let units = converter.getAllowedUnits(unitTypes[i]);
-            let sectHeader = hasSections ? converter.getSectionHeader(unitTypes[i]) : "";
-
-            for (let j = 0; j < units.length; j++)
-                unitModel.append({ "longString": converter.convertToLongString(units[j]), "unitId": units[j], "shortString": converter.convertToShortString(units[j]), "sect": sectHeader });
-        }
-
-        let unitList = converter.getAllowedUnits(unitTypes[0]);
-        unitBox.currentIndex = 0;
-        unitBox.contentString = converter.convertToLongString(unitList[0]);
-        unitText.text = converter.convertToShortString(unitList[0]);
+        lastMinBlinkChecked = hasMinBlinkSwitch.checked;
+        lastMinBlinkValue = minBlinkVal.text;
+        lastMaxBlinkChecked = hasMaxBlinkSwitch.checked;
+        lastMaxBlinkValue = maxBlinkVal.text;
+        lastForceTextChecked = forceTextColorSwitch.checked;
+        lastForceTextColor = textForcedColorRect.color;
     }
 
     function saveData() {
-        gaugeObject.setTitleAndUnit(titleText.text, unitModel.get(unitBox.currentIndex).unitId, unitText.text);
-        gaugeObject.setRange(minVal, maxVal);
+        topSection.saveData();
+
         colorInputTable.saveData(gaugeObject);
         gradInputTable.saveData(gaugeObject);
         textGradInputTable.saveData(gaugeObject);
-        gaugeObject.setTextIncrement(noTextSwitch.checked ? 1 : parseFloat(incrementVal.text), noTextSwitch.checked ? 0 : parseInt(numDecimalsVal.text));
+
         gaugeObject.setForceTextColor(forceTextColorSwitch.checked, textForcedColorRect.color.toString());
         gaugeObject.setMinBlink(hasMinBlinkSwitch.checked, hasMinBlinkSwitch.checked ? parseFloat(minBlinkVal.text) : 0);
         gaugeObject.setMaxBlink(hasMaxBlinkSwitch.checked, hasMaxBlinkSwitch.checked ? parseFloat(maxBlinkVal.text) : 0);
-        gaugeObject.setNoText(noTextSwitch.checked);
+
+        lastMinBlinkChecked = hasMinBlinkSwitch.checked;
+        if (lastMinBlinkChecked)
+            lastMinBlinkValue = minBlinkVal.text;
+
+        lastMaxBlinkChecked = hasMaxBlinkSwitch.checked;
+        if (lastMaxBlinkChecked)
+            lastMaxBlinkValue = maxBlinkVal.text;
+
+        lastForceTextChecked = forceTextColorSwitch.checked;
+        if (lastForceTextChecked)
+            lastForceTextColor = textForcedColorRect.color;
+
+
         gaugeObject.updateComplete();
     }
 
@@ -131,12 +100,20 @@ Item {
         modality: Qt.WindowModal
         onAccepted: {
             textForcedColorRect.color = colorDialog.color;
-            root.changeMade();
         }
         Component.onCompleted: color = "#FFFFFF"
     }
 
+    TopSection {
+        id: topSection
 
+        gaugeObject: root.gaugeObject
+
+        onMaxValChanged: {
+            gradInputTable.maxValue = maxVal;
+            textGradInputTable.maxValue = maxVal;
+        }
+    }
 
 
     Row {
@@ -146,7 +123,6 @@ Item {
         ColorZoneTable {
             id: colorInputTable
             anchors.bottom: parent.bottom
-            onChangeMade: root.changeMade();
         }
         Rectangle {
             width: 2
@@ -157,7 +133,6 @@ Item {
         GradTable {
             id: gradInputTable
             anchors.bottom: parent.bottom
-            onChangeMade: root.changeMade();
         }
         Rectangle {
             width: 2
@@ -168,204 +143,11 @@ Item {
         TextGradTable {
             id: textGradInputTable
             anchors.bottom: parent.bottom
-            onChangeMade: root.changeMade();
         }
     }
 
-    TextField {
-        id: minValField
-        x: 80
-        y: 12
-        width: 70
-        height: 25
-        text: "0.0"
-        selectByMouse: true
-        validator: DoubleValidator{ top: maxVal }
-        leftPadding: 5
-        font.pixelSize: 11
-        onTextChanged: {
-            if (acceptableInput)
-            {
-                minVal = parseFloat(text);
-                root.changeMade();
-            }
-        }
-    }
-
-    TextField {
-        id: maxValField
-        x: 231
-        y: 12
-        width: 70
-        height: 25
-        text: "100.0"
-        selectByMouse: true
-        validator: DoubleValidator{ bottom: minVal }
-        leftPadding: 5
-        font.pixelSize: 11
-        onTextChanged: {
-            if (acceptableInput)
-            {
-                maxVal = parseFloat(text);
-            }
-        }
-        onTextEdited: root.changeMade();
-    }
-
-
-    TextField {
-        id: titleText
-        x: 14
-        y: 60
-        width: 100
-        height: 25
-        leftPadding: 5
-        padding: 2
-        bottomPadding: 2
-        topPadding: 2
-        font.pixelSize: 11
-        selectByMouse: true
-        onTextEdited: root.changeMade();
-    }
-
-    Text {
-        y: 24
-        text: "Title"
-        anchors.left: titleText.left
-        anchors.bottom: titleText.top
-        font.pixelSize: 12
-        anchors.bottomMargin: 3
-        anchors.leftMargin: 5
-    }
-
-    TextField {
-        id: unitText
-        x: 240
-        y: 30
-        width: 70
-        height: 25
-        anchors.verticalCenter: titleText.verticalCenter
-        topPadding: 2
-        bottomPadding: 2
-        padding: 2
-        leftPadding: 5
-        font.pixelSize: 11
-        selectByMouse: true
-        onTextEdited: root.changeMade();
-    }
-
-    Text {
-        y: 35
-        text: "Unit (text)"
-        anchors.left: unitText.left
-        anchors.bottom: unitText.top
-        font.pixelSize: 12
-        anchors.leftMargin: 5
-        anchors.bottomMargin: 3
-    }
-
-    ListModel {
-        id: unitModel
-    }
-
-
-    StyledComboBox {
-        id: unitBox
-        x: 120
-        y: 30
-        width: 105
-        anchors.verticalCenter: titleText.verticalCenter
-        model: unitModel
-        onActivated: {
-            unitText.text = unitModel.get(index).shortString
-            unitBox.contentString = unitModel.get(index).longString
-        }
-        onCurrentIndexChanged: root.changeMade();
-    }
-
-    Text {
-        y: 24
-        text: "Unit"
-        anchors.left: unitBox.left
-        anchors.bottom: unitBox.top
-        font.pixelSize: 12
-        anchors.leftMargin: 5
-        anchors.bottomMargin: 3
-    }
-
-    TextField {
-        id: incrementVal
-        x: 335
-        y: 30
-        width: 70
-        height: 25
-        text: "0.0"
-        anchors.verticalCenter: titleText.verticalCenter
-        selectByMouse: true
-        validator: DoubleValidator{}
-        leftPadding: 5
-        font.pixelSize: 11
-        enabled: !noTextSwitch.checked
-        onTextEdited: root.changeMade();
-    }
-
-    TextField {
-        id: numDecimalsVal
-        x: 430
-        y: 30
-        width: 70
-        height: 25
-        text: "0"
-        anchors.verticalCenter: titleText.verticalCenter
-        validator: IntValidator{ bottom: 0; top: 5 }
-        leftPadding: 5
-        selectByMouse: true
-        font.pixelSize: 11
-        enabled: !noTextSwitch.checked
-        onTextEdited: root.changeMade();
-    }
-
-    Text {
-        text: "No Text"
-        anchors.verticalCenter: numDecimalsVal.verticalCenter
-        anchors.right: noTextSwitch.left
-        font.pixelSize: 12
-        anchors.rightMargin: 15
-    }
-
-    StyledSwitch {
-        id: noTextSwitch
-        width: 42
-        anchors.verticalCenter: numDecimalsVal.verticalCenter
-        anchors.right: parent.right
-        anchors.rightMargin: 15
-        onCheckedChanged: root.changeMade();
-    }
-
-    Text {
-        x: 346
-        y: 24
-        text: "Text Increment"
-        anchors.bottom: incrementVal.top
-        font.pixelSize: 12
-        anchors.horizontalCenter: incrementVal.horizontalCenter
-        anchors.bottomMargin: 3
-        color: noTextSwitch.checked ? "#bdbebf" : "black"
-    }
-
-    Text {
-        x: 458
-        y: 24
-        text: "Num Decimals"
-        anchors.bottom: numDecimalsVal.top
-        font.pixelSize: 12
-        anchors.horizontalCenter: numDecimalsVal.horizontalCenter
-        anchors.bottomMargin: 3
-        color: noTextSwitch.checked ? "#bdbebf" : "black"
-    }
 
     Column {
-        x: 0
         y: 126
         width: 230
         height: 144
@@ -390,7 +172,6 @@ Item {
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.right: parent.right
                 anchors.rightMargin: 15
-                onCheckedChanged: root.changeMade();
             }
         }
 
@@ -422,7 +203,6 @@ Item {
                 leftPadding: 5
                 anchors.rightMargin: 15
                 selectByMouse: true
-                onTextEdited: root.changeMade();
             }
         }
 
@@ -443,7 +223,6 @@ Item {
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.right: parent.right
                 anchors.rightMargin: 15
-                onCheckedChanged: root.changeMade();
             }
         }
 
@@ -476,27 +255,22 @@ Item {
                 anchors.rightMargin: 15
                 font.pixelSize: 11
                 selectByMouse: true
-                onTextEdited: root.changeMade();
             }
         }
 
         Item {
             width: 230
             height: 21
-            enabled: !noTextSwitch.checked
-            visible: !noTextSwitch.checked
+            visible: !topSection.noTextChecked
 
 
 
 
             StyledSwitch {
                 id: forceTextColorSwitch
-                //x: 553
-                //y: 84
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.right: textForcedColorRect.left
                 anchors.rightMargin: 5
-                onCheckedChanged: root.changeMade();
             }
 
             Text {
@@ -530,21 +304,8 @@ Item {
 
     }
 
-    Text {
-        text: "Minimum"
-        anchors.verticalCenter: minValField.verticalCenter
-        anchors.right: minValField.left
-        font.pixelSize: 12
-        anchors.rightMargin: 15
-    }
 
-    Text {
-        text: "Maximum"
-        anchors.verticalCenter: maxValField.verticalCenter
-        anchors.right: maxValField.left
-        font.pixelSize: 12
-        anchors.rightMargin: 15
-    }
+
 
 
 

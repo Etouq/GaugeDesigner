@@ -10,7 +10,27 @@ Item {
     clip: true
     height: 338
 
-    signal changeMade()
+    property bool unsavedChanges: false
+
+    // listmodel to check if data changed
+    ListModel {
+        id: lastListModel
+    }
+
+    function checkModelsEqual() {
+        if (lastListModel.count != gradModel.count)
+            return false;
+
+        for (let i = 0; i < lastListModel.count; ++i) {
+            let savedEntry = lastListModel.get(i);
+            let newEntry = gradModel.get(i);
+
+            if (savedEntry.pos != newEntry.pos || savedEntry.bigGrad != newEntry.bigGrad || savedEntry.color != newEntry.color)
+                return false;
+        }
+
+        return true;
+    }
 
     ColorDialog {
         id: colorDialog
@@ -20,7 +40,7 @@ Item {
             view.itemAtIndex(activeIndex).activeColor = colorDialog.color;
             gradModel.get(activeIndex).color = colorDialog.color.toString();
             activeIndex = -1;
-            root.changeMade();
+            unsavedChanges = !checkModelsEqual();
         }
         onRejected: {
             activeIndex = -1;
@@ -34,12 +54,14 @@ Item {
             text: "Insert"
             onTriggered: {
                 gradModel.insert(activeIndex, { "pos": 0, "bigGrad": false, "color": "#ffffff" });
+                unsavedChanges = !checkModelsEqual();
             }
         }
         MenuItem {
             text: "Delete"
             onTriggered: {
                 gradModel.remove(activeIndex);
+                unsavedChanges = !checkModelsEqual();
             }
         }
         onClosed: activeIndex = -1;
@@ -47,9 +69,17 @@ Item {
 
     function updateModel(gaugeObject) {
         gradModel.clear();
+        lastListModel.clear();
+
         for (let i = 0; i < gaugeObject.numGrads(); i++) {
-            gradModel.append({ "pos": gaugeObject.gradValAt(i), "bigGrad": gaugeObject.gradIsBigAt(i), "color": gaugeObject.gradColorAt(i).toString() })
+            let gradPos = gaugeObject.gradValAt(i);
+            let isBigGrad = gaugeObject.gradIsBigAt(i);
+            let gradColor = gaugeObject.gradColorAt(i).toString();
+
+            gradModel.append({ "pos": gradPos, "bigGrad": isBigGrad, "color": gradColor });
+            lastListModel.append({ "pos": gradPos, "bigGrad": isBigGrad, "color": gradColor });
         }
+        unsavedChanges = false;
     }
 
     function fillModel(_gradDist, _gradStart)
@@ -60,14 +90,19 @@ Item {
             if (gradModel.count > 250)
                 break;
         }
+        unsavedChanges = !checkModelsEqual();
     }
 
     function saveData(gaugeObject) {
         gaugeObject.setNumGrads(gradModel.count);
+        lastListModel.clear();
+
         for (let i = 0; i < gradModel.count; i++) {
             let grad = gradModel.get(i);
             gaugeObject.setGradAt(i, grad.pos, grad.bigGrad, grad.color);
+            lastListModel.append({ "pos": grad.pos, "bigGrad": grad.bigGrad, "color": grad.color });
         }
+        unsavedChanges = false;
     }
 
     signal colorTriggered(int idx)
@@ -89,12 +124,12 @@ Item {
 
     onIsBigChanged: {
         gradModel.get(idx).bigGrad = newVal;
-        root.changeMade();
+        unsavedChanges = !checkModelsEqual();
     }
 
     onPosChanged: {
         gradModel.get(idx).pos = newVal;
-        root.changeMade();
+        unsavedChanges = !checkModelsEqual();
     }
 
 
@@ -201,7 +236,10 @@ Item {
         padding: 2
         enabled: gradModel.count < 250
 
-        onReleased: gradModel.append({ "pos": 0, "bigGrad": false, "color": "#ffffff" })
+        onReleased: {
+            gradModel.append({ "pos": 0, "bigGrad": false, "color": "#ffffff" });
+            unsavedChanges = !checkModelsEqual();
+        }
 
         background: Rectangle {
             anchors.fill: parent
@@ -229,7 +267,10 @@ Item {
 
         enabled: gradModel.count > 0
 
-        onReleased: gradModel.remove(gradModel.count - 1)
+        onReleased: {
+            gradModel.remove(gradModel.count - 1);
+            unsavedChanges = !checkModelsEqual();
+        }
 
         background: Rectangle {
             anchors.fill: parent

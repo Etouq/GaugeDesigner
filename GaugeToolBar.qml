@@ -12,19 +12,15 @@ Rectangle {
     height: 20
     color: "#0085cb"
 
-    Connections {
-        target: aircraftInterface
-        function onUpdateComplete() { saveButton.text = "Save"; }
-    }
+
 
     Connections {
         target: aircraftInterface
-        function onImageChanged() { saveButton.text = "Save*"; }
+        function onImageChanged() { unsavedImageChange = true; }
     }
 
-    function unsavedChangesMade() {
-        saveButton.text = "Save*";
-    }
+    property bool unsavedChanges: false
+    property bool unsavedImageChange: false
 
     property bool connected: false
     property bool everythingValid: false
@@ -43,7 +39,7 @@ Rectangle {
             openModeActive = true;
             lastKey = selectedItem;
             aircraftManager.loadAircraft(selectedItem);
-            saveButton.text = "Save"
+            unsavedImageChange = false;
         }
     }
 
@@ -55,7 +51,7 @@ Rectangle {
             positionResetNeeded();
             lastKey = selectedItem + " (Copy)";
             aircraftManager.copyAircraft(selectedItem);
-            saveButton.text = "Save"
+            unsavedImageChange = false;
         }
     }
 
@@ -69,7 +65,7 @@ Rectangle {
                 aircraftManager.removeAircraft(selection[i]);
                 if(selection[i] === aircraftInterface.getName()) {
                     aircraftInterface.newAircraft();
-                    saveButton.text = "Save"
+                    unsavedImageChange = false;
                 }
             }
         }
@@ -121,7 +117,6 @@ Rectangle {
                 root.openModeActive = false;
                 root.positionResetNeeded();
                 aircraftInterface.newAircraft();
-                saveButton.text = "Save"
             }
         }
         StyledToolBarButton {
@@ -150,7 +145,7 @@ Rectangle {
         }
         StyledToolBarButton {
             id: saveButton
-            text: "Save"
+            text: unsavedChanges || unsavedImageChange ? "Save*" : "Save"
             enabled: everythingValid
             ToolTip {
                 text: "Save the current aircraft (only saves edits locally)"
@@ -159,14 +154,14 @@ Rectangle {
             }
             onClicked: {
                 root.saveDataClicked();
-                saveButton.text = "Save"
+                unsavedImageChange = false;
             }
 
             Shortcut {
                 sequence: StandardKey.Save
                 onActivated: {
                     root.saveDataClicked();
-                    saveButton.text = "Save"
+                    unsavedImageChange = false;
                 }
             }
         }
@@ -232,7 +227,7 @@ Rectangle {
             }
             onClicked: {
                 root.saveDataClicked();
-                saveButton.text = "Save"
+                unsavedImageChange = false;
                 if (!previewWindow.visible)
                     previewWindow.show();
                 else

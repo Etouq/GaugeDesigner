@@ -12,6 +12,7 @@
 #include <QQmlContext>
 #include <QQuickView>
 #include <QtQml>
+#include <QLocale>
 
 
 int main(int argc, char *argv[])
@@ -20,9 +21,11 @@ int main(int argc, char *argv[])
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 #endif
 
-
+    QLocale::setDefault(QLocale::c());
     QApplication app(argc, argv);
     app.setOrganizationName("MKootstra");
+    app.setApplicationName("gaugeDesigner");
+    app.setApplicationDisplayName("Gauge Designer");
     QColorDialog::setCustomColor(0, QColor(0, 128, 0));
     QColorDialog::setCustomColor(2, QColor(255, 255, 0));
     QColorDialog::setCustomColor(4, QColor(255, 0, 0));
