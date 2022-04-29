@@ -1,6 +1,6 @@
-import QtQuick 2.15
-import QtQuick.Controls 2.15
-import QtQuick.Shapes 1.15
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Shapes
 
 Item {
     id: root
@@ -25,7 +25,7 @@ Item {
             let savedEntry = lastListModel.get(i);
             let newEntry = textGradModel.get(i);
 
-            if (savedEntry.pos != newEntry.pos || savedEntry.text != newEntry.text)
+            if (savedEntry.pos !== newEntry.pos || savedEntry.text !== newEntry.text)
                 return false;
         }
 
@@ -79,14 +79,14 @@ Item {
         id: contextMenu
         MenuItem {
             text: "Insert"
-            onTriggered: {
+            onTriggered: function() {
                 textGradModel.insert(activeIndex, { "pos": 0, "text": "0" });
                 unsavedChanges = !checkModelsEqual();
             }
         }
         MenuItem {
             text: "Delete"
-            onTriggered: {
+            onTriggered: function() {
                 textGradModel.remove(activeIndex);
                 unsavedChanges = !checkModelsEqual();
             }
@@ -97,11 +97,11 @@ Item {
     property real maxValue: 100
 
 
-    onPosChanged: {
+    onPosChanged: function(idx, val) {
         textGradModel.get(idx).pos = val;
         unsavedChanges = !checkModelsEqual();
     }
-    onTextChanged: {
+    onTextChanged: function(idx, val) {
         textGradModel.get(idx).text = val;
         unsavedChanges = !checkModelsEqual();
     }
@@ -154,7 +154,7 @@ Item {
                 anchors.fill: parent
                 acceptedButtons: Qt.RightButton
                 propagateComposedEvents: true
-                onClicked: {
+                onClicked: function(mouse) {
                     activeIndex = view.indexAt(mouse.x, mouse.y);
                     if (activeIndex != -1)
                         contextMenu.popup();
@@ -163,8 +163,9 @@ Item {
 
             ScrollBar.vertical.policy: view.contentHeight > height ? ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
             ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
-            Component.onCompleted: {
-                ScrollBar.vertical.contentItem.color = "#aeaeae"
+            Component.onCompleted: function() {
+                //ScrollBar.vertical.contentItem.color = "#aeaeae"
+                //console.log(ScrollBar.vertical.contentItem)
             }
             ListView {
                 id: view
@@ -183,7 +184,7 @@ Item {
                     idx: index
                     posVal: pos
                     textVal: text
-                    Component.onCompleted: {
+                    Component.onCompleted: function() {
                         posChanged.connect(root.posChanged);
                         textChanged.connect(root.textChanged);
                         resetCursors();

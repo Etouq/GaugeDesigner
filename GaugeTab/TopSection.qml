@@ -16,7 +16,7 @@ Item {
 
     property int selectedUnitId: -1
 
-    property bool unsavedChanges: lastMinVal != minValField.text || lastMaxVal != maxValField.text || lastTitle != titleText.text || lastUnitId != selectedUnitId || lastUnitText != unitText.text || (!noTextSwitch.checked && (lastTextIncrement != incrementVal.text || lastNumDecimals != numDecimalsVal.text)) || lastNoTextChecked != noTextSwitch.checked
+    property bool unsavedChanges: lastMinVal !== minValField.text || lastMaxVal !== maxValField.text || lastTitle !== titleText.text || lastUnitId != selectedUnitId || lastUnitText !== unitText.text || (!noTextSwitch.checked && (lastTextIncrement !== incrementVal.text || lastNumDecimals !== numDecimalsVal.text)) || lastNoTextChecked !== noTextSwitch.checked
     property bool isValid: minValField.isValid && maxValField.isValid && titleText.isValid && incrementVal.isValid && numDecimalsVal.isValid
 
     property alias noTextChecked: noTextSwitch.checked
@@ -144,7 +144,7 @@ Item {
             border.color: parent.activeFocus ? parent.palette.highlight : parent.isValid ? parent.palette.mid : "red"
         }
 
-        onTextChanged: {
+        onTextChanged: function() {
             if (acceptableInput)
             {
                 minVal = parseFloat(text);
@@ -181,7 +181,7 @@ Item {
             border.color: parent.activeFocus ? parent.palette.highlight : parent.isValid ? parent.palette.mid : "red"
         }
 
-        onTextChanged: {
+        onTextChanged: function() {
             if (acceptableInput)
             {
                 maxVal = parseFloat(text);
@@ -241,7 +241,7 @@ Item {
         width: 105
         anchors.verticalCenter: titleText.verticalCenter
         model: unitModel
-        onActivated: {
+        onActivated: function() {
             unitText.text = unitModel.get(index).shortString;
             unitBox.contentString = unitModel.get(index).longString;
             root.selectedUnitId = unitModel.get(unitBox.currentIndex).unitId;
@@ -343,7 +343,7 @@ Item {
             border.color: parent.activeFocus ? parent.palette.highlight : parent.isValid ? parent.palette.mid : "red"
         }
 
-        onEditingFinished: {
+        onEditingFinished: function() {
             if (parseInt(text) > 0) {
                 incrementVal.text = 1 / Math.pow(10, parseInt(text));
             }

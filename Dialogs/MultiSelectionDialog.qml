@@ -24,7 +24,7 @@ Dialog {
 
         MouseArea {
             anchors.fill: parent
-            onClicked: {
+            onClicked: (mouse) => {
                 if (mouse.y < root.implicitHeaderHeight)
                     return;
                 for (let i = 0; i < aircraftNames.count; i++)
@@ -43,7 +43,7 @@ Dialog {
 
     property bool anyItemsSelected: false
 
-    onAboutToShow: {
+    onAboutToShow: () => {
         selection = [];
         aircraftNames.clear();
 
@@ -61,7 +61,7 @@ Dialog {
         }
     }
 
-    onAccepted: {
+    onAccepted: () => {
         for (let i = 0; i < aircraftNames.count; i++)
         {
             if (aircraftNames.get(i).selected)
@@ -108,10 +108,10 @@ Dialog {
                         id: selectionArea
                         anchors.fill: parent
                         hoverEnabled: true
-                        onClicked: {
-                            if (mouse.button != Qt.LeftButton)
+                        onClicked: function(mouse) {
+                            if (mouse.button !== Qt.LeftButton)
                                 return;
-                            if (mouse.modifiers == Qt.ShiftModifier) {
+                            if (mouse.modifiers === Qt.ShiftModifier) {
                                 let minIdx = Math.min(lastSelectedIndex, index);
                                 let maxIdx = Math.max(lastSelectedIndex, index);
                                 for (let i = 0; i < aircraftNames.count; i++)
@@ -119,15 +119,15 @@ Dialog {
                                 anyItemsSelected = true;
                                 return;
                             }
-                            if (mouse.modifiers == Qt.NoModifier) {
+                            if (mouse.modifiers === Qt.NoModifier) {
                                 for (let i = 0; i < aircraftNames.count; i++)
-                                    aircraftNames.set(i, { "selected": i == index });
+                                    aircraftNames.set(i, { "selected": i === index });
 
                                 anyItemsSelected = true;
                                 lastSelectedIndex = index;
                                 return;
                             }
-                            if (mouse.modifiers == Qt.ControlModifier) {
+                            if (mouse.modifiers === Qt.ControlModifier) {
                                 aircraftNames.set(index, { "selected": !selected });
 
                                 lastSelectedIndex = index;
@@ -188,7 +188,7 @@ Dialog {
                     color: parent.enabled ? (parent.hovered ? Qt.darker("white", 1.1) : "white") : Qt.darker("white", 2)
                     font.pixelSize: 13
                 }
-                onClicked: {
+                onClicked: function() {
                     root.accept();
                 }
             }
@@ -210,7 +210,7 @@ Dialog {
                     color: parent.enabled ? (parent.hovered ? Qt.darker("white", 1.1) : "white") : Qt.darker("white", 2)
                     font.pixelSize: 13
                 }
-                onClicked: {
+                onClicked: function() {
                     root.reject();
                 }
             }

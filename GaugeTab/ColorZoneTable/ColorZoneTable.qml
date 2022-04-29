@@ -1,8 +1,8 @@
-import QtQuick 2.15
-import QtQuick.Controls 2.15
-import QtQuick.Dialogs 1.3
-import QtQuick.Shapes 1.15
-import QtQuick.Layouts 1.15
+import QtQuick
+import QtQuick.Controls 6
+import Qt.labs.platform
+import QtQuick.Shapes
+import QtQuick.Layouts
 
 Item {
     id: root
@@ -26,7 +26,7 @@ Item {
             let savedEntry = lastListModel.get(i);
             let newEntry = zoneModel.get(i);
 
-            if (savedEntry.start != newEntry.start || savedEntry.end != newEntry.end || savedEntry.color != newEntry.color)
+            if (savedEntry.start !== newEntry.start || savedEntry.end !== newEntry.end || savedEntry.color !== newEntry.color)
                 return false;
         }
 
@@ -65,7 +65,7 @@ Item {
                 unsavedChanges = !checkModelsEqual();
             }
         }
-        onClosed: activeIndex = -1;
+        onAboutToHide: activeIndex = -1;
     }
 
     function updateModel(gaugeObject) {
@@ -101,16 +101,16 @@ Item {
     signal startChanged(int idx, real val)
     signal endChanged(int idx, real val)
 
-    onColorTriggered: {
+    onColorTriggered: function(idx) {
         activeIndex = idx;
         colorDialog.open();
     }
 
-    onStartChanged: {
+    onStartChanged: function(idx, val) {
         zoneModel.get(idx).start = val;
         unsavedChanges = !checkModelsEqual();
     }
-    onEndChanged: {
+    onEndChanged: function(idx, val) {
         zoneModel.get(idx).end = val;
         unsavedChanges = !checkModelsEqual();
     }
@@ -172,7 +172,7 @@ Item {
                 anchors.fill: parent
                 acceptedButtons: Qt.RightButton
                 propagateComposedEvents: true
-                onClicked: {
+                onClicked: function(mouse) {
                     activeIndex = view.indexAt(mouse.x, mouse.y);
                     if (activeIndex != -1)
                         contextMenu.popup();
@@ -181,8 +181,8 @@ Item {
 
             ScrollBar.vertical.policy: view.contentHeight > view.height ? ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
             ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
-            Component.onCompleted: {
-                ScrollBar.vertical.contentItem.color = "#aeaeae"
+            Component.onCompleted: function() {
+                //ScrollBar.vertical.contentItem.color = "#aeaeae"
             }
 
             ListView {
@@ -203,7 +203,7 @@ Item {
                     startVal: start
                     endVal: end
                     activeColor: color
-                    Component.onCompleted: {
+                    Component.onCompleted: function() {
                         colorActivated.connect(root.colorTriggered);
                         startChanged.connect(root.startChanged);
                         endChanged.connect(root.endChanged);
@@ -229,7 +229,7 @@ Item {
         padding: 2
         enabled: zoneModel.count < 10
 
-        onReleased: {
+        onReleased: function() {
             zoneModel.append({ "start": 0, "end": 0, "color": "#008000" });
             unsavedChanges = !checkModelsEqual();
         }
@@ -260,7 +260,7 @@ Item {
 
         enabled: zoneModel.count > 0
 
-        onReleased: {
+        onReleased: function() {
             zoneModel.remove(zoneModel.count - 1);
             unsavedChanges = !checkModelsEqual();
         }

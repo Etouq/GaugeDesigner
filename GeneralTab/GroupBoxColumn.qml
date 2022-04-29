@@ -18,9 +18,9 @@ Column {
 
     property bool unsavedChanges: lastActiveType != activeType || lastNumEngines != numEngines || lastNumTanks != numTanks
 
-    onActiveTypeChanged: {
+    onActiveTypeChanged: function() {
         if (numEngines == 4)
-            twinEngRadio.checked = tru
+            twinEngRadio.checked = true;
     }
 
     // last saved state data

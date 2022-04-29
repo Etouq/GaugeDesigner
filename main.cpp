@@ -17,15 +17,13 @@
 
 int main(int argc, char *argv[])
 {
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-    QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
-#endif
 
     QLocale::setDefault(QLocale::c());
     QApplication app(argc, argv);
     app.setOrganizationName("MKootstra");
     app.setApplicationName("gaugeDesigner");
     app.setApplicationDisplayName("Gauge Designer");
+    app.setWindowIcon(QIcon(":/gaugeDesignerIcon.ico"));
     QColorDialog::setCustomColor(0, QColor(0, 128, 0));
     QColorDialog::setCustomColor(2, QColor(255, 255, 0));
     QColorDialog::setCustomColor(4, QColor(255, 0, 0));
@@ -56,7 +54,7 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("gaugeInterface", &gaugeInterface);
     engine.rootContext()->setContextProperty("netInterface", &netInterface);
 
-    engine.load("qrc:/main.qml");
+    engine.load("qrc:/GaugeDesigner/main.qml");
 
     QObject::connect(&planeInterface,
                      &AircraftInterface::aircraftSaved,

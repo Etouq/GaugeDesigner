@@ -1,9 +1,9 @@
 import QtQuick 2.15
 import QtQuick.Window 2.15
 import QtQuick.Controls 2.15
-import QtQuick.Dialogs 1.3
-import QtQuick.Shapes 1.15
-import QtQuick.Layouts 1.15
+import Qt.labs.platform as LabPlatform
+import QtQuick.Shapes 2.15
+import QtQuick.Layouts 2.15
 import "GeneralTab"
 import "GaugeTab"
 import "StyledControls"
@@ -74,7 +74,7 @@ ApplicationWindow {
 
         aircraftInterface.saveAircraft();
 
-        if (toolbar.openModeActive && (toolbar.lastKey != generalTab.name))
+        if (toolbar.openModeActive && (toolbar.lastKey !== generalTab.name))
         {
             aircraftManager.removeAircraft(toolbar.lastKey);
             toolbar.lastKey = generalTab.name;
@@ -209,11 +209,11 @@ ApplicationWindow {
     }
 
 
-    MessageDialog {
+    LabPlatform.MessageDialog {
         id: errorPopup
-        icon: StandardIcon.Critical
+//        icon: StandardIcon.Critical
         title: "Error"
-        standardButtons: StandardButton.Ok
+        buttons: LabPlatform.MessageDialog.Ok
     }
 
 

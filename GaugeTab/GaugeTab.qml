@@ -1,7 +1,7 @@
-import QtQuick 2.15
-import QtQuick.Window 2.15
-import QtQuick.Controls 2.15
-import QtQuick.Dialogs 1.3
+import QtQuick
+import QtQuick.Window
+import QtQuick.Controls
+import Qt.labs.platform
 import "ColorZoneTable"
 import "GradTable"
 import "TextGradTable"
@@ -19,7 +19,7 @@ Item {
     property var gaugeObject: null
 
     property bool isValid: (!hasMinBlinkSwitch.checked || (minBlinkVal.acceptableInput && minBlinkVal.length > 0)) && (!hasMaxBlinkSwitch.checked || (maxBlinkVal.acceptableInput && maxBlinkVal.length > 0)) && topSection.isValid
-    property bool unsavedChanges: topSection.unsavedChanges || lastMinBlinkChecked != hasMinBlinkSwitch.checked || (!hasMinBlinkSwitch.checked && lastMinBlinkValue != minBlinkVal.text) || lastMaxBlinkChecked != hasMaxBlinkSwitch.checked || (!hasMaxBlinkSwitch.checked && lastMaxBlinkValue != maxBlinkVal.text) || lastForceTextChecked != forceTextColorSwitch.checked || (!forceTextColorSwitch.checked && textForcedColorRect.color != lastForceTextColor) || colorInputTable.unsavedChanges || gradInputTable.unsavedChanges || textGradInputTable.unsavedChanges
+    property bool unsavedChanges: topSection.unsavedChanges || lastMinBlinkChecked !== hasMinBlinkSwitch.checked || (!hasMinBlinkSwitch.checked && lastMinBlinkValue !== minBlinkVal.text) || lastMaxBlinkChecked !== hasMaxBlinkSwitch.checked || (!hasMaxBlinkSwitch.checked && lastMaxBlinkValue !== maxBlinkVal.text) || lastForceTextChecked !== forceTextColorSwitch.checked || (!forceTextColorSwitch.checked && textForcedColorRect.color !== lastForceTextColor) || colorInputTable.unsavedChanges || gradInputTable.unsavedChanges || textGradInputTable.unsavedChanges
 
 
     // last saved state data
@@ -98,7 +98,7 @@ Item {
         id: colorDialog
         title: "Please choose a color"
         modality: Qt.WindowModal
-        onAccepted: {
+        onAccepted: function() {
             textForcedColorRect.color = colorDialog.color;
         }
         Component.onCompleted: color = "#FFFFFF"
@@ -109,7 +109,7 @@ Item {
 
         gaugeObject: root.gaugeObject
 
-        onMaxValChanged: {
+        onMaxValChanged: function() {
             gradInputTable.maxValue = maxVal;
             textGradInputTable.maxValue = maxVal;
         }

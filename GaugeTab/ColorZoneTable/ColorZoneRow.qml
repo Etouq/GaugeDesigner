@@ -16,11 +16,11 @@ Item {
     signal startChanged(int itemIdx, real val)
     signal endChanged(int itemIdx, real val)
 
-    onStartValChanged: {
+    onStartValChanged: function() {
         startText.text = startVal;
         startChanged(idx, startVal);
     }
-    onEndValChanged: {
+    onEndValChanged: function() {
         endText.text = endVal;
         endChanged(idx, endVal);
     }
@@ -62,13 +62,13 @@ Item {
             leftPadding: 5
             font.pixelSize: 11
 
-            onEditingFinished: {
-                if (text == "" || text == "-" || !acceptableInput)
+            onEditingFinished: function() {
+                if (text === "" || text === "-" || !acceptableInput)
                     text = "0";
             }
 
-            onTextEdited: {
-                if (startText.text == "" || startText.text == "-")
+            onTextEdited: function() {
+                if (startText.text === "" || startText.text === "-")
                     return;
                 startVal = parseFloat(startText.text);
                 if (startVal > endVal)
@@ -90,13 +90,13 @@ Item {
             leftPadding: 5
             font.pixelSize: 11
 
-            onEditingFinished: {
-                if (text == "" || text == "-" || !acceptableInput)
+            onEditingFinished: function() {
+                if (text === "" || text === "-" || !acceptableInput)
                     text = "0";
             }
 
-            onTextEdited: {
-                if (endText.text == "" || endText.text == "-")
+            onTextEdited: function() {
+                if (endText.text === "" || endText.text === "-")
                     return;
                 endVal = parseFloat(endText.text);
                 if (endVal < startVal)
@@ -120,8 +120,8 @@ Item {
                 cursorShape: Qt.PointingHandCursor
                 acceptedButtons: Qt.AllButtons
                 hoverEnabled: true
-                onClicked: {
-                    if (mouse.button == Qt.LeftButton)
+                onClicked: function(mouse) {
+                    if (mouse.button === Qt.LeftButton)
                         root.colorActivated(idx);
                     mouse.accepted = true;
                 }

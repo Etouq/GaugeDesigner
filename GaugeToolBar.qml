@@ -1,7 +1,6 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
-import QtQuick.Dialogs 1.3
 import QtQml 2.15
 import "StyledControls"
 import "Dialogs"
@@ -34,7 +33,7 @@ Rectangle {
     SingleSelectionDialog {
         id: openDialog
         infoText: "Please select an aircraft to edit"
-        onAccepted: {
+        onAccepted: function() {
             positionResetNeeded();
             openModeActive = true;
             lastKey = selectedItem;
@@ -46,7 +45,7 @@ Rectangle {
     SingleSelectionDialog {
         id: copyDialog
         infoText: "Please select an aircraft to copy"
-        onAccepted: {
+        onAccepted: function() {
             openModeActive = true;
             positionResetNeeded();
             lastKey = selectedItem + " (Copy)";
@@ -59,7 +58,7 @@ Rectangle {
         id: deleteLocalDialog
         useLocalFiles: true
         infoText: "Please make a selection of aircraft to delete from local storage"
-        onAccepted: {
+        onAccepted: function() {
             positionResetNeeded();
             for (let i = 0; i < selection.length; i++) {
                 aircraftManager.removeAircraft(selection[i]);
@@ -75,7 +74,7 @@ Rectangle {
         id: deleteClientDialog
         useLocalFiles: false
         infoText: "Please make a selection of aircraft to delete from the client"
-        onAccepted: {
+        onAccepted: function() {
             netInterface.removeClientAircraft(selection);
         }
     }
@@ -84,7 +83,7 @@ Rectangle {
         id: loadDialog
         useLocalFiles: false
         infoText: "Please make a selection of aircraft to load (and save) from the client"
-        onAccepted: {
+        onAccepted: function() {
             netInterface.loadClientAircraft(selection);
         }
     }
@@ -93,7 +92,7 @@ Rectangle {
         id: sendDialog
         useLocalFiles: true
         infoText: "Please make a selection of aircraft to send to the client"
-        onAccepted: {
+        onAccepted: function() {
             aircraftManager.sendAircraft(selection);
         }
     }
@@ -113,7 +112,7 @@ Rectangle {
                 visible: parent.hovered
                 delay: 500
             }
-            onClicked: {
+            onClicked: function() {
                 root.openModeActive = false;
                 root.positionResetNeeded();
                 aircraftInterface.newAircraft();
@@ -127,7 +126,7 @@ Rectangle {
                 visible: parent.hovered
                 delay: 500
             }
-            onClicked: {
+            onClicked: function() {
                 openDialog.open();
             }
         }
@@ -139,7 +138,7 @@ Rectangle {
                 visible: parent.hovered
                 delay: 500
             }
-            onClicked: {
+            onClicked: function() {
                 copyDialog.open();
             }
         }
@@ -152,14 +151,14 @@ Rectangle {
                 visible: parent.hovered
                 delay: 500
             }
-            onClicked: {
+            onClicked: function() {
                 root.saveDataClicked();
                 unsavedImageChange = false;
             }
 
             Shortcut {
                 sequence: StandardKey.Save
-                onActivated: {
+                onActivated: function() {
                     root.saveDataClicked();
                     unsavedImageChange = false;
                 }
@@ -173,7 +172,7 @@ Rectangle {
                 visible: parent.hovered
                 delay: 500
             }
-            onClicked: {
+            onClicked: function() {
                 deleteLocalDialog.open();
             }
         }
@@ -186,7 +185,7 @@ Rectangle {
                 visible: parent.hovered
                 delay: 500
             }
-            onClicked: {
+            onClicked: function() {
                 deleteClientDialog.open();
             }
         }
@@ -199,7 +198,7 @@ Rectangle {
                 visible: parent.hovered
                 delay: 500
             }
-            onClicked: {
+            onClicked: function() {
                 loadDialog.open();
             }
         }
@@ -212,7 +211,7 @@ Rectangle {
                 visible: parent.hovered
                 delay: 500
             }
-            onClicked: {
+            onClicked: function() {
                 sendDialog.open();
             }
         }
@@ -225,7 +224,7 @@ Rectangle {
                 visible: parent.hovered
                 delay: 500
             }
-            onClicked: {
+            onClicked: function() {
                 root.saveDataClicked();
                 unsavedImageChange = false;
                 if (!previewWindow.visible)

@@ -1,7 +1,7 @@
-import QtQuick 2.15
+import QtQuick
 import QtQuick.Controls 2.15
-import QtQuick.Dialogs 1.3
-import QtQuick.Shapes 1.15
+import Qt.labs.platform as LabPlatform
+import QtQuick.Shapes
 
 Item {
     id: root
@@ -25,24 +25,24 @@ Item {
             let savedEntry = lastListModel.get(i);
             let newEntry = gradModel.get(i);
 
-            if (savedEntry.pos != newEntry.pos || savedEntry.bigGrad != newEntry.bigGrad || savedEntry.color != newEntry.color)
+            if (savedEntry.pos !== newEntry.pos || savedEntry.bigGrad !== newEntry.bigGrad || savedEntry.color !== newEntry.color)
                 return false;
         }
 
         return true;
     }
 
-    ColorDialog {
+    LabPlatform.ColorDialog {
         id: colorDialog
         title: "Please choose a color"
         modality: Qt.WindowModal
-        onAccepted: {
+        onAccepted: function() {
             view.itemAtIndex(activeIndex).activeColor = colorDialog.color;
             gradModel.get(activeIndex).color = colorDialog.color.toString();
             activeIndex = -1;
             unsavedChanges = !checkModelsEqual();
         }
-        onRejected: {
+        onRejected: function() {
             activeIndex = -1;
         }
         Component.onCompleted: color = "#FFFFFF"
@@ -52,14 +52,14 @@ Item {
         id: contextMenu
         MenuItem {
             text: "Insert"
-            onTriggered: {
+            onTriggered: function() {
                 gradModel.insert(activeIndex, { "pos": 0, "bigGrad": false, "color": "#ffffff" });
                 unsavedChanges = !checkModelsEqual();
             }
         }
         MenuItem {
             text: "Delete"
-            onTriggered: {
+            onTriggered: function() {
                 gradModel.remove(activeIndex);
                 unsavedChanges = !checkModelsEqual();
             }
@@ -117,17 +117,17 @@ Item {
         id: gradModel
     }
 
-    onColorTriggered: {
+    onColorTriggered: function(idx) {
         activeIndex = idx;
         colorDialog.open();
     }
 
-    onIsBigChanged: {
+    onIsBigChanged: function(idx, newVal) {
         gradModel.get(idx).bigGrad = newVal;
         unsavedChanges = !checkModelsEqual();
     }
 
-    onPosChanged: {
+    onPosChanged: function(idx, newVal) {
         gradModel.get(idx).pos = newVal;
         unsavedChanges = !checkModelsEqual();
     }
@@ -182,7 +182,7 @@ Item {
                 anchors.fill: parent
                 acceptedButtons: Qt.RightButton
                 propagateComposedEvents: true
-                onClicked: {
+                onClicked: function(mouse) {
                     activeIndex = view.indexAt(mouse.x, mouse.y);
                     if (activeIndex != -1)
                         contextMenu.popup();
@@ -191,8 +191,8 @@ Item {
 
             ScrollBar.vertical.policy: view.contentHeight > height ? ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
             ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
-            Component.onCompleted: {
-                ScrollBar.vertical.contentItem.color = "#aeaeae"
+            Component.onCompleted: function() {
+                //ScrollBar.vertical.contentItem.color = "#aeaeae"
             }
             ListView {
                 id: view
@@ -212,7 +212,7 @@ Item {
                     position: pos
                     isBig: bigGrad
                     activeColor: color
-                    Component.onCompleted: {
+                    Component.onCompleted: function() {
                         colorActivated.connect(root.colorTriggered);
                         bigChanged.connect(root.isBigChanged);
                         posChanged.connect(root.posChanged);

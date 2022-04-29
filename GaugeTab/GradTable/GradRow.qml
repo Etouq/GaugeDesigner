@@ -55,13 +55,13 @@ Item {
             leftPadding: 5
             font.pixelSize: 11
 
-            onEditingFinished: {
-                if (text == "" || text == "-" || !acceptableInput)
+            onEditingFinished: function() {
+                if (text === "" || text === "-" || !acceptableInput)
                     text = "0";
             }
 
-            onTextEdited: {
-                if (positionText.text == "" || positionText.text == "-" || positionText.text == ".")
+            onTextEdited: function() {
+                if (positionText.text === "" || positionText.text === "-" || positionText.text === ".")
                     return;
                 position = parseFloat(positionText.text);
             }
@@ -93,8 +93,8 @@ Item {
                 cursorShape: Qt.PointingHandCursor
                 acceptedButtons: Qt.AllButtons
                 hoverEnabled: true
-                onClicked: {
-                    if (mouse.button == Qt.LeftButton)
+                onClicked: function(mouse) {
+                    if (mouse.button === Qt.LeftButton)
                         root.colorActivated(idx);
                     mouse.accepted = true;
                 }

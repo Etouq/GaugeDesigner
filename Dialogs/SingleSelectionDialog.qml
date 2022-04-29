@@ -23,7 +23,7 @@ Dialog {
 
         MouseArea {
             anchors.fill: parent
-            onClicked: {
+            onClicked: (mouse) => {
                 if (mouse.y < root.implicitHeaderHeight)
                     return;
                 lastSelectedIndex = -1;
@@ -93,8 +93,8 @@ Dialog {
                         id: selectionArea
                         anchors.fill: parent
                         hoverEnabled: true
-                        onClicked: {
-                            if (mouse.button != Qt.LeftButton)
+                        onClicked: (mouse) => {
+                            if (mouse.button !== Qt.LeftButton)
                                 return;
 
                             lastSelectedIndex = index;
@@ -104,7 +104,7 @@ Dialog {
                     Rectangle {
                         anchors.fill: parent
                         color: "#6ae6ff"
-                        visible: selectionArea.containsMouse || lastSelectedIndex == index
+                        visible: selectionArea.containsMouse || lastSelectedIndex === index
                     }
 
                     Text {
@@ -142,7 +142,7 @@ Dialog {
                     font.pixelSize: 13
                 }
 
-                onClicked: {
+                onClicked: () => {
                     root.accept();
                 }
             }
@@ -164,7 +164,7 @@ Dialog {
                     color: parent.enabled ? (parent.hovered ? Qt.darker("white", 1.1) : "white") : Qt.darker("white", 2)
                     font.pixelSize: 13
                 }
-                onClicked: {
+                onClicked: () => {
                     root.reject();
                 }
             }

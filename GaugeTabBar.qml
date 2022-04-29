@@ -44,7 +44,7 @@ Rectangle {
                 id: generalTab
                 isActiveItem: layout.activeItem == generalTab
                 text: "GENERAL"
-                onClicked: { layout.activeItem = generalTab; gaugeTabBar.activeIndex = 0; }
+                onClicked: function() { layout.activeItem = generalTab; gaugeTabBar.activeIndex = 0; }
             }
 
             StyledTabButton {
@@ -52,7 +52,7 @@ Rectangle {
                 isActiveItem: layout.activeItem == n1Tab
                 text: "N1"
                 visible: activeType != 1
-                onClicked: { layout.activeItem = n1Tab; gaugeTabBar.activeIndex = 1; }
+                onClicked: function() { layout.activeItem = n1Tab; gaugeTabBar.activeIndex = 1; }
             }
 
             StyledTabButton {
@@ -60,7 +60,7 @@ Rectangle {
                 isActiveItem: layout.activeItem == n2Tab
                 text: "N2"
                 visible: activeType == 0
-                onClicked: { layout.activeItem = n2Tab; gaugeTabBar.activeIndex = 2; }
+                onClicked: function() { layout.activeItem = n2Tab; gaugeTabBar.activeIndex = 2; }
             }
 
             StyledTabButton {
@@ -68,7 +68,7 @@ Rectangle {
                 isActiveItem: layout.activeItem == trqTab
                 text: "TORQUE"
                 visible: activeType == 2
-                onClicked: { layout.activeItem = trqTab; gaugeTabBar.activeIndex = 3; }
+                onClicked: function() { layout.activeItem = trqTab; gaugeTabBar.activeIndex = 3; }
             }
 
             StyledTabButton {
@@ -76,7 +76,7 @@ Rectangle {
                 isActiveItem: layout.activeItem == ittTab
                 text: gaugeTabBar.egtReplacesItt ? "EGT" : "ITT"
                 visible: activeType != 1
-                onClicked: { layout.activeItem = ittTab; gaugeTabBar.activeIndex = 4; }
+                onClicked: function() { layout.activeItem = ittTab; gaugeTabBar.activeIndex = 4; }
             }
 
             StyledTabButton {
@@ -84,7 +84,7 @@ Rectangle {
                 isActiveItem: layout.activeItem == rpmTab
                 text: "RPM"
                 visible: activeType != 0
-                onClicked: { layout.activeItem = rpmTab; gaugeTabBar.activeIndex = 5; }
+                onClicked: function() { layout.activeItem = rpmTab; gaugeTabBar.activeIndex = 5; }
             }
 
             StyledTabButton {
@@ -92,35 +92,35 @@ Rectangle {
                 isActiveItem: layout.activeItem == secondTab
                 text: gaugeTabBar.loadReplacesMan ? "LOAD" : "MANIFOLD"
                 visible: activeType == 1
-                onClicked: { layout.activeItem = secondTab; gaugeTabBar.activeIndex = 6; }
+                onClicked: function() { layout.activeItem = secondTab; gaugeTabBar.activeIndex = 6; }
             }
 
             StyledTabButton {
                 id: fuelQtyTab
                 isActiveItem: layout.activeItem == fuelQtyTab
                 text: "FUEL QUANTITY"
-                onClicked: { layout.activeItem = fuelQtyTab; gaugeTabBar.activeIndex = 7; }
+                onClicked: function() { layout.activeItem = fuelQtyTab; gaugeTabBar.activeIndex = 7; }
             }
 
             StyledTabButton {
                 id: fuelFlowTab
                 isActiveItem: layout.activeItem == fuelFlowTab
                 text: "FUEL FLOW"
-                onClicked: { layout.activeItem = fuelFlowTab; gaugeTabBar.activeIndex = 8; }
+                onClicked: function() { layout.activeItem = fuelFlowTab; gaugeTabBar.activeIndex = 8; }
             }
 
             StyledTabButton {
                 id: oilTempTab
                 isActiveItem: layout.activeItem == oilTempTab
                 text: "OIL TEMPERATURE"
-                onClicked: { layout.activeItem = oilTempTab; gaugeTabBar.activeIndex = 9; }
+                onClicked: function() { layout.activeItem = oilTempTab; gaugeTabBar.activeIndex = 9; }
             }
 
             StyledTabButton {
                 id: oilPressTab
                 isActiveItem: layout.activeItem == oilPressTab
                 text: "OIL PRESSURE"
-                onClicked: { layout.activeItem = oilPressTab; gaugeTabBar.activeIndex = 10; }
+                onClicked: function() { layout.activeItem = oilPressTab; gaugeTabBar.activeIndex = 10; }
             }
 
             StyledTabButton {
@@ -128,7 +128,7 @@ Rectangle {
                 isActiveItem: layout.activeItem == egtTab
                 text: "EGT"
                 visible: activeType != 0 && gaugeTabBar.hasEgt
-                onClicked: { layout.activeItem = egtTab; gaugeTabBar.activeIndex = 11; }
+                onClicked: function() { layout.activeItem = egtTab; gaugeTabBar.activeIndex = 11; }
             }
         }
 

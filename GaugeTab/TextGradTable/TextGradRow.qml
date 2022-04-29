@@ -13,10 +13,10 @@ Item {
     signal posChanged(int itemIdx, real val)
     signal textChanged(int itemIdx, string val)
 
-    onPosValChanged: {
+    onPosValChanged: function(itemIdx, val) {
         posChanged(idx, posVal);
     }
-    onTextValChanged: {
+    onTextValChanged: function(itemIdx, val) {
         textChanged(idx, textVal);
     }
 
@@ -55,19 +55,19 @@ Item {
             validator: DoubleValidator{}
             font.pixelSize: 11
 
-            onEditingFinished: {
-                if (text == "" || text == "-" || !acceptableInput)
+            onEditingFinished: function() {
+                if (text === "" || text === "-" || !acceptableInput)
                     text = "0";
             }
 
-            onTextEdited: {
-                if (posText.text == "" || posText.text == "-")
+            onTextEdited: function() {
+                if (posText.text === "" || posText.text === "-")
                     return;
                 posVal = parseFloat(posText.text);
             }
             Layout.rightMargin: 10
 
-            Component.onCompleted: {
+            Component.onCompleted: function() {
                 text = posVal
             }
         }
@@ -79,11 +79,11 @@ Item {
             selectByMouse: true
             font.pixelSize: 11
 
-            onTextEdited: {
+            onTextEdited: function() {
                 textVal = text;
             }
 
-            Component.onCompleted: {
+            Component.onCompleted: function() {
                 text = textVal;
             }
         }
