@@ -1,0 +1,9 @@
+set(QT_MODULES
+    Quick
+    QuickControls2
+    Widgets
+    QuickWidgets
+    Svg
+    Network
+    Qml
+)

@@ -1,0 +1,6 @@
+qt_add_resources(${_PROJECT_NAME} "resource_images"
+    PREFIX "/"
+    FILES
+        DefaultImage.png
+        gaugeDesignerIcon.ico
+)
