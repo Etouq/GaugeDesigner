@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file>DefaultImage.png</file>
+        <file>gaugeDesignerIcon.ico</file>
+    </qresource>
+</RCC>
