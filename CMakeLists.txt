@@ -6,8 +6,10 @@ set(_PROJECT_VERSION 0.1)
 
 project(${_PROJECT_NAME} VERSION ${_PROJECT_VERSION} LANGUAGES CXX)
 
+set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
+
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
@@ -23,6 +25,7 @@ find_package(Qt5 COMPONENTS ${QT_MODULES} REQUIRED)
 
 add_executable(
     ${_PROJECT_NAME}
+    ${PROJECT_HEADERS}
     ${PROJECT_SOURCES}
     resources/resources.qrc
     qml/qml.qrc
@@ -37,7 +40,6 @@ add_executable(
 
 target_include_directories(${_PROJECT_NAME} PUBLIC
     src
-    qml
 )
 
 set_target_properties(${_PROJECT_NAME} PROPERTIES

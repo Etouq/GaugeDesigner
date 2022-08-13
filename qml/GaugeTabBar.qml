@@ -1,4 +1,8 @@
 import QtQuick 2.15
+
+import Definition 1.0
+import TypeEnums 1.0
+
 import "StyledControls"
 
 Rectangle {
@@ -7,17 +11,39 @@ Rectangle {
     height: 30
     color: "#00b4ff"
 
-    property int activeType: 0
-    property bool egtReplacesItt: false
-    property bool loadReplacesMan: false
-    property bool hasEgt: false
-
     property int activeIndex: 0
 
     function resetPosition()
     {
         layout.activeItem = generalTab;
         gaugeTabBar.activeIndex = 0;
+    }
+
+    function gaugeTypeToText(type)
+    {
+        switch (type)
+        {
+            case SwitchingGaugeType.NONE:
+                return "None";
+            case SwitchingGaugeType.N1:
+                return "N1";
+            case SwitchingGaugeType.N2:
+                return "N2";
+            case SwitchingGaugeType.ENGINE_TEMP:
+                return "ENG TEMP";
+            case SwitchingGaugeType.RPM:
+                return "RPM";
+            case SwitchingGaugeType.PROP_RPM:
+                return "PROPELLER RPM";
+            case SwitchingGaugeType.POWER:
+                return "POWER";
+            case SwitchingGaugeType.MANIFOLD_PRESSURE:
+                return "MANIFOLD";
+            case SwitchingGaugeType.TORQUE:
+                return "TORQUE";
+            default:
+                return "UNKNOWN";
+        }
     }
 
     Item {
@@ -48,87 +74,69 @@ Rectangle {
             }
 
             StyledTabButton {
-                id: n1Tab
-                isActiveItem: layout.activeItem == n1Tab
-                text: "N1"
-                visible: activeType != 1
-                onClicked: function() { layout.activeItem = n1Tab; gaugeTabBar.activeIndex = 1; }
+                id: gauge1Tab
+                isActiveItem: layout.activeItem == gauge1Tab
+                text: gaugeTypeToText(AircraftDefinition.gauge1Type)
+                onClicked: function() { layout.activeItem = gauge1Tab; gaugeTabBar.activeIndex = 1; }
             }
 
             StyledTabButton {
-                id: n2Tab
-                isActiveItem: layout.activeItem == n2Tab
-                text: "N2"
-                visible: activeType == 0
-                onClicked: function() { layout.activeItem = n2Tab; gaugeTabBar.activeIndex = 2; }
+                id: gauge2Tab
+                isActiveItem: layout.activeItem == gauge2Tab
+                text: gaugeTypeToText(AircraftDefinition.gauge2Type)
+                onClicked: function() { layout.activeItem = gauge2Tab; gaugeTabBar.activeIndex = 2; }
             }
 
             StyledTabButton {
-                id: trqTab
-                isActiveItem: layout.activeItem == trqTab
-                text: "TORQUE"
-                visible: activeType == 2
-                onClicked: function() { layout.activeItem = trqTab; gaugeTabBar.activeIndex = 3; }
+                id: gauge3Tab
+                isActiveItem: layout.activeItem == gauge3Tab
+                text: gaugeTypeToText(AircraftDefinition.gauge3Type)
+                visible: AircraftDefinition.gauge3Type != SwitchingGaugeType.NONE
+                onClicked: function() { layout.activeItem = gauge3Tab; gaugeTabBar.activeIndex = 3; }
             }
 
             StyledTabButton {
-                id: ittTab
-                isActiveItem: layout.activeItem == ittTab
-                text: gaugeTabBar.egtReplacesItt ? "EGT" : "ITT"
-                visible: activeType != 1
-                onClicked: function() { layout.activeItem = ittTab; gaugeTabBar.activeIndex = 4; }
-            }
-
-            StyledTabButton {
-                id: rpmTab
-                isActiveItem: layout.activeItem == rpmTab
-                text: "RPM"
-                visible: activeType != 0
-                onClicked: function() { layout.activeItem = rpmTab; gaugeTabBar.activeIndex = 5; }
-            }
-
-            StyledTabButton {
-                id: secondTab
-                isActiveItem: layout.activeItem == secondTab
-                text: gaugeTabBar.loadReplacesMan ? "LOAD" : "MANIFOLD"
-                visible: activeType == 1
-                onClicked: function() { layout.activeItem = secondTab; gaugeTabBar.activeIndex = 6; }
+                id: gauge4Tab
+                isActiveItem: layout.activeItem == gauge4Tab
+                text: gaugeTypeToText(AircraftDefinition.gauge4Type)
+                visible: AircraftDefinition.gauge4Type != SwitchingGaugeType.NONE
+                onClicked: function() { layout.activeItem = gauge4Tab; gaugeTabBar.activeIndex = 4; }
             }
 
             StyledTabButton {
                 id: fuelQtyTab
                 isActiveItem: layout.activeItem == fuelQtyTab
                 text: "FUEL QUANTITY"
-                onClicked: function() { layout.activeItem = fuelQtyTab; gaugeTabBar.activeIndex = 7; }
+                onClicked: function() { layout.activeItem = fuelQtyTab; gaugeTabBar.activeIndex = 5; }
             }
 
             StyledTabButton {
                 id: fuelFlowTab
                 isActiveItem: layout.activeItem == fuelFlowTab
                 text: "FUEL FLOW"
-                onClicked: function() { layout.activeItem = fuelFlowTab; gaugeTabBar.activeIndex = 8; }
+                onClicked: function() { layout.activeItem = fuelFlowTab; gaugeTabBar.activeIndex = 6; }
             }
 
             StyledTabButton {
                 id: oilTempTab
                 isActiveItem: layout.activeItem == oilTempTab
                 text: "OIL TEMPERATURE"
-                onClicked: function() { layout.activeItem = oilTempTab; gaugeTabBar.activeIndex = 9; }
+                onClicked: function() { layout.activeItem = oilTempTab; gaugeTabBar.activeIndex = 7; }
+            }
+
+            StyledTabButton {
+                id: egtTab
+                isActiveItem: layout.activeItem == egtTab
+                text: "ENG TEMP"
+                visible: AircraftDefinition.hasSecondaryTempGauge
+                onClicked: function() { layout.activeItem = egtTab; gaugeTabBar.activeIndex = 8; }
             }
 
             StyledTabButton {
                 id: oilPressTab
                 isActiveItem: layout.activeItem == oilPressTab
                 text: "OIL PRESSURE"
-                onClicked: function() { layout.activeItem = oilPressTab; gaugeTabBar.activeIndex = 10; }
-            }
-
-            StyledTabButton {
-                id: egtTab
-                isActiveItem: layout.activeItem == egtTab
-                text: "EGT"
-                visible: activeType != 0 && gaugeTabBar.hasEgt
-                onClicked: function() { layout.activeItem = egtTab; gaugeTabBar.activeIndex = 11; }
+                onClicked: function() { layout.activeItem = oilPressTab; gaugeTabBar.activeIndex = 9; }
             }
         }
 

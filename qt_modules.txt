@@ -1,4 +1,6 @@
 set(QT_MODULES
+    Core
+    Gui
     Quick
     QuickControls2
     Widgets

@@ -1,132 +1,62 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
+import QtQuick.Controls.Material 2.15
 import QtQuick.Layouts 1.15
+
+import Definition 1.0
+import TypeEnums 1.0
+
 import "../StyledControls"
 
 Item {
     id: root
-    width: 630
-    height: 450
-
-    property alias activeType: groupBoxColumn.activeType
-    property alias egtReplacesItt: switchColumn.egtReplacesItt
-    property alias loadReplacesMan: switchColumn.loadReplacesMan
-    property alias hasEgt: switchColumn.hasEgt
-    property alias numEngines: groupBoxColumn.numEngines
-    property alias numTanks: groupBoxColumn.numTanks
-    property alias name: nameField.text
-
-
-    property bool unsavedChanges: lastNameText != nameField.text || airspeedColors.unsavedChanges || groupBoxColumn.unsavedChanges || switchColumn.unsavedChanges
-    property bool isValid: nameField.acceptableInput && nameField.length > 0 && airspeedColors.isValid && switchColumn.isValid
-
-
-    property string lastNameText: ""
-
-    Connections {
-        target: aircraftInterface
-        function onUpdateQml() {
-            updateData();
-        }
-    }
-
-    Connections {
-        target: aircraftInterface
-        function onUpdateImage() {
-            selectedImg.source = "file:" + aircraftInterface.getImagePath();
-        }
-    }
-
-    function saveData() {
-        groupBoxColumn.saveData();
-        aircraftInterface.setName(nameField.text);
-
-        if (!switchColumn.noColorsChecked)
-            airspeedColors.saveData();
-
-        switchColumn.saveData();
-
-        lastNameText = nameField.text;
-
-    }
-
-    function updateData() {
-        groupBoxColumn.updateData();
-
-        airspeedColors.updateData();
-
-        nameField.text = aircraftInterface.getName();
-        nameField.ensureVisible(0);
-
-        switchColumn.updateData();
-
-        selectedImg.source = "file:" + aircraftInterface.getImagePath();
-
-        lastNameText = nameField.text;
-    }
-
-
-    Text {
-        id: nameText
-        text: "Name"
-        anchors.left: selectedImgText.left
-        anchors.bottom: selectedImgText.top
-        anchors.bottomMargin: 10
-        font.pixelSize: 12
-    }
 
     TextField {
         id: nameField
-        anchors.verticalCenter: nameText.verticalCenter
-        anchors.left: nameText.right
-        anchors.leftMargin: 10
-        width: 150
-        height: 25
-        padding: 2
-        leftPadding: 5
-        rightPadding: 5
-        selectByMouse: true
-        maximumLength: 64
+        width: 260
 
-        background: Rectangle {
-            border.width: parent.activeFocus ? 2 : 1
-            color: parent.palette.base
-            border.color: parent.activeFocus ? parent.palette.highlight : parent.acceptableInput && parent.length > 0 ? parent.palette.mid : "red"
-        }
+        anchors.left: parent.left
+        anchors.top: parent.top
+        anchors.leftMargin: 15
+        anchors.topMargin: 10
 
-
+        placeholderText: "Name"
+        text: AircraftDefinition.name
     }
 
-    Text {
-        anchors.left: nameField.right
-        anchors.leftMargin: 20
-        anchors.verticalCenter: nameField.verticalCenter
-        font.pixelSize: 12
-        font.family: "Roboto"
-        visible: netInterface.address !== "" && netInterface.port > 0
-        text: "Running on Address: " + netInterface.address + " And Port: " + netInterface.port
-    }
+    // Connections {
+    //     target: aircraftInterface
+    //     function onUpdateImage() {
+    //         selectedImg.source = "file:" + aircraftInterface.getImagePath();
+    //     }
+    // }
+
+
 
 
     Text {
         id: selectedImgText
+        color: Material.foreground
         text: "Image (click to edit)"
-        font.pixelSize: 12
-        anchors.bottom: selectedImg.top
-        anchors.bottomMargin: 5
+        anchors.topMargin: 15
         anchors.left: selectedImg.left
+        anchors.top: parent.top
+        font.family: "Roboto"
+        font.pointSize: 11
         anchors.leftMargin: 2
     }
 
     Image {
         id: selectedImg
-        anchors.left: parent.left
-        anchors.leftMargin: 15
-        y: 60
+        anchors.top: selectedImgText.bottom
         width: 300
         height: 108
+        anchors.right: parent.right
         source: "qrc:/DefaultImage.png"
+        anchors.rightMargin: 15
+        anchors.topMargin: 5
         cache: false
+
         MouseArea {
             anchors.fill: parent
             cursorShape: Qt.PointingHandCursor
@@ -137,33 +67,188 @@ Item {
 
     AirspeedColors {
         id: airspeedColors
+        y: 201
         anchors.left: parent.left
         anchors.leftMargin: 15
         anchors.top: groupBoxColumn.top
-        enabled: !switchColumn.noColorsChecked
+        anchors.bottom: parent.bottom
+        anchors.bottomMargin: 15
     }
 
-
-    GroupBoxColumn {
-        id: groupBoxColumn
-        y: 200
-
-        anchors.right: switchColumn.left
-        anchors.rightMargin: 20
-    }
-
-
-
-    SwitchColumn {
-        id: switchColumn
+    CheckBoxColumn {
+        id: checkBoxes
+        x: 417
         anchors.right: parent.right
         anchors.rightMargin: 15
-        anchors.top: parent.top
-        anchors.topMargin: 40
-
-        activeType: groupBoxColumn.activeType
+        anchors.top: airspeedColors.top
+        anchors.topMargin: 0
     }
 
+    ComboBox {
+        id: typeBox
+        x: 495
+        anchors.right: nameField.right
+        anchors.top: nameField.bottom
+        font.pointSize: 11
+        anchors.rightMargin: 0
+        anchors.topMargin: 10
+        model: ["Jet", "Propeller", "Turboprop"]
+        currentIndex: 0
+
+        onActivated: function (index) {
+            if (index === 0) {
+                AircraftDefinition.type = AircraftType.JET;
+            } else if (index === 1) {
+                AircraftDefinition.type = AircraftType.PROP;
+            } else if (index === 2) {
+                AircraftDefinition.type = AircraftType.TURBOPROP;
+            }
+            else {
+                console.log("invalid type");
+                AircraftDefinition.type = AircraftType.INVALID;
+            }
+        }
+    }
+
+    ComboBox {
+        id: numEngineBox
+
+        anchors.top: typeBox.bottom
+        anchors.right: nameField.right
+        anchors.topMargin: 10
+        anchors.rightMargin: 0
+
+        font.pointSize: 11
+
+        model: [1, 2, 4]
+        currentIndex: 0
+
+        onActivated: function (index) {
+            if (index === 0) {
+                AircraftDefinition.numEngines = 1;
+            } else if (index === 1) {
+                AircraftDefinition.numEngines = 2;
+            } else if (index === 2) {
+                AircraftDefinition.numEngines = 4;
+            }
+        }
+    }
+
+    Text {
+        color: Material.foreground
+        text: "Aircraft Type"
+        anchors.verticalCenter: typeBox.verticalCenter
+        anchors.left: parent.left
+        verticalAlignment: Text.AlignVCenter
+        anchors.leftMargin: 15
+        Layout.fillHeight: false
+        Layout.topMargin: 10
+        font.pointSize: 11
+        font.family: "Roboto"
+        Layout.fillWidth: true
+        textFormat: Text.PlainText
+    }
+
+    Text {
+        id: numEngineText
+        color: Material.foreground
+        text: "Number of Engines"
+        anchors.verticalCenter: numEngineBox.verticalCenter
+        anchors.left: parent.left
+        verticalAlignment: Text.AlignVCenter
+        anchors.leftMargin: 15
+        anchors.verticalCenterOffset: 0
+        Layout.fillHeight: false
+        Layout.topMargin: 10
+        font.pointSize: 11
+        font.family: "Roboto"
+        Layout.fillWidth: true
+        textFormat: Text.PlainText
+    }
+
+
+    Binding {
+        target: AircraftDefinition
+        property: "name"
+        value: nameField.text
+    }
+
+    Component.onCompleted: function() {
+        switch (AircraftDefinition.type) {
+            case AircraftType.JET:
+                typeBox.currentIndex = 0;
+                break;
+            case AircraftType.PROP:
+                typeBox.currentIndex = 1;
+                break;
+            case AircraftType.TURBOPROP:
+                typeBox.currentIndex = 2;
+                break;
+            default:
+                typeBox.currentIndex = 0;
+                break;
+        }
+        switch (AircraftDefinition.numEngines) {
+            case 1:
+                numEngineBox.currentIndex = 0;
+                break;
+            case 2:
+                numEngineBox.currentIndex = 1;
+                break;
+            case 4:
+                numEngineBox.currentIndex = 2;
+                break;
+            default:
+                numEngineBox.currentIndex = 0;
+                break;
+        }
+    }
+
+    Connections {
+        target: AircraftDefinition
+        function onTypeChanged() {
+            switch (AircraftDefinition.type) {
+                case AircraftType.JET:
+                    typeBox.currentIndex = 0;
+                    break;
+                case AircraftType.PROP:
+                    typeBox.currentIndex = 1;
+                    break;
+                case AircraftType.TURBOPROP:
+                    typeBox.currentIndex = 2;
+                    break;
+                default:
+                    typeBox.currentIndex = 0;
+                    break;
+            }
+        }
+    }
+
+    Connections {
+        target: AircraftDefinition
+        function onNumEnginesChanged() {
+            switch (AircraftDefinition.numEngines) {
+                case 1:
+                    numEngineBox.currentIndex = 0;
+                    break;
+                case 2:
+                    numEngineBox.currentIndex = 1;
+                    break;
+                case 4:
+                    numEngineBox.currentIndex = 2;
+                    break;
+                default:
+                    numEngineBox.currentIndex = 0;
+                    break;
+            }
+        }
+    }
 
 
 }
+
+/*##^##
+Designer {
+    D{i:0;autoSize:true;height:480;width:640}D{i:2}D{i:5}D{i:12}
+}
+##^##*/

@@ -1,371 +1,603 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
+import QtQuick.Controls.Material 2.15
+import QtQuick.Layouts 1.15
+
+import Definition 1.0
+import TypeEnums 1.0
+
 import "../StyledControls"
 
 Item {
     id: root
     width: 630
+    height: childrenRect.height
 
-    property string defaultTitle: ""
-    property var unitTypes: [0] // 0: none, 1: percent, 2: rpm, 3: temperature, 4: pressure, 5: torque, 6: weight, 7: volume, 8: weight per hour, 9: volume per hour, 10: weight per minute, 11: volume per minute, 12: weight per second, 13: volume per second
 
-    property real minVal: 0
-    property real maxVal: 100
+    required property GaugeDefinition gaugeDef
+    required property int gaugeType
+    required property bool isSecondaryTemp
 
-    property var gaugeObject: null
+    Row {
+        id: topRow
 
-    property int selectedUnitId: -1
+        x: 10
+        y: 10
+        spacing: 10
 
-    property bool unsavedChanges: lastMinVal !== minValField.text || lastMaxVal !== maxValField.text || lastTitle !== titleText.text || lastUnitId != selectedUnitId || lastUnitText !== unitText.text || (!noTextSwitch.checked && (lastTextIncrement !== incrementVal.text || lastNumDecimals !== numDecimalsVal.text)) || lastNoTextChecked !== noTextSwitch.checked
-    property bool isValid: minValField.isValid && maxValField.isValid && titleText.isValid && incrementVal.isValid && numDecimalsVal.isValid
+        Text {
+            anchors.verticalCenter: titleText.verticalCenter
 
-    property alias noTextChecked: noTextSwitch.checked
+            font.family: "Roboto"
+            font.pointSize: 11
 
-    // last saved state data
-    property string lastMinVal: ""
-    property string lastMaxVal: ""
-    property string lastTitle: ""
-    property int lastUnitId: -1
-    property string lastUnitText: ""
-    property string lastTextIncrement: ""
-    property string lastNumDecimals: ""
-    property bool lastNoTextChecked: false
+            color: Material.foreground
 
-    function updateData() {
-        titleText.text = gaugeObject.getTitle();
-        titleText.ensureVisible(0);
-        let unitInt = gaugeObject.getUnit();
-        for (let i = 0; i < unitModel.count; i++) {
-            if (unitModel.get(i).unitId === unitInt) {
-                unitBox.currentIndex = i;
-                unitBox.contentString = unitModel.get(i).longString
-            }
-        }
-        unitText.text = gaugeObject.getUnitString();
-        unitText.ensureVisible(0);
-        minValField.text = gaugeObject.getMinValue();
-        minValField.ensureVisible(0);
-        maxValField.text = gaugeObject.getMaxValue();
-        maxValField.ensureVisible(0);
-
-        incrementVal.text = gaugeObject.getTextIncrement();
-        incrementVal.ensureVisible(0);
-        numDecimalsVal.text = gaugeObject.getTextNumDigits();
-        numDecimalsVal.ensureVisible(0);
-
-        noTextSwitch.checked = gaugeObject.getNoText();
-
-        selectedUnitId = unitModel.get(unitBox.currentIndex).unitId;
-
-        lastMinVal = minValField.text;
-        lastMaxVal = maxValField.text;
-        lastTitle = titleText.text;
-        lastUnitId = unitModel.get(unitBox.currentIndex).unitId;
-        lastUnitText = unitText.text;
-
-        lastTextIncrement = incrementVal.text;
-        lastNumDecimals = numDecimalsVal.text;
-
-        lastNoTextChecked = noTextSwitch.checked;
-    }
-
-    function saveData() {
-        gaugeObject.setTitleAndUnit(titleText.text, unitModel.get(unitBox.currentIndex).unitId, unitText.text);
-        gaugeObject.setRange(minVal, maxVal);
-
-        if (!noTextSwitch.checked)
-            gaugeObject.setTextIncrement(parseFloat(incrementVal.text), parseInt(numDecimalsVal.text));
-
-        gaugeObject.setNoText(noTextSwitch.checked);
-
-        lastMinVal = minValField.text;
-        lastMaxVal = maxValField.text;
-        lastTitle = titleText.text;
-        lastUnitId = unitModel.get(unitBox.currentIndex).unitId;
-        lastUnitText = unitText.text;
-
-        if (!noTextSwitch.checked) {
-            lastTextIncrement = incrementVal.text;
-            lastNumDecimals = numDecimalsVal.text;
+            text: "Title"
         }
 
-        lastNoTextChecked = noTextSwitch.checked;
-    }
+        TextField {
+            id: titleText
+            width: 150
 
-    function updateUnitModel() {
-        unitModel.clear();
-        let hasSections = unitTypes.length > 1;
+            font.pointSize: 11
 
-        for (let i = 0; i < unitTypes.length; i++) {
-            let units = converter.getAllowedUnits(unitTypes[i]);
-            let sectHeader = hasSections ? converter.getSectionHeader(unitTypes[i]) : "";
+            selectByMouse: true
 
-            for (let j = 0; j < units.length; j++)
-                unitModel.append({ "longString": converter.convertToLongString(units[j]), "unitId": units[j], "shortString": converter.convertToShortString(units[j]), "sect": sectHeader });
-        }
+            text: root.gaugeDef.title
 
-        let unitList = converter.getAllowedUnits(unitTypes[0]);
-        unitBox.currentIndex = 0;
-        unitBox.contentString = converter.convertToLongString(unitList[0]);
-        unitText.text = converter.convertToShortString(unitList[0]);
-    }
-
-
-
-    Component.onCompleted: updateUnitModel();
-    onUnitTypesChanged: updateUnitModel();
-
-    onDefaultTitleChanged: titleText.text = defaultTitle
-
-
-    Text {
-        text: "Minimum"
-        anchors.verticalCenter: minValField.verticalCenter
-        anchors.right: minValField.left
-        font.pixelSize: 12
-        anchors.rightMargin: 15
-    }
-
-    TextField {
-        id: minValField
-        x: 80
-        y: 12
-        width: 70
-        height: 25
-        text: "0.0"
-        selectByMouse: true
-        validator: DoubleValidator{ top: maxVal }
-        leftPadding: 5
-        font.pixelSize: 11
-
-        background: Rectangle {
-            border.width: parent.activeFocus ? 2 : 1
-            color: parent.palette.base
-            border.color: parent.activeFocus ? parent.palette.highlight : parent.isValid ? parent.palette.mid : "red"
-        }
-
-        onTextChanged: function() {
-            if (acceptableInput)
-            {
-                minVal = parseFloat(text);
+            onTextChanged: function() {
+                root.gaugeDef.title = titleText.text;
             }
         }
 
-        property bool isValid: length > 0 && acceptableInput
+        Text {
+            anchors.verticalCenter: minValField.verticalCenter
 
-    }
+            leftPadding: 10
 
-    Text {
-        text: "Maximum"
-        anchors.verticalCenter: maxValField.verticalCenter
-        anchors.right: maxValField.left
-        font.pixelSize: 12
-        anchors.rightMargin: 15
-    }
+            font.family: "Roboto"
+            font.pointSize: 11
 
-    TextField {
-        id: maxValField
-        x: 231
-        y: 12
-        width: 70
-        height: 25
-        text: "100.0"
-        selectByMouse: true
-        validator: DoubleValidator{ bottom: minVal }
-        leftPadding: 5
-        font.pixelSize: 11
+            color: Material.foreground
 
-        background: Rectangle {
-            border.width: parent.activeFocus ? 2 : 1
-            color: parent.palette.base
-            border.color: parent.activeFocus ? parent.palette.highlight : parent.isValid ? parent.palette.mid : "red"
+            text: "Min"
         }
 
-        onTextChanged: function() {
-            if (acceptableInput)
-            {
-                maxVal = parseFloat(text);
+        TextField {
+            id: minValField
+
+            width: 80
+
+            font.pointSize: 11
+
+            validator: DoubleValidator { top: root.gaugeDef.maxValue }
+            selectByMouse: true
+
+            text: root.gaugeDef.minValue
+
+            onTextChanged: function() {
+                if (acceptableInput)
+                {
+                    root.gaugeDef.minValue = parseFloat(minValField.text);
+                }
+            }
+
+            Component.onCompleted: function() {
+                ensureVisible(0);
             }
         }
 
-        property bool isValid: length > 0 && acceptableInput
-    }
+        Text {
+            anchors.verticalCenter: maxValField.verticalCenter
 
+            leftPadding: 10
 
-    Text {
-        y: 24
-        text: "Title"
-        anchors.left: titleText.left
-        anchors.bottom: titleText.top
-        font.pixelSize: 12
-        anchors.bottomMargin: 3
-        anchors.leftMargin: 5
-    }
+            font.family: "Roboto"
+            font.pointSize: 11
 
-    TextField {
-        id: titleText
-        x: 14
-        y: 60
-        width: 100
-        height: 25
-        leftPadding: 5
-        padding: 2
-        bottomPadding: 2
-        topPadding: 2
-        font.pixelSize: 11
-        selectByMouse: true
+            color: Material.foreground
 
-        background: Rectangle {
-            border.width: parent.activeFocus ? 2 : 1
-            color: parent.palette.base
-            border.color: parent.activeFocus ? parent.palette.highlight : parent.isValid ? parent.palette.mid : "red"
+            text: "Max"
         }
 
-        property bool isValid: length > 0
-    }
+        TextField {
+            id: maxValField
 
-    Text {
-        y: 24
-        text: "Unit"
-        anchors.left: unitBox.left
-        anchors.bottom: unitBox.top
-        font.pixelSize: 12
-        anchors.leftMargin: 5
-        anchors.bottomMargin: 3
-    }
+            width: 80
 
-    StyledComboBox {
-        id: unitBox
-        x: 120
-        y: 30
-        width: 105
-        anchors.verticalCenter: titleText.verticalCenter
-        model: unitModel
-        onActivated: function() {
-            unitText.text = unitModel.get(index).shortString;
-            unitBox.contentString = unitModel.get(index).longString;
-            root.selectedUnitId = unitModel.get(unitBox.currentIndex).unitId;
-        }
-    }
+            font.pointSize: 11
 
-    ListModel {
-        id: unitModel
-    }
+            validator: DoubleValidator { bottom: root.gaugeDef.minValue }
+            selectByMouse: true
 
-    Text {
-        y: 35
-        text: "Unit (text)"
-        anchors.left: unitText.left
-        anchors.bottom: unitText.top
-        font.pixelSize: 12
-        anchors.leftMargin: 5
-        anchors.bottomMargin: 3
-    }
+            text: root.gaugeDef.maxValue
 
-    TextField {
-        id: unitText
-        x: 240
-        y: 30
-        width: 70
-        height: 25
-        anchors.verticalCenter: titleText.verticalCenter
-        topPadding: 2
-        bottomPadding: 2
-        padding: 2
-        leftPadding: 5
-        font.pixelSize: 11
-        selectByMouse: true
-    }
+            Component.onCompleted: function() {
+                ensureVisible(0);
+            }
 
-
-    Text {
-        x: 346
-        y: 24
-        text: "Text Increment"
-        anchors.bottom: incrementVal.top
-        font.pixelSize: 12
-        anchors.horizontalCenter: incrementVal.horizontalCenter
-        anchors.bottomMargin: 3
-        color: noTextSwitch.checked ? "#bdbebf" : "black"
-    }
-
-    TextField {
-        id: incrementVal
-        x: 335
-        y: 30
-        width: 70
-        height: 25
-        text: "0.0"
-        anchors.verticalCenter: titleText.verticalCenter
-        selectByMouse: true
-        validator: DoubleValidator{}
-        leftPadding: 5
-        font.pixelSize: 11
-        enabled: !noTextSwitch.checked
-
-        background: Rectangle {
-            border.width: parent.activeFocus ? 2 : 1
-            color: parent.palette.base
-            border.color: parent.activeFocus ? parent.palette.highlight : parent.isValid ? parent.palette.mid : "red"
-        }
-
-        property bool isValid: !enabled || (acceptableInput && length > 0)
-    }
-
-    Text {
-        x: 458
-        y: 24
-        text: "Num Decimals"
-        anchors.bottom: numDecimalsVal.top
-        font.pixelSize: 12
-        anchors.horizontalCenter: numDecimalsVal.horizontalCenter
-        anchors.bottomMargin: 3
-        color: noTextSwitch.checked ? "#bdbebf" : "black"
-    }
-
-    TextField {
-        id: numDecimalsVal
-        x: 430
-        y: 30
-        width: 70
-        height: 25
-        text: "0"
-        anchors.verticalCenter: titleText.verticalCenter
-        validator: IntValidator{ bottom: 0; top: 5 }
-        leftPadding: 5
-        selectByMouse: true
-        font.pixelSize: 11
-        enabled: !noTextSwitch.checked
-
-        background: Rectangle {
-            border.width: parent.activeFocus ? 2 : 1
-            color: parent.palette.base
-            border.color: parent.activeFocus ? parent.palette.highlight : parent.isValid ? parent.palette.mid : "red"
-        }
-
-        onEditingFinished: function() {
-            if (parseInt(text) > 0) {
-                incrementVal.text = 1 / Math.pow(10, parseInt(text));
+            onTextChanged: function() {
+                if (acceptableInput)
+                {
+                    root.gaugeDef.maxValue = parseFloat(maxValField.text);
+                }
             }
         }
 
-        property bool isValid: !enabled || (acceptableInput && length > 0)
+
+        Text {
+            anchors.verticalCenter: noTextSwitch.verticalCenter
+
+            leftPadding: 10
+
+            font.family: "Roboto"
+            font.pointSize: 11
+
+            color: Material.foreground
+
+            text: "No Text"
+        }
+
+        CheckBox {
+            id: noTextSwitch
+
+            anchors.verticalCenter: maxValField.verticalCenter
+
+            spacing: 0
+            bottomPadding: 8
+            topPadding: 8
+
+            font.pointSize: 11
+
+            checked: root.gaugeDef.noText
+        }
     }
 
-    Text {
-        text: "No Text"
-        anchors.verticalCenter: numDecimalsVal.verticalCenter
-        anchors.right: noTextSwitch.left
-        font.pixelSize: 12
-        anchors.rightMargin: 15
+    Row {
+        id: botRow
+        x: 10
+        anchors.top: topRow.bottom
+        spacing: 10
+
+        Text {
+            text: "Unit"
+
+            anchors.verticalCenter: unitBox.verticalCenter
+
+            font.family: "Roboto"
+            font.pointSize: 11
+
+            color: Material.foreground
+        }
+
+        ComboBox {
+            id: unitBox
+
+            width: 150
+            model: root.gaugeDef.unitModel
+
+            textRole: "longText"
+            valueRole: "unitId"
+
+            font.pointSize: 11
+
+            Component.onCompleted: function() {
+                currentIndex = unitBox.indexOfValue(root.gaugeDef.unit)
+            }
+
+            Connections {
+                target: root.gaugeDef
+                function onUnitChanged() {
+                    unitBox.currentIndex = unitBox.indexOfValue(root.gaugeDef.unit)
+                }
+            }
+
+            onActivated: function(index) {
+                root.gaugeDef.unit = currentValue;
+                root.gaugeDef.unitString = gaugeDef.unitModel.getShortText(index);
+            }
+        }
+
+        TextField {
+            id: unitText
+
+            width: 70
+
+            font.pointSize: 11
+
+            selectByMouse: true
+
+            text: root.gaugeDef.unitString
+
+            onTextChanged: function() {
+                root.gaugeDef.unitString = unitText.text;
+            }
+
+            Component.onCompleted: function() {
+                ensureVisible(0);
+            }
+        }
+
+
+        Text {
+            text: "Increment"
+
+            font.family: "Roboto"
+            font.pointSize: 11
+
+            anchors.verticalCenter: incrementVal.verticalCenter
+
+            color: noTextSwitch.checked ? Material.hintTextColor : Material.foreground
+
+            leftPadding: 10
+        }
+
+        TextField {
+            id: incrementVal
+
+            enabled: !noTextSwitch.checked
+
+            width: 70
+
+            validator: DoubleValidator{}
+            selectByMouse: true
+            font.pointSize: 11
+
+            text: root.gaugeDef.textIncrement
+
+            onTextChanged: function() {
+                if (acceptableInput)
+                {
+                    root.gaugeDef.textIncrement = parseFloat(incrementVal.text);
+                }
+            }
+
+            Component.onCompleted: function() {
+                ensureVisible(0);
+            }
+
+            // background: Rectangle {
+            //     border.width: parent.activeFocus ? 2 : 1
+            //     color: parent.palette.base
+            //     border.color: parent.activeFocus ? parent.palette.highlight : parent.isValid ? parent.palette.mid : "red"
+            // }
+        }
+
+        Text {
+            text: "Precision"
+
+            font.family: "Roboto"
+            font.pointSize: 11
+
+            anchors.verticalCenter: numDecimalsVal.verticalCenter
+
+            color: noTextSwitch.checked ? Material.hintTextColor : Material.foreground
+
+            leftPadding: 10
+        }
+
+        TextField {
+            id: numDecimalsVal
+
+            enabled: !noTextSwitch.checked
+
+            width: 70
+
+            font.pointSize: 11
+
+            validator: IntValidator { bottom: 0; top: 5 }
+            selectByMouse: true
+
+            text: root.gaugeDef.textNumDigits
+
+            // background: Rectangle {
+            //     border.width: parent.activeFocus ? 2 : 1
+            //     color: parent.palette.base
+            //     border.color: parent.activeFocus ? parent.palette.highlight : parent.isValid ? parent.palette.mid : "red"
+            // }
+
+            onEditingFinished: function() {
+                if (parseInt(numDecimalsVal.text) > 0) {
+                    incrementVal.text = 1 / Math.pow(10, parseInt(numDecimalsVal.text));
+                    root.gaugeDef.textNumDigits = parseInt(numDecimalsVal.text);
+                }
+            }
+
+            Component.onCompleted: function() {
+                ensureVisible(0);
+            }
+
+            property bool isValid: !enabled || (acceptableInput && length > 0)
+        }
     }
 
-    StyledSwitch {
-        id: noTextSwitch
-        width: 42
-        anchors.verticalCenter: numDecimalsVal.verticalCenter
+    Row {
+        x: 10
+        anchors.top: botRow.bottom
+        spacing: 10
+
+        Text {
+            text: "Type"
+
+            visible: root.gaugeType == SwitchingGaugeType.ENGINE_TEMP || root.isSecondaryTemp
+
+            anchors.verticalCenter: typeBox.verticalCenter
+
+            font.family: "Roboto"
+            font.pointSize: 11
+
+            color: Material.foreground
+        }
+
+        ComboBox {
+            id: typeBox
+
+            visible: root.gaugeType == SwitchingGaugeType.ENGINE_TEMP || root.isSecondaryTemp
+
+            width: 105
+            model: AircraftDefinition.type === AircraftType.PROP ? [ { text: "CHT", value: TemperatureGaugeType.CHT }, { text: "EGT", value: TemperatureGaugeType.EGT } ] : [ { text: "ITT", value: TemperatureGaugeType.ITT }, { text: "EGT", value: TemperatureGaugeType.EGT }, { text: "TIT", value: TemperatureGaugeType.TIT } ]
+
+            textRole: "text"
+            valueRole: "value"
+
+            font.pointSize: 11
+
+            currentIndex: 0
+
+
+            Component.onCompleted: function() {
+                if (root.gaugeType == SwitchingGaugeType.ENGINE_TEMP)
+                    currentIndex = indexOfValue(AircraftDefinition.engineTempType);
+                else if (root.isSecondaryTemp)
+                    currentIndex = indexOfValue(AircraftDefinition.secondaryTempType);
+            }
+
+            Connections {
+                enabled: root.gaugeType === SwitchingGaugeType.ENGINE_TEMP
+                target: AircraftDefinition
+                function onEngineTempTypeChanged() {
+                    currentIndex = indexOfValue(AircraftDefinition.engineTempType);
+                }
+            }
+
+            Connections {
+                enabled: root.isSecondaryTemp
+                target: AircraftDefinition
+                function onSecondaryTempTypeChanged() {
+                    currentIndex = indexOfValue(AircraftDefinition.secondaryTempType);
+                }
+            }
+
+            onActivated: function(index) {
+                if (root.gaugeType === SwitchingGaugeType.ENGINE_TEMP) {
+                    AircraftDefinition.engineTempType = currentValue;
+                }
+                else if (root.isSecondaryTemp) {
+                    AircraftDefinition.secondaryTempType = currentValue;
+                }
+            }
+        }
+
+        Text {
+            text: "Max Power"
+
+            visible: root.gaugeType == SwitchingGaugeType.POWER && unitBox.currentText === "Percent"
+
+            anchors.verticalCenter: maxPowerValue.verticalCenter
+
+            font.family: "Roboto"
+            font.pointSize: 11
+
+            color: Material.foreground
+
+            leftPadding: 10
+        }
+
+        TextField {
+            id: maxPowerValue
+
+            visible: root.gaugeType == SwitchingGaugeType.POWER && unitBox.currentText === "Percent"
+
+            width: 70
+
+            font.pointSize: 11
+
+            selectByMouse: true
+
+            text: AircraftDefinition.maxPower
+
+            validator: DoubleValidator{}
+
+            onTextChanged: function() {
+                if (maxPowerValue.acceptableInput) {
+                    AircraftDefinition.maxPower = parseFloat(maxPowerValue.text);
+                }
+            }
+
+            Component.onCompleted: function() {
+                ensureVisible(0);
+            }
+        }
+
+
+        Text {
+            text: "Max Torque"
+
+            visible: root.gaugeType == SwitchingGaugeType.TORQUE && AircraftDefinition.type === AircraftType.PROP && unitBox.currentText === "Percent"
+
+            anchors.verticalCenter: maxTorqueValue.verticalCenter
+
+            font.family: "Roboto"
+            font.pointSize: 11
+
+            color: Material.foreground
+
+            leftPadding: 10
+        }
+
+        TextField {
+            id: maxTorqueValue
+
+            visible: root.gaugeType === SwitchingGaugeType.TORQUE && AircraftDefinition.type === AircraftType.PROP && unitBox.currentText === "Percent"
+
+            width: 70
+
+            font.pointSize: 11
+
+            selectByMouse: true
+
+            text: AircraftDefinition.maxTorque
+
+            validator: DoubleValidator{}
+
+            onTextChanged: function() {
+                if (maxTorqueValue.acceptableInput) {
+                    AircraftDefinition.maxTorque = parseFloat(maxTorqueValue.text);
+                }
+            }
+
+            Component.onCompleted: function() {
+                ensureVisible(0);
+            }
+        }
+    }
+
+    GridLayout {
         anchors.right: parent.right
-        anchors.rightMargin: 15
+        anchors.top: botRow.bottom
+
+        columns: 3
+
+        Text {
+            Layout.fillWidth: true
+
+            font.pointSize: 11
+            font.family: "Roboto"
+
+            color: Material.foreground
+
+            text: "Low Red Blink"
+        }
+
+        CheckBox {
+            id: lowEnabledBox
+
+            Layout.fillWidth: true
+            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+
+            topPadding: 8
+            bottomPadding: 8
+            spacing: 0
+
+            text: ""
+
+            checked: root.gaugeDef.hasMinRedBlink
+        }
+
+        TextField {
+            id: lowThresholdField
+
+            enabled: lowEnabledBox.checked
+
+            Layout.fillWidth: true
+            Layout.preferredWidth: 80
+
+            validator: DoubleValidator { }
+
+            font.pointSize: 11
+
+            inputMethodHints: Qt.ImhFormattedNumbersOnly
+
+            placeholderText: "Threshold"
+            text: root.gaugeDef.minRedBlinkThreshold
+
+            onTextChanged: function() {
+                if (lowThresholdField.acceptableInput)
+                {
+                    root.gaugeDef.minRedBlinkThreshold = parseFloat(lowThresholdField.text);
+                }
+            }
+
+            Component.onCompleted: function() {
+                ensureVisible(0);
+            }
+        }
+
+        Text {
+            Layout.fillWidth: true
+
+            font.pointSize: 11
+            font.family: "Roboto"
+
+            color: Material.foreground
+
+            text: "High Red Blink"
+        }
+
+        CheckBox {
+            id: highEnabledBox
+
+            Layout.fillWidth: true
+            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+
+            topPadding: 8
+            bottomPadding: 8
+            spacing: 0
+
+            text: ""
+
+            checked: root.gaugeDef.hasMaxRedBlink
+        }
+
+        TextField {
+            id: highThresholdField
+
+            enabled: highEnabledBox.checked
+
+            Layout.fillWidth: true
+            Layout.preferredWidth: 80
+
+            validator: DoubleValidator { }
+
+            font.pointSize: 11
+
+            inputMethodHints: Qt.ImhFormattedNumbersOnly
+
+            placeholderText: "Threshold"
+            text: root.gaugeDef.maxRedBlinkThreshold
+
+            onTextChanged: function() {
+                if (highThresholdField.acceptableInput)
+                {
+                    root.gaugeDef.maxRedBlinkThreshold = parseFloat(highThresholdField.text);
+                }
+            }
+
+            Component.onCompleted: function() {
+                ensureVisible(0);
+            }
+        }
+    }
+
+
+
+    Binding {
+        target: root.gaugeDef
+        property: "noText"
+        value: noTextSwitch.checked
+    }
+
+    Binding {
+        target: root.gaugeDef
+        property: "hasMinRedBlink"
+        value: lowEnabledBox.checked
+    }
+
+    Binding {
+        target: root.gaugeDef
+        property: "hasMaxRedBlink"
+        value: highEnabledBox.checked
     }
 
 }

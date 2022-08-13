@@ -1,54 +1,68 @@
 set(PROJECT_SOURCES
-        main.cpp
-        aircraftmanager/aircraftinterface/aircraftinterface.cpp
-        aircraftmanager/aircraftinterface/interfaceGetters.cpp
-        aircraftmanager/aircraftinterface/interfacesetters.cpp
-        aircraftmanager/aircraftinterface/interfaceupdategauges.cpp
-        aircraftmanager/aircraftmanager/aircraftmanager.cpp
-        aircraftmanager/definitions/aircraft/aircraft-definition.cpp
-        aircraftmanager/definitions/gauge/gauge-definition.cpp
-        aircraftmanager/definitions/jet/jet-definition.cpp
-        aircraftmanager/definitions/prop/prop-definition.cpp
-        aircraftmanager/definitions/turboprop/turboprop-definition.cpp
-        filemanager/aircraftfile/aircraftfile.cpp
-        gauges/gaugeinterface/gaugeinterface.cpp
-        gauges/gaugeinterface/gaugegetters.cpp
-        gauges/gaugeinterface/gaugesetters.cpp
-        gauges/gaugemanager/gaugemanager.cpp
-        network/networkinterface/networkinterface.cpp
-        network/networkmanager/loadclientaircraft.cpp
-        network/networkmanager/networkmanager.cpp
-        network/networkmanager/receiveddatafromclient.cpp
-        network/networkmanager/removeclientaircraft.cpp
-        network/networkmanager/sendaircrafttoclient.cpp
-        util/unitconverter/converttolongstring.cpp
-        util/unitconverter/converttoshortstring.cpp
-        util/unitconverter/getallowedunits.cpp
-        util/unitconverter/getsectionheader.cpp
-        util/unitconverter/unitconverter.cpp
-)
+        src/main.cpp
+        src/setupQml.cpp
 
-list(TRANSFORM PROJECT_SOURCES PREPEND src/)
+        src/AircraftManager/AircraftManager.cpp
+        src/AircraftManager/loadDefinitions.cpp
+        src/AircraftManager/saveCurrentDefinition.cpp
+
+        src/AircraftManager/QmlDefinitions/QmlAircraftDefinition/changeDefinition.cpp
+        src/AircraftManager/QmlDefinitions/QmlAircraftDefinition/getters.cpp
+        src/AircraftManager/QmlDefinitions/QmlAircraftDefinition/QmlAircraftDefinition.cpp
+        src/AircraftManager/QmlDefinitions/QmlAircraftDefinition/setEngineTempType.cpp
+        src/AircraftManager/QmlDefinitions/QmlAircraftDefinition/setGauge1Type.cpp
+        src/AircraftManager/QmlDefinitions/QmlAircraftDefinition/setGauge2Type.cpp
+        src/AircraftManager/QmlDefinitions/QmlAircraftDefinition/setGauge3Type.cpp
+        src/AircraftManager/QmlDefinitions/QmlAircraftDefinition/setGauge4Type.cpp
+        src/AircraftManager/QmlDefinitions/QmlAircraftDefinition/setters.cpp
+        src/AircraftManager/QmlDefinitions/QmlAircraftDefinition/setType.cpp
+
+        src/AircraftManager/QmlDefinitions/QmlGaugeDefinition/changeDefinition.cpp
+        src/AircraftManager/QmlDefinitions/QmlGaugeDefinition/changeType1.cpp
+        src/AircraftManager/QmlDefinitions/QmlGaugeDefinition/changeType2.cpp
+        src/AircraftManager/QmlDefinitions/QmlGaugeDefinition/getters.cpp
+        src/AircraftManager/QmlDefinitions/QmlGaugeDefinition/setters.cpp
+
+        src/common/UnitModel/data.cpp
+
+        src/common/definitions/AircraftDefinition/differs.cpp
+        src/common/definitions/AircraftDefinition/localDiffers.cpp
+        src/common/definitions/AircraftDefinition/toBinary.cpp
+        src/common/definitions/AircraftDefinition/toConfig.cpp
+        src/common/definitions/AircraftDefinition/fromBinary/fromBinaryV1.cpp
+        src/common/definitions/AircraftDefinition/fromBinary/fromBinaryV2.cpp
+        src/common/definitions/AircraftDefinition/fromBinary/fromBinaryV3.cpp
+
+        src/common/definitions/GaugeDefinition/getEpsilon.cpp
+        src/common/definitions/GaugeDefinition/toBinary.cpp
+        src/common/definitions/GaugeDefinition/fromBinary/fromBinaryV1.cpp
+        src/common/definitions/GaugeDefinition/fromBinary/fromBinaryV3.cpp
+
+        src/preview/loadAircraft.cpp
+        src/preview/PreviewManager.cpp
+        src/preview/GaugeElement/setGaugeParameters1.cpp
+        src/preview/GaugeElement/setGaugeParameters2.cpp
+        src/preview/GaugeElement/update.cpp
+        src/preview/MiscElement/updateFlaps.cpp
+        src/preview/MiscElement/updateSpoilers.cpp
+        src/preview/MiscElement/updateTrim.cpp
+)
 
 set(PROJECT_HEADERS
-        aircraftmanager/aircraftinterface/aircraftinterface.hpp
-        aircraftmanager/aircraftmanager/aircraftmanager.hpp
-        aircraftmanager/definitions/basetypes.hpp
-        aircraftmanager/definitions/aircraft/aircraft-definition.hpp
-        aircraftmanager/definitions/gauge/gauge-definition.hpp
-        aircraftmanager/definitions/jet/jet-definition.hpp
-        aircraftmanager/definitions/prop/prop-definition.hpp
-        aircraftmanager/definitions/turboprop/turboprop-definition.hpp
-        filemanager/aircraftfile/aircraftfile.hpp
-        gauges/gaugeinterface/gaugeinterface.hpp
-        gauges/gaugemanager/gaugemanager.hpp
-        network/networkinterface/networkinterface.hpp
-        network/networkmanager/data-identifiers.hpp
-        network/networkmanager/networkmanager.hpp
-        network/networkmanager/networkmanager.ih
-        util/binaryconverter.hpp
-        util/unitconverter/unitconverter.hpp
-        util/unitconverter/units.hpp
+        src/main.hpp
+        src/AircraftManager/AircraftManager.hpp
+        src/AircraftManager/QmlDefinitions/QmlAircraftDefinition/QmlAircraftDefinition.hpp
+        src/AircraftManager/QmlDefinitions/QmlGaugeDefinition/QmlGaugeDefinition.hpp
+        src/common/QmlEnums.hpp
+        src/common/TypeEnums.hpp
+        src/common/UnitConverter.hpp
+        src/common/Units.hpp
+        src/common/UnitModel/UnitModel.hpp
+        src/common/definitions/AircraftConfig.hpp
+        src/common/definitions/BaseTypes.hpp
+        src/common/definitions/AircraftDefinition/AircraftDefinition.hpp
+        src/common/definitions/GaugeDefinition/GaugeDefinition.hpp
+        src/preview/PreviewManager.hpp
+        src/preview/GaugeElement/GaugeElement.hpp
+        src/preview/MiscElement/MiscElement.hpp
 )
-
-list(TRANSFORM PROJECT_HEADERS PREPEND src/)

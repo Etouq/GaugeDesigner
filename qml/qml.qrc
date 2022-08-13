@@ -44,5 +44,6 @@
         <file>GaugeTab/TextGradTable/TextGradTable.qml</file>
         <file>Dialogs/MultiSelectionDialog.qml</file>
         <file>Dialogs/SingleSelectionDialog.qml</file>
+        <file>GeneralTab/CheckBoxColumn.qml</file>
     </qresource>
 </RCC>

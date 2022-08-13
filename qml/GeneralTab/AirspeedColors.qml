@@ -1,8 +1,11 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
+import QtQuick.Controls.Material 2.15
+import QtQuick.Layouts 1.15
+
+import Definition 1.0
 
 GroupBox {
-    width: 250
 
     title: "Airspeed Colors"
     topPadding: 5
@@ -10,423 +13,548 @@ GroupBox {
     rightPadding: 5
     bottomPadding: 5
 
-
-
-    property bool unsavedChanges: enabled && (lastMinSpeed != lowLimitField.text || lastFlapsStart != flapsStart.text || lastFlapsEnd != flapsEnd.text || lastGreenStart != greenStart.text || lastGreenEnd != greenEnd.text || lastYellowStart != yellowStart.text || lastYellowEnd != yellowEnd.text || lastRedStart != redStart.text || lastRedEnd != redEnd.text || lastMaxSpeed != highLimitField.text)
-    property bool isValid: lowLimitField.isValid && flapsStart.isValid && flapsEnd.isValid && greenStart.isValid && greenEnd.isValid && yellowStart.isValid && yellowEnd.isValid && redStart.isValid && redEnd.isValid && highLimitField.isValid
-
-
-
-    // last saved state data
-    property string lastMinSpeed: ""
-    property string lastFlapsStart: ""
-    property string lastFlapsEnd: ""
-    property string lastGreenStart: ""
-    property string lastGreenEnd: ""
-    property string lastYellowStart: ""
-    property string lastYellowEnd: ""
-    property string lastRedStart: ""
-    property string lastRedEnd: ""
-    property string lastMaxSpeed: ""
-
-
-    function saveData() {
-        aircraftInterface.setLowLimit(parseFloat(lowLimitField.text));
-        aircraftInterface.setFlapsBegin(parseFloat(flapsStart.text));
-        aircraftInterface.setFlapsEnd(parseFloat(flapsEnd.text));
-        aircraftInterface.setGreenBegin(parseFloat(greenStart.text));
-        aircraftInterface.setGreenEnd(parseFloat(greenEnd.text));
-        aircraftInterface.setYellowBegin(parseFloat(yellowStart.text));
-        aircraftInterface.setYellowEnd(parseFloat(yellowEnd.text));
-        aircraftInterface.setRedBegin(parseFloat(redStart.text));
-        aircraftInterface.setRedEnd(parseFloat(redEnd.text));
-        aircraftInterface.setHighLimit(parseFloat(highLimitField.text));
-
-        lastMinSpeed = lowLimitField.text;
-        lastFlapsStart = flapsStart.text;
-        lastFlapsEnd = flapsEnd.text;
-        lastGreenStart = greenStart.text;
-        lastGreenEnd = greenEnd.text;
-        lastYellowStart = yellowStart.text;
-        lastYellowEnd = yellowEnd.text;
-        lastRedStart = redStart.text;
-        lastRedEnd = redEnd.text;
-        lastMaxSpeed = highLimitField.text;
-    }
-
-    function updateData() {
-        lowLimitField.text = aircraftInterface.getLowLimit();
-        flapsStart.text = aircraftInterface.getFlapsBegin();
-        flapsEnd.text = aircraftInterface.getFlapsEnd();
-        greenStart.text = aircraftInterface.getGreenBegin();
-        greenEnd.text = aircraftInterface.getGreenEnd();
-        yellowStart.text = aircraftInterface.getYellowBegin();
-        yellowEnd.text = aircraftInterface.getYellowEnd();
-        redStart.text = aircraftInterface.getRedBegin();
-        redEnd.text = aircraftInterface.getRedEnd();
-        highLimitField.text = aircraftInterface.getHighLimit();
-
-        lowLimitField.ensureVisible(0);
-        flapsStart.ensureVisible(0);
-        flapsEnd.ensureVisible(0);
-        greenStart.ensureVisible(0);
-        greenEnd.ensureVisible(0);
-        yellowStart.ensureVisible(0);
-        yellowEnd.ensureVisible(0);
-        redStart.ensureVisible(0);
-        redEnd.ensureVisible(0);
-        highLimitField.ensureVisible(0);
-
-        lastMinSpeed = lowLimitField.text;
-        lastFlapsStart = flapsStart.text;
-        lastFlapsEnd = flapsEnd.text;
-        lastGreenStart = greenStart.text;
-        lastGreenEnd = greenEnd.text;
-        lastYellowStart = yellowStart.text;
-        lastYellowEnd = yellowEnd.text;
-        lastRedStart = redStart.text;
-        lastRedEnd = redEnd.text;
-        lastMaxSpeed = highLimitField.text;
-    }
-
-    label: Label {
-        x: parent.leftPadding
+    label: CheckBox {
+        id: checkBox
+        x: -3
+        checked: !AircraftDefinition.noColors
         text: parent.title
-        anchors.bottomMargin: 4
+        font.pointSize: 11
     }
 
     Component.onCompleted: label.anchors.bottom = background.top
 
-    Column {
-        anchors.fill: parent
+    GridLayout {
+        id: gridLayout
+        columns: 5
+        enabled: checkBox.checked
 
         Item {
-            height: 25
-            anchors.left: parent.left
-            anchors.right: parent.right
+            Layout.fillWidth: true // spacer
+        }
 
-            Text {
-                text: "Start"
-                font.pixelSize: 12
-                height: 25
-                width: 70
-                horizontalAlignment: Text.AlignHCenter
-                verticalAlignment: Text.AlignVCenter
-                anchors.right: colorEndText.left
-                anchors.rightMargin: 5
-            }
+        Text {
+            text: "Start"
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
+            Layout.preferredWidth: 100
+            Layout.fillWidth: true
+            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+            font.family: "Roboto"
+            font.pointSize: 11
+            color: enabled ? Material.foreground : Material.hintTextColor
+        }
 
-            Text {
-                id: colorEndText
-                text: "End"
-                font.pixelSize: 12
-                height: 25
-                width: 70
-                horizontalAlignment: Text.AlignHCenter
-                verticalAlignment: Text.AlignVCenter
-                anchors.right: parent.right
-            }
+        Text {
+            text: "End"
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
+            Layout.preferredWidth: 100
+            Layout.fillWidth: true
+            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+            font.family: "Roboto"
+            font.pointSize: 11
+            color: enabled ? Material.foreground : Material.hintTextColor
+        }
+
+        Text {
+            text: "Enabled"
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
+            Layout.fillWidth: true
+            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+            font.family: "Roboto"
+            font.pointSize: 11
+            color: enabled ? Material.foreground : Material.hintTextColor
+        }
+
+        Text {
+            text: "Dynamic"
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
+            font.pointSize: 11
+            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+            font.family: "Roboto"
+            Layout.fillWidth: true
+            color: enabled ? Material.foreground : Material.hintTextColor
+        }
+
+        Text {
+            enabled: lowEnabledBox.checked
+            color: enabled ? Material.foreground : Material.hintTextColor
+            text: "Lower Barberpole"
+            Layout.fillWidth: true
+            font.pointSize: 11
+            font.family: "Roboto"
         }
 
         Item {
-            height: 30
-            anchors.left: parent.left
-            anchors.right: parent.right
-
-            Text {
-                text: "Lower Barberpole"
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.left: parent.left
-                font.pixelSize: 12
-                color: enabled ? "black" : "#bdbebf"
-            }
-
-            TextField {
-                id: lowLimitField
-                width: 70
-                height: 25
-                text: "0.0"
-                validator: DoubleValidator { bottom: 0 }
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.right: parent.right
-                padding: 2
-                leftPadding: 5
-                selectByMouse: true
-
-                property bool isValid: !enabled || (acceptableInput && length > 0)
-
-                background: Rectangle {
-                    border.width: parent.activeFocus ? 2 : 1
-                    color: parent.palette.base
-                    border.color: parent.activeFocus ? parent.palette.highlight : parent.isValid ? parent.palette.mid : "red"
-                }
-            }
+            Layout.preferredWidth: 100
+            Layout.fillWidth: true
+            Layout.preferredHeight: 0
+            // spacer
         }
 
+        TextField {
+            id: lowLimitField
 
+            enabled: lowEnabledBox.checked
 
-        Item {
-            height: 30
-            anchors.left: parent.left
-            anchors.right: parent.right
+            Layout.fillWidth: true
+            Layout.preferredWidth: 100
 
-            Text {
-                text: "Flaps (white)"
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.left: parent.left
-                font.pixelSize: 12
-                color: enabled ? "black" : "#bdbebf"
-            }
+            font.pointSize: 11
 
-            TextField {
-                id: flapsStart
-                width: 70
-                height: 25
-                text: "0.0"
-                validator: DoubleValidator { bottom: 0 }
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.right: flapsEnd.left
-                anchors.rightMargin: 5
-                padding: 2
-                leftPadding: 5
-                selectByMouse: true
+            inputMethodHints: Qt.ImhFormattedNumbersOnly
 
-                property bool isValid: !enabled || (acceptableInput && length > 0)
+            placeholderText: "End"
+            text: AircraftDefinition.lowLimit
+        }
 
-                background: Rectangle {
-                    border.width: parent.activeFocus ? 2 : 1
-                    color: parent.palette.base
-                    border.color: parent.activeFocus ? parent.palette.highlight : parent.isValid ? parent.palette.mid : "red"
-                }
-            }
+        CheckBox {
+            id: lowEnabledBox
 
-            TextField {
-                id: flapsEnd
-                width: 70
-                height: 25
-                text: "0.0"
-                validator: DoubleValidator { bottom: 0 }
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.right: parent.right
-                padding: 2
-                leftPadding: 5
-                selectByMouse: true
+            Layout.fillWidth: true
+            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
 
-                property bool isValid: !enabled || (acceptableInput && length > 0)
+            topPadding: 8
+            bottomPadding: 8
+            spacing: 0
 
-                background: Rectangle {
-                    border.width: parent.activeFocus ? 2 : 1
-                    color: parent.palette.base
-                    border.color: parent.activeFocus ? parent.palette.highlight : parent.isValid ? parent.palette.mid : "red"
-                }
-            }
+            text: ""
+
+            checked: AircraftDefinition.hasLowLimit
         }
 
         Item {
-            height: 30
-            anchors.left: parent.left
-            anchors.right: parent.right
+            Layout.fillWidth: true
+            Layout.preferredHeight: 0
+        }
 
-            Text {
-                text: "Green"
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.left: parent.left
-                font.pixelSize: 12
-                color: enabled ? "black" : "#bdbebf"
-            }
+        Text {
+            enabled: flapsEnabledBox.checked
 
-            TextField {
-                id: greenStart
-                width: 70
-                height: 25
-                text: "0.0"
-                validator: DoubleValidator { bottom: 0 }
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.right: greenEnd.left
-                anchors.rightMargin: 5
-                padding: 2
-                leftPadding: 5
-                selectByMouse: true
+            Layout.fillWidth: true
 
-                property bool isValid: !enabled || (acceptableInput && length > 0)
+            font.pointSize: 11
+            font.family: "Roboto"
 
-                background: Rectangle {
-                    border.width: parent.activeFocus ? 2 : 1
-                    color: parent.palette.base
-                    border.color: parent.activeFocus ? parent.palette.highlight : parent.isValid ? parent.palette.mid : "red"
-                }
-            }
+            color: enabled ? Material.foreground : Material.hintTextColor
 
-            TextField {
-                id: greenEnd
-                width: 70
-                height: 25
-                text: "0.0"
-                validator: DoubleValidator { bottom: 0 }
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.right: parent.right
-                padding: 2
-                leftPadding: 5
-                selectByMouse: true
+            text: "Flaps (white)"
+        }
 
-                property bool isValid: !enabled || (acceptableInput && length > 0)
+        TextField {
+            id: flapsStartField
 
-                background: Rectangle {
-                    border.width: parent.activeFocus ? 2 : 1
-                    color: parent.palette.base
-                    border.color: parent.activeFocus ? parent.palette.highlight : parent.isValid ? parent.palette.mid : "red"
-                }
-            }
+            enabled: flapsEnabledBox.checked
+
+            Layout.fillWidth: true
+            Layout.preferredWidth: 100
+
+            font.pointSize: 11
+
+            inputMethodHints: Qt.ImhFormattedNumbersOnly
+
+            placeholderText: "Start"
+            text: AircraftDefinition.flapsBegin
+        }
+
+        TextField {
+            id: flapsEndField
+
+            enabled: flapsEnabledBox.checked
+
+            Layout.fillWidth: true
+            Layout.preferredWidth: 100
+
+            font.pointSize: 11
+
+            inputMethodHints: Qt.ImhFormattedNumbersOnly
+
+            placeholderText: "End"
+            text: AircraftDefinition.flapsEnd
+        }
+
+        CheckBox {
+            id: flapsEnabledBox
+
+            Layout.fillWidth: true
+            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+
+            topPadding: 8
+            bottomPadding: 8
+            spacing: 0
+
+            text: ""
+
+            checked: AircraftDefinition.hasFlapsSpeed
         }
 
         Item {
-            height: 30
-            anchors.left: parent.left
-            anchors.right: parent.right
+            Layout.fillWidth: true
+            Layout.preferredHeight: 0
+        }
 
-            Text {
-                text: "Yellow"
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.left: parent.left
-                font.pixelSize: 12
-                color: enabled ? "black" : "#bdbebf"
-            }
+        Text {
+            enabled: greenEnabledBox.checked
+            color: enabled ? Material.foreground : Material.hintTextColor
+            text: "Green"
+            font.pointSize: 11
+            font.family: "Roboto"
+            Layout.fillWidth: true
+        }
 
-            TextField {
-                id: yellowStart
-                width: 70
-                height: 25
-                text: "0.0"
-                validator: DoubleValidator { bottom: 0 }
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.right: yellowEnd.left
-                anchors.rightMargin: 5
-                padding: 2
-                leftPadding: 5
-                selectByMouse: true
+        TextField {
+            id: greenStartField
 
-                property bool isValid: !enabled || (acceptableInput && length > 0)
+            enabled: greenEnabledBox.checked
 
-                background: Rectangle {
-                    border.width: parent.activeFocus ? 2 : 1
-                    color: parent.palette.base
-                    border.color: parent.activeFocus ? parent.palette.highlight : parent.isValid ? parent.palette.mid : "red"
-                }
-            }
+            Layout.fillWidth: true
+            Layout.preferredWidth: 100
 
-            TextField {
-                id: yellowEnd
-                width: 70
-                height: 25
-                text: "0.0"
-                validator: DoubleValidator { bottom: 0 }
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.right: parent.right
-                padding: 2
-                leftPadding: 5
-                selectByMouse: true
+            font.pointSize: 11
 
-                property bool isValid: !enabled || (acceptableInput && length > 0)
+            inputMethodHints: Qt.ImhFormattedNumbersOnly
 
-                background: Rectangle {
-                    border.width: parent.activeFocus ? 2 : 1
-                    color: parent.palette.base
-                    border.color: parent.activeFocus ? parent.palette.highlight : parent.isValid ? parent.palette.mid : "red"
-                }
-            }
+            placeholderText: "Start"
+            text: AircraftDefinition.greenBegin
+        }
+
+
+        TextField {
+            id: greenEndField
+
+            enabled: greenEnabledBox.checked
+
+            Layout.fillWidth: true
+            Layout.preferredWidth: 100
+
+            font.pointSize: 11
+
+            inputMethodHints: Qt.ImhFormattedNumbersOnly
+
+            placeholderText: "End"
+            text: AircraftDefinition.greenEnd
+        }
+
+        CheckBox {
+            id: greenEnabledBox
+
+            Layout.fillWidth: true
+            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+
+            topPadding: 8
+            bottomPadding: 8
+            spacing: 0
+
+            text: ""
+
+            checked: AircraftDefinition.hasGreenSpeed
         }
 
         Item {
-            height: 30
-            anchors.left: parent.left
-            anchors.right: parent.right
+            Layout.fillWidth: true
+            Layout.preferredHeight: 0
+        }
 
-            Text {
-                text: "Red"
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.left: parent.left
-                font.pixelSize: 12
-                color: enabled ? "black" : "#bdbebf"
-            }
+        Text {
+            enabled: yellowEnabledBox.checked
+            color: enabled ? Material.foreground : Material.hintTextColor
+            text: "Yellow"
+            font.pointSize: 11
+            font.family: "Roboto"
+            Layout.fillWidth: true
+        }
 
-            TextField {
-                id: redStart
-                width: 70
-                height: 25
-                text: "0.0"
-                validator: DoubleValidator { bottom: 0 }
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.right: redEnd.left
-                anchors.rightMargin: 5
-                padding: 2
-                leftPadding: 5
-                selectByMouse: true
+        TextField {
+            id: yellowStartField
 
-                property bool isValid: !enabled || (acceptableInput && length > 0)
+            enabled: yellowEnabledBox.checked
 
-                background: Rectangle {
-                    border.width: parent.activeFocus ? 2 : 1
-                    color: parent.palette.base
-                    border.color: parent.activeFocus ? parent.palette.highlight : parent.isValid ? parent.palette.mid : "red"
-                }
-            }
+            Layout.fillWidth: true
+            Layout.preferredWidth: 100
 
-            TextField {
-                id: redEnd
-                width: 70
-                height: 25
-                text: "0.0"
-                validator: DoubleValidator { bottom: 0 }
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.right: parent.right
-                padding: 2
-                leftPadding: 5
-                selectByMouse: true
+            font.pointSize: 11
 
-                property bool isValid: !enabled || (acceptableInput && length > 0)
+            inputMethodHints: Qt.ImhFormattedNumbersOnly
 
-                background: Rectangle {
-                    border.width: parent.activeFocus ? 2 : 1
-                    color: parent.palette.base
-                    border.color: parent.activeFocus ? parent.palette.highlight : parent.isValid ? parent.palette.mid : "red"
-                }
-            }
+            placeholderText: "Start"
+            text: AircraftDefinition.yellowBegin
+        }
+
+        TextField {
+            id: yellowEndField
+
+            enabled: yellowEnabledBox.checked
+
+            Layout.fillWidth: true
+            Layout.preferredWidth: 100
+
+            font.pointSize: 11
+
+            inputMethodHints: Qt.ImhFormattedNumbersOnly
+
+            placeholderText: "End"
+            text: AircraftDefinition.yellowEnd
+        }
+
+        CheckBox {
+            id: yellowEnabledBox
+
+            Layout.fillWidth: true
+            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+
+            topPadding: 8
+            bottomPadding: 8
+            spacing: 0
+
+            text: ""
+
+            checked: AircraftDefinition.hasYellowSpeed
         }
 
         Item {
-            height: 30
-            anchors.left: parent.left
-            anchors.right: parent.right
-
-            Text {
-                text: "Upper Barberpole"
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.left: parent.left
-                font.pixelSize: 12
-                color: enabled ? "black" : "#bdbebf"
-            }
-
-            TextField {
-                id: highLimitField
-                width: 70
-                height: 25
-                text: "0.0"
-                validator: DoubleValidator { bottom: 0 }
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.right: parent.right
-                anchors.rightMargin: 75
-                padding: 2
-                leftPadding: 5
-                selectByMouse: true
-
-                property bool isValid: !enabled || (acceptableInput && length > 0)
-
-                background: Rectangle {
-                    border.width: parent.activeFocus ? 2 : 1
-                    color: parent.palette.base
-                    border.color: parent.activeFocus ? parent.palette.highlight : parent.isValid ? parent.palette.mid : "red"
-                }
-            }
+            Layout.fillWidth: true
+            Layout.preferredHeight: 0
         }
+
+        Text {
+            enabled: redEnabledBox.checked
+            color: enabled ? Material.foreground : Material.hintTextColor
+            text: "Red"
+            font.pointSize: 11
+            font.family: "Roboto"
+            Layout.fillWidth: true
+        }
+
+        TextField {
+            id: redStartField
+
+            enabled: redEnabledBox.checked
+
+            Layout.fillWidth: true
+            Layout.preferredWidth: 100
+
+            font.pointSize: 11
+
+            inputMethodHints: Qt.ImhFormattedNumbersOnly
+
+            placeholderText: "Start"
+            text: AircraftDefinition.redBegin
+        }
+
+        TextField {
+            id: redEndField
+
+            enabled: redEnabledBox.checked
+
+            Layout.fillWidth: true
+            Layout.preferredWidth: 100
+
+            font.pointSize: 11
+
+            inputMethodHints: Qt.ImhFormattedNumbersOnly
+
+            placeholderText: "End"
+            text: AircraftDefinition.redEnd
+        }
+
+        CheckBox {
+            id: redEnabledBox
+
+            Layout.fillWidth: true
+            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+
+            topPadding: 8
+            bottomPadding: 8
+            spacing: 0
+
+            text: ""
+
+            checked: AircraftDefinition.hasRedSpeed
+        }
+
+        Item {
+            Layout.fillWidth: true
+            Layout.preferredHeight: 0
+        }
+
+        Text {
+            enabled: highEnabledBox.checked
+            color: enabled ? Material.foreground : Material.hintTextColor
+            text: "Upper Barberpole"
+            font.pointSize: 11
+            font.family: "Roboto"
+            Layout.fillWidth: true
+        }
+
+        TextField {
+            id: highLimitField
+
+            enabled: highEnabledBox.checked && !highDynamicBox.checked
+
+            Layout.fillWidth: true
+            Layout.preferredWidth: 100
+
+            font.pointSize: 11
+
+            inputMethodHints: Qt.ImhFormattedNumbersOnly
+
+            placeholderText: "Start"
+            text: AircraftDefinition.highLimit
+        }
+
+        Item {
+            Layout.fillWidth: true
+            Layout.preferredHeight: 0
+        }
+
+        CheckBox {
+            id: highEnabledBox
+
+            Layout.fillWidth: true
+            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+
+            topPadding: 8
+            bottomPadding: 8
+            spacing: 0
+
+            text: ""
+
+            checked: AircraftDefinition.hasHighLimit
+        }
+
+        CheckBox {
+            id: highDynamicBox
+
+            enabled: highEnabledBox.checked
+
+            Layout.fillWidth: true
+            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+
+            topPadding: 8
+            bottomPadding: 8
+            spacing: 0
+
+            text: ""
+
+            checked: AircraftDefinition.dynamicBarberpole
+        }
+
+    }
+
+    Binding {
+        target: AircraftDefinition
+        property: "noColors"
+        value: !checkBox.checked
+    }
+
+    Binding {
+        target: AircraftDefinition
+        property: "lowLimit"
+        value: lowLimitField.text
+    }
+
+    Binding {
+        target: AircraftDefinition
+        property: "hasLowLimit"
+        value: lowEnabledBox.checked
+    }
+
+    Binding {
+        target: AircraftDefinition
+        property: "flapsBegin"
+        value: flapsStartField.text
+    }
+
+    Binding {
+        target: AircraftDefinition
+        property: "flapsEnd"
+        value: flapsEndField.text
+    }
+
+    Binding {
+        target: AircraftDefinition
+        property: "hasFlapsSpeed"
+        value: flapsEnabledBox.checked
+    }
+
+    Binding {
+        target: AircraftDefinition
+        property: "greenBegin"
+        value: greenStartField.text
+    }
+
+    Binding {
+        target: AircraftDefinition
+        property: "greenEnd"
+        value: greenEndField.text
+    }
+
+    Binding {
+        target: AircraftDefinition
+        property: "hasGreenSpeed"
+        value: greenEnabledBox.checked
+    }
+
+    Binding {
+        target: AircraftDefinition
+        property: "yellowBegin"
+        value: yellowStartField.text
+    }
+
+    Binding {
+        target: AircraftDefinition
+        property: "yellowEnd"
+        value: yellowEndField.text
+    }
+
+    Binding {
+        target: AircraftDefinition
+        property: "hasYellowSpeed"
+        value: yellowEnabledBox.checked
+    }
+
+    Binding {
+        target: AircraftDefinition
+        property: "redBegin"
+        value: redStartField.text
+    }
+
+    Binding {
+        target: AircraftDefinition
+        property: "redEnd"
+        value: redEndField.text
+    }
+
+    Binding {
+        target: AircraftDefinition
+        property: "hasRedSpeed"
+        value: redEnabledBox.checked
+    }
+
+    Binding {
+        target: AircraftDefinition
+        property: "highLimit"
+        value: highLimitField.text
+    }
+
+    Binding {
+        target: AircraftDefinition
+        property: "hasHighLimit"
+        value: highEnabledBox.checked
+    }
+
+    Binding {
+        target: AircraftDefinition
+        property: "dynamicBarberpole"
+        value: highDynamicBox.checked
     }
 }
+
+/*##^##
+Designer {
+    D{i:0;height:296;width:424}D{i:5}D{i:7}D{i:8}D{i:12}D{i:15}D{i:16}D{i:17}D{i:18}D{i:22}
+D{i:27}D{i:32}D{i:33}D{i:34}D{i:35}D{i:36}D{i:37}D{i:2}
+}
+##^##*/

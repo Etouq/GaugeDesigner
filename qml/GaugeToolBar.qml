@@ -2,6 +2,9 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
 import QtQml 2.15
+
+import Definition 1.0
+
 import "StyledControls"
 import "Dialogs"
 import "PreviewPopup"
@@ -13,16 +16,12 @@ Rectangle {
 
 
 
-    Connections {
-        target: aircraftInterface
-        function onImageChanged() { unsavedImageChange = true; }
-    }
+    // Connections {
+    //     target: aircraftInterface
+    //     function onImageChanged() { unsavedImageChange = true; }
+    // }
 
-    property bool unsavedChanges: false
     property bool unsavedImageChange: false
-
-    property bool connected: false
-    property bool everythingValid: false
 
     signal saveDataClicked()
     signal positionResetNeeded()
@@ -70,33 +69,6 @@ Rectangle {
         }
     }
 
-    MultiSelectionDialog {
-        id: deleteClientDialog
-        useLocalFiles: false
-        infoText: "Please make a selection of aircraft to delete from the client"
-        onAccepted: function() {
-            netInterface.removeClientAircraft(selection);
-        }
-    }
-
-    MultiSelectionDialog {
-        id: loadDialog
-        useLocalFiles: false
-        infoText: "Please make a selection of aircraft to load (and save) from the client"
-        onAccepted: function() {
-            netInterface.loadClientAircraft(selection);
-        }
-    }
-
-    MultiSelectionDialog {
-        id: sendDialog
-        useLocalFiles: true
-        infoText: "Please make a selection of aircraft to send to the client"
-        onAccepted: function() {
-            aircraftManager.sendAircraft(selection);
-        }
-    }
-
     PreviewPopup {
         id: previewWindow
     }
@@ -104,6 +76,7 @@ Rectangle {
 
     Row {
         anchors.fill: parent
+
         StyledToolBarButton {
             id: newButton
             text: "New"
@@ -144,31 +117,29 @@ Rectangle {
         }
         StyledToolBarButton {
             id: saveButton
-            text: unsavedChanges || unsavedImageChange ? "Save*" : "Save"
-            enabled: everythingValid
+            text: AircraftDefinition.unsavedChanges ? "Save*" : "Save"
+            // enabled: everythingValid
             ToolTip {
-                text: "Save the current aircraft (only saves edits locally)"
+                text: "Save the current aircraft"
                 visible: parent.hovered
                 delay: 500
             }
             onClicked: function() {
                 root.saveDataClicked();
-                unsavedImageChange = false;
             }
 
             Shortcut {
                 sequence: StandardKey.Save
                 onActivated: function() {
                     root.saveDataClicked();
-                    unsavedImageChange = false;
                 }
             }
         }
         StyledToolBarButton {
             id: deleteLocalButton
-            text: "Delete Local"
+            text: "Delete"
             ToolTip {
-                text: "Delete aircraft from local storage"
+                text: "Delete aircraft"
                 visible: parent.hovered
                 delay: 500
             }
@@ -177,48 +148,9 @@ Rectangle {
             }
         }
         StyledToolBarButton {
-            id: deleteClientButton
-            text: "Delete from Client"
-            enabled: netInterface.connected
-            ToolTip {
-                text: "Delete aircraft from client storage"
-                visible: parent.hovered
-                delay: 500
-            }
-            onClicked: function() {
-                deleteClientDialog.open();
-            }
-        }
-        StyledToolBarButton {
-            id: loadButton
-            text: "Load"
-            enabled: netInterface.connected
-            ToolTip {
-                text: "Load (and save) aircraft from the client"
-                visible: parent.hovered
-                delay: 500
-            }
-            onClicked: function() {
-                loadDialog.open();
-            }
-        }
-        StyledToolBarButton {
-            id: sendButton
-            text: "Send"
-            enabled: netInterface.connected
-            ToolTip {
-                text: "Send aircraft to the client (use this to send saved edits to the client)"
-                visible: parent.hovered
-                delay: 500
-            }
-            onClicked: function() {
-                sendDialog.open();
-            }
-        }
-        StyledToolBarButton {
             id: previewButton
             text: "Preview"
-            enabled: everythingValid
+            // enabled: everythingValid
             ToolTip {
                 text: "Create preview of the current gauge settings (also saves)"
                 visible: parent.hovered
