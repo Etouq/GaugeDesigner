@@ -1,18 +1,19 @@
 import QtQuick 2.15
+import Mfd.Engine 1.0
 
 Item {
     id: main
     anchors.fill: parent
 
     property real topBaseline: 0
-    property bool hasApu: aircraftInterface.getHasApu()
+    property bool hasApu: EngineMisc.hasApu()
 
     Text {
         id: fuelTimeTitle
         anchors.left: parent.left
         anchors.leftMargin: 7.5
         anchors.baseline: parent.top
-        anchors.baselineOffset: main.hasApu ? topBaseline : topBaseline + 11.25
+        anchors.baselineOffset: main.hasApu ? main.topBaseline : main.topBaseline + 11.25
         color: "white"
         font.pixelSize: 18
         font.family: "Roboto Mono"
@@ -25,7 +26,7 @@ Item {
         anchors.right: parent.left
         anchors.rightMargin: -202.5
         anchors.baseline: parent.top
-        anchors.baselineOffset: main.hasApu ? topBaseline : topBaseline + 11.25
+        anchors.baselineOffset: main.hasApu ? main.topBaseline : main.topBaseline + 11.25
         color: "white"
         font.pixelSize: 18
         font.family: "Roboto Mono"
@@ -38,7 +39,7 @@ Item {
         anchors.left: parent.right
         anchors.leftMargin: -202.5
         anchors.baseline: parent.top
-        anchors.baselineOffset: main.hasApu ? topBaseline : topBaseline + 11.25
+        anchors.baselineOffset: main.hasApu ? main.topBaseline : main.topBaseline + 11.25
         color: "white"
         font.pixelSize: 18
         font.family: "Roboto Mono"
@@ -51,7 +52,7 @@ Item {
         anchors.right: parent.right
         anchors.rightMargin: 7.5
         anchors.baseline: parent.top
-        anchors.baselineOffset: main.hasApu ? topBaseline : topBaseline + 11.25
+        anchors.baselineOffset: main.hasApu ? main.topBaseline : main.topBaseline + 11.25
         color: "white"
         font.pixelSize: 18
         font.family: "Roboto Mono"
@@ -68,32 +69,38 @@ Item {
         color: "white"
     }
 
-    Text {
-        id: apuTitle
-        visible: main.hasApu
-        enabled: main.hasApu
-        anchors.right: parent.left
-        anchors.rightMargin: -195
+    Loader {
+        active: main.hasApu
         anchors.top: fuelTimeTitle.bottom
-        color: "white"
-        font.pixelSize: 18
-        font.family: "Roboto Mono"
-        font.bold: true
-        text: "APU N1"
+        anchors.left: parent.left
+        anchors.right: parent.right
+        sourceComponent: Item {
+            anchors.top: parent.bottom
+            Text {
+                id: apuTitle
+                anchors.right: parent.horizontalCenter
+                anchors.rightMargin: 15
+                anchors.top: parent.top
+                color: "white"
+                font.pixelSize: 18
+                font.family: "Roboto Mono"
+                font.bold: true
+                text: "APU N1"
+            }
+
+            Text {
+                id: apuText
+                anchors.left: parent.horizontalCenter
+                anchors.leftMargin: 15
+                anchors.top: parent.top
+                color: "white"
+                font.pixelSize: 18
+                font.family: "Roboto Mono"
+                font.bold: true
+                text: "69%"
+            }
+        }
     }
 
-    Text {
-        id: apuText
-        visible: main.hasApu
-        enabled: main.hasApu
-        anchors.left: parent.right
-        anchors.leftMargin: -195
-        anchors.top: fuelTimeTitle.bottom
-        color: "white"
-        font.pixelSize: 18
-        font.family: "Roboto Mono"
-        font.bold: true
-        text: "0%"
-    }
 
 }

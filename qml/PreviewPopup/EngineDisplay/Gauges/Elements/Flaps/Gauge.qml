@@ -1,10 +1,11 @@
 import QtQuick 2.15
 import QtQuick.Shapes 1.15
+import Mfd.Engine 1.0
 
 Shape {
     id: main
 
-    property real yStart: 0
+    required property real yStart
 
 
     ShapePath {
@@ -66,7 +67,7 @@ Shape {
     Shape {
         id: flaps
         transform: Rotation {
-            angle: gaugeInterface.flapsAngle
+            angle: EngineMisc.flapsAngle
             origin.x: 269.8124972
             origin.y: main.yStart + 28.05
         }
@@ -95,16 +96,16 @@ Shape {
 
     Text {
         id: flapsText
-        visible: gaugeInterface.showFlapsText
+        visible: EngineMisc.showFlapsText
         anchors.left: parent.left
-        anchors.leftMargin: 360.5624972
+        anchors.leftMargin: 350.5624972
         anchors.baseline: parent.top
         anchors.baselineOffset: main.yStart + 39.6
         color: "white"
         font.pixelSize: 23
         font.family: "Roboto Mono"
         font.bold: true
-        text: gaugeInterface.flapsValue
+        text: EngineMisc.flapsValue
     }
 
 

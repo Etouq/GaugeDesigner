@@ -1,4 +1,5 @@
 import QtQuick 2.15
+import QtQuick.Controls.Material 2.15
 
 import Definition 1.0
 import TypeEnums 1.0
@@ -9,7 +10,7 @@ Rectangle {
     id: gaugeTabBar
     width: parent.width
     height: 30
-    color: "#00b4ff"
+    color: Material.primary//"#00b4ff"
 
     property int activeIndex: 0
 
@@ -30,7 +31,7 @@ Rectangle {
             case SwitchingGaugeType.N2:
                 return "N2";
             case SwitchingGaugeType.ENGINE_TEMP:
-                return "ENG TEMP";
+                return "ENGINE TEMPERATURE";
             case SwitchingGaugeType.RPM:
                 return "RPM";
             case SwitchingGaugeType.PROP_RPM:
@@ -47,10 +48,18 @@ Rectangle {
     }
 
     Item {
-        x: Math.max(Math.min(gaugeTabBar.width / 2 - layout.activeItem.x - layout.activeItem.width / 2, 0), gaugeTabBar.width - layout.childrenRect.width)
+        id: movingItem
+        x: (gaugeTabBar.width - layout.childrenRect.width) / 2
         y: 0
         width: gaugeTabBar.width
         height: 30
+
+        Binding {
+            target: movingItem
+            property: "x"
+            when: layout.childrenRect.width > gaugeTabBar.width
+            value: Math.max(Math.min(gaugeTabBar.width / 2 - layout.activeItem.x - layout.activeItem.width / 2, 0), gaugeTabBar.width - layout.childrenRect.width)
+        }
 
         Behavior on x {
             NumberAnimation { duration: 250 }

@@ -1,106 +1,143 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
-import "../../StyledControls"
+import QtQuick.Dialogs 1.3
+import QtQuick.Controls.Material 2.15
 
 Item {
-    id: root
-    property color activeColor: "#FFFFFF"
-    property bool isBig: false
-    property real position: 0
-    property int idx: 0
-    width: 196
-    height: 30
-
-    signal colorActivated(int itemIdx)
-
-    signal posChanged(int itemIdx, real newPos)
-    signal bigChanged(int itemIdx, bool newVal)
-
-    onIsBigChanged: bigChanged(idx, isBig)
-    onPositionChanged: posChanged(idx, position)
-
-    function resetCursors()
-    {
-        positionText.ensureVisible(0);
-    }
+    height: childrenRect.height
 
     MouseArea {
         id: hoverArea
         anchors.fill: parent
         hoverEnabled: true
         propagateComposedEvents: true
-    }
 
-
-    Rectangle {
-        anchors.fill: parent
-        color: "black"
-        opacity: 0.16
-        visible: hoverArea.containsMouse
+        Rectangle {
+            anchors.fill: parent
+            color: Material.foreground
+            opacity: 0.16
+            visible: hoverArea.containsMouse
+        }
     }
 
     RowLayout {
-        anchors.horizontalCenter: parent.horizontalCenter
         id: layoutItem
-        height: 30
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.leftMargin: 5
+        anchors.rightMargin: 5
+
+        height: posText.height
 
         TextField {
-            id: positionText
+            id: posText
+
             Layout.preferredWidth: 70
-            Layout.preferredHeight: 30
-            text: "0.0"
-            selectByMouse: true
-            validator: DoubleValidator{}
+            Layout.fillWidth: true
+
             leftPadding: 5
-            font.pixelSize: 11
+            rightPadding: 5
+
+            font.pointSize: 11
+
+            selectByMouse: true
+            validator: DoubleValidator{ }
+
+            text: model.value
 
             onEditingFinished: function() {
-                if (text === "" || text === "-" || !acceptableInput)
-                    text = "0";
+                if (posText.text === "" || posText.text === "-" || !posText.acceptableInput) {
+                    model.value = 0;
+                }
             }
 
             onTextEdited: function() {
-                if (positionText.text === "" || positionText.text === "-" || positionText.text === ".")
+                if (posText.text === "" || posText.text === "-")
                     return;
-                position = parseFloat(positionText.text);
-            }
-            Layout.rightMargin: 10
 
-            Component.onCompleted: text = position;
+                const completeVal = Number(posText.text);
+
+                if (isNaN(completeVal)) {
+                    console.log(posText.text + " is not a number");
+                    posText.undo();
+                    return;
+                }
+
+                model.value = completeVal;
+            }
+
+            Component.onCompleted: function() {
+                ensureVisible(0);
+            }
         }
 
         Item {
-            Layout.preferredWidth: 56
-            Layout.preferredHeight: 30
-            Layout.rightMargin: 10
+            Layout.preferredWidth: 10
+            Layout.fillWidth: true
+        }
 
-            StyledSwitch {
-                anchors.centerIn: parent
-                onToggled: isBig = checked
-                Component.onCompleted: checked = isBig
+        CheckBox {
+            id: bigCheckBox
+
+            Layout.preferredWidth: 34
+            Layout.fillWidth: true
+
+            topPadding: 8
+            bottomPadding: 8
+            spacing: 0
+            checked: model.big
+
+            Binding {
+                target: model
+                property: "big"
+                value: bigCheckBox.checked
             }
+        }
+
+        Item {
+            Layout.preferredWidth: 10
+            Layout.fillWidth: true
         }
 
         Rectangle {
             Layout.preferredWidth: 30
-            Layout.preferredHeight: 30
-            color: activeColor
+            Layout.preferredHeight: 34
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+            Layout.topMargin: 4
+            Layout.bottomMargin: 8
+
+            color: model.color
+
             border.width: 1
             border.color: "black"
+
             MouseArea {
                 anchors.fill: parent
                 cursorShape: Qt.PointingHandCursor
                 acceptedButtons: Qt.AllButtons
                 hoverEnabled: true
+
                 onClicked: function(mouse) {
                     if (mouse.button === Qt.LeftButton)
-                        root.colorActivated(idx);
-                    mouse.accepted = true;
-                }
+                        rowColorDialog.open();
+                        mouse.accepted = true;
+                    }
             }
         }
 
+        ColorDialog {
+            id: rowColorDialog
+            title: "Please choose a color"
+            modality: Qt.WindowModal
+            onAccepted: {
+                model.color = rowColorDialog.color;
+            }
+            Component.onCompleted: color = "#FFFFFF"
+        }
+
     }
+
 
 }

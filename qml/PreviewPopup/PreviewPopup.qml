@@ -1,53 +1,50 @@
 import QtQuick 2.15
 import QtQuick.Window 2.15
 import QtQuick.Controls 2.15
+
+import Preview 1.0
+
 import "../StyledControls"
 
-Window {
+ApplicationWindow {
     id: root
-    width: height / 3
-    height: 0.95 * Screen.desktopAvailableHeight
+    width: (height - animationToggle.height - 7.5) * 0.35
+    height: 0.85 * Screen.desktopAvailableHeight
 
-    flags: Qt.WindowTitleHint | Qt.CustomizeWindowHint | Qt.Dialog | Qt.WindowCloseButtonHint
-
-    color: "#eeeeee"
+    flags: Qt.Dialog//Qt.WindowTitleHint | Qt.CustomizeWindowHint | Qt.Dialog | Qt.WindowCloseButtonHint
 
     onWidthChanged: Qt.callLater(updateWidth)
     onHeightChanged: Qt.callLater(updateWidth)
 
     function updateWidth() {
-        width = height / 3;
+        const desiredWidth = (height - animationToggle.height - 7.5) * 0.35
+        if (Math.abs(width - desiredWidth) > 0.5) {
+            width = desiredWidth
+        }
     }
 
     Connections {
-        target: gaugeInterface
-        function onGaugesLoaded() {
-            let typeVal = aircraftInterface.getType();
-            if (typeVal === -1)
-            {
-                edLoader.setSource('');
-                return;
-            }
-            let typeString = typeVal === 0 ? "Jet" : typeVal === 1 ? "Prop" : "Turboprop";
-            let engineString = aircraftInterface.getNumEngines() === 1 ? "Single" : aircraftInterface.getNumEngines() === 2 ? "Double" : "Quad";
-            edLoader.setSource("qrc:/PreviewPopup/" + typeString + engineString + ".qml", { "numTanks": aircraftInterface.getNumTanks() });
+        target: PreviewManager
+        function onLayoutPathChanged() {
+            edLoader.setSource("qrc:/PreviewPopup/EngineDisplay/Gauges/Layouts/" + PreviewManager.layoutPath + ".qml");
         }
     }
 
     function updateAnimations()
     {
-        n1Interface.updateEngineAnimation();
-        n2Interface.updateEngineAnimation();
-        ittInterface.updateEngineAnimation();
-        rpmInterface.updateEngineAnimation();
-        secondInterface.updateEngineAnimation();
-        trqInterface.updateEngineAnimation();
-        fuelQtyInterface.updateEngineAnimation();
-        fuelFlowInterface.updateEngineAnimation();
-        oilTempInterface.updateEngineAnimation();
-        oilPressInterface.updateEngineAnimation();
-        egtInterface.updateEngineAnimation();
-        gaugeInterface.updateMiscAnimations();
+        PreviewManager.update();
+        // n1Interface.updateEngineAnimation();
+        // n2Interface.updateEngineAnimation();
+        // ittInterface.updateEngineAnimation();
+        // rpmInterface.updateEngineAnimation();
+        // secondInterface.updateEngineAnimation();
+        // trqInterface.updateEngineAnimation();
+        // fuelQtyInterface.updateEngineAnimation();
+        // fuelFlowInterface.updateEngineAnimation();
+        // oilTempInterface.updateEngineAnimation();
+        // oilPressInterface.updateEngineAnimation();
+        // egtInterface.updateEngineAnimation();
+        // gaugeInterface.updateMiscAnimations();
     }
 
     Timer {
@@ -61,7 +58,7 @@ Window {
     Item {
         id: bgItem
         width: 420
-        height: 1260
+        height: 1200
         transformOrigin: Item.TopLeft
         scale: root.width / 420
 
@@ -77,39 +74,24 @@ Window {
                 asynchronous: true
                 anchors.fill: parent
             }
-
         }
+    }
 
-        Button {
-            anchors.left: parent.left
-            anchors.right: parent.right
-            anchors.bottom: parent.bottom
-            anchors.leftMargin: 7.5
-            anchors.rightMargin: 7.5
-            anchors.bottomMargin: 7.5
-            height: 45
-            hoverEnabled: true
 
-            padding: 0
+    Button {
+        id: animationToggle
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.bottom: parent.bottom
+        anchors.leftMargin: 7.5
+        anchors.rightMargin: 7.5
+        anchors.bottomMargin: 7.5
 
-            onClicked: animTimer.running = !animTimer.running
 
-            background: Rectangle {
-                anchors.fill: parent
-                color: parent.hovered ? Qt.darker("#00b4ff", 1.1) : "#00b4ff"
-            }
+        text: (animTimer.running ? "Stop" : "Start") + " Animation"
 
-            contentItem: Text {
-                anchors.fill: parent
-                horizontalAlignment: Text.AlignHCenter
-                verticalAlignment: Text.AlignVCenter
-                text: (animTimer.running ? "Stop" : "Start") + " Animation"
-                font.bold: true
-                color: parent.hovered ? Qt.darker("white", 1.1) : "white"
-                font.pixelSize: 24
-            }
+        onClicked: animTimer.running = !animTimer.running
 
-        }
     }
 
 

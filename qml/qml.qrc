@@ -1,8 +1,72 @@
 <RCC>
     <qresource prefix="/">
+        <file>main.qml</file>
         <file>GaugeTabBar.qml</file>
         <file>GaugeToolBar.qml</file>
-        <file>main.qml</file>
+
+        <file>AircraftSelectionPopup/AircraftGroupHeader.qml</file>
+        <file>AircraftSelectionPopup/AircraftGroupLayout.qml</file>
+        <file>AircraftSelectionPopup/AircraftSelectionItem.qml</file>
+        <file>AircraftSelectionPopup/AircraftSelectionPopup.qml</file>
+
+        <file>Dialogs/MultiSelectionDialog.qml</file>
+        <file>Dialogs/SingleSelectionDialog.qml</file>
+
+        <file>GaugeTab/GaugeTab.qml</file>
+        <file>GaugeTab/TopSection.qml</file>
+
+        <file>GaugeTab/ColorZoneTable/ColorZoneRow.qml</file>
+        <file>GaugeTab/ColorZoneTable/ColorZoneTable.qml</file>
+
+        <file>GaugeTab/GradTable/GradRow.qml</file>
+        <file>GaugeTab/GradTable/GradTable.qml</file>
+
+        <file>GaugeTab/TextGradTable/TextGradRow.qml</file>
+        <file>GaugeTab/TextGradTable/TextGradTable.qml</file>
+
+        <file>GeneralTab/AirspeedColors.qml</file>
+        <file>GeneralTab/CheckBoxColumn.qml</file>
+        <file>GeneralTab/GaugePickers.qml</file>
+        <file>GeneralTab/GeneralTab.qml</file>
+        <file>GeneralTab/GroupBoxColumn.qml</file>
+        <file>GeneralTab/SwitchColumn.qml</file>
+
+        <file>PreviewPopup/PreviewPopup.qml</file>
+
+        <file>PreviewPopup/EngineDisplay/Gauges/Elements/ValueBlinkAnimation.qml</file>
+
+        <file>PreviewPopup/EngineDisplay/Gauges/Elements/Circular/ColorArc.qml</file>
+        <file>PreviewPopup/EngineDisplay/Gauges/Elements/Circular/Gauge.qml</file>
+
+        <file>PreviewPopup/EngineDisplay/Gauges/Elements/Compound/DoubleCircularGauge.qml</file>
+        <file>PreviewPopup/EngineDisplay/Gauges/Elements/Compound/FuelText.qml</file>
+        <file>PreviewPopup/EngineDisplay/Gauges/Elements/Compound/QuadVertGauge.qml</file>
+        <file>PreviewPopup/EngineDisplay/Gauges/Elements/Compound/TrimGauge.qml</file>
+
+        <file>PreviewPopup/EngineDisplay/Gauges/Elements/Flaps/Gauge.qml</file>
+        <file>PreviewPopup/EngineDisplay/Gauges/Elements/Flaps/SpoilersGauge.qml</file>
+
+        <file>PreviewPopup/EngineDisplay/Gauges/Elements/Trims/Aileron.qml</file>
+        <file>PreviewPopup/EngineDisplay/Gauges/Elements/Trims/Elevator.qml</file>
+        <file>PreviewPopup/EngineDisplay/Gauges/Elements/Trims/Rudder.qml</file>
+
+        <file>PreviewPopup/EngineDisplay/Gauges/Elements/Vertical/DoubleGauge.qml</file>
+        <file>PreviewPopup/EngineDisplay/Gauges/Elements/Vertical/Gauge.qml</file>
+        <file>PreviewPopup/EngineDisplay/Gauges/Elements/Vertical/QuadGauge.qml</file>
+
+        <file>PreviewPopup/EngineDisplay/Gauges/Layouts/DoubleEngine/DoubleGauge.qml</file>
+        <file>PreviewPopup/EngineDisplay/Gauges/Layouts/DoubleEngine/QuadGauge.qml</file>
+        <file>PreviewPopup/EngineDisplay/Gauges/Layouts/DoubleEngine/TripleGauge.qml</file>
+
+        <file>PreviewPopup/EngineDisplay/Gauges/Layouts/QuadEngine/DoubleGauge.qml</file>
+        <file>PreviewPopup/EngineDisplay/Gauges/Layouts/QuadEngine/QuadGauge.qml</file>
+        <file>PreviewPopup/EngineDisplay/Gauges/Layouts/QuadEngine/TripleGauge.qml</file>
+
+        <file>PreviewPopup/EngineDisplay/Gauges/Layouts/SingleEngine/DoubleGauge.qml</file>
+        <file>PreviewPopup/EngineDisplay/Gauges/Layouts/SingleEngine/QuadGauge.qml</file>
+        <file>PreviewPopup/EngineDisplay/Gauges/Layouts/SingleEngine/TripleGauge.qml</file>
+
+        <file>MyControls/UnitBox.qml</file>
         <file>StyledControls/StyledComboBox.qml</file>
         <file>StyledControls/StyledRadioButton.qml</file>
         <file>StyledControls/StyledRadioButtonWithText.qml</file>
@@ -10,40 +74,5 @@
         <file>StyledControls/StyledSwitchWithText.qml</file>
         <file>StyledControls/StyledTabButton.qml</file>
         <file>StyledControls/StyledToolBarButton.qml</file>
-        <file>PreviewPopup/JetDouble.qml</file>
-        <file>PreviewPopup/JetQuad.qml</file>
-        <file>PreviewPopup/JetSingle.qml</file>
-        <file>PreviewPopup/PreviewPopup.qml</file>
-        <file>PreviewPopup/PropDouble.qml</file>
-        <file>PreviewPopup/PropSingle.qml</file>
-        <file>PreviewPopup/TurbopropDouble.qml</file>
-        <file>PreviewPopup/TurbopropSingle.qml</file>
-        <file>PreviewPopup/gauges/AileronTrimGauge.qml</file>
-        <file>PreviewPopup/gauges/CircularGauge.qml</file>
-        <file>PreviewPopup/gauges/ElevatorTrimGauge.qml</file>
-        <file>PreviewPopup/gauges/FlapsGauge.qml</file>
-        <file>PreviewPopup/gauges/FlapsSpoilersGauge.qml</file>
-        <file>PreviewPopup/gauges/FuelDoubleTankGauge.qml</file>
-        <file>PreviewPopup/gauges/FuelSingleTankGauge.qml</file>
-        <file>PreviewPopup/gauges/FuelText.qml</file>
-        <file>PreviewPopup/gauges/RudderTrimGauge.qml</file>
-        <file>PreviewPopup/gauges/TrimGauges.qml</file>
-        <file>PreviewPopup/gauges/VerticalDoubleGauge.qml</file>
-        <file>PreviewPopup/gauges/VerticalGauge.qml</file>
-        <file>GeneralTab/AirspeedColors.qml</file>
-        <file>GeneralTab/GeneralTab.qml</file>
-        <file>GeneralTab/GroupBoxColumn.qml</file>
-        <file>GeneralTab/SwitchColumn.qml</file>
-        <file>GaugeTab/GaugeTab.qml</file>
-        <file>GaugeTab/TopSection.qml</file>
-        <file>GaugeTab/ColorZoneTable/ColorZoneRow.qml</file>
-        <file>GaugeTab/ColorZoneTable/ColorZoneTable.qml</file>
-        <file>GaugeTab/GradTable/GradRow.qml</file>
-        <file>GaugeTab/GradTable/GradTable.qml</file>
-        <file>GaugeTab/TextGradTable/TextGradRow.qml</file>
-        <file>GaugeTab/TextGradTable/TextGradTable.qml</file>
-        <file>Dialogs/MultiSelectionDialog.qml</file>
-        <file>Dialogs/SingleSelectionDialog.qml</file>
-        <file>GeneralTab/CheckBoxColumn.qml</file>
     </qresource>
 </RCC>

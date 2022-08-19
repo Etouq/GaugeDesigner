@@ -2,361 +2,394 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Dialogs 1.3
 import QtQuick.Shapes 1.15
+import QtQuick.Layouts 1.15
+import QtQuick.Controls.Material 2.15
+
+import Definition 1.0
 
 Item {
     id: root
     property int activeIndex: -1
-    width: 216
-    clip: true
-    height: 338
 
-    property bool unsavedChanges: false
-
-    // listmodel to check if data changed
-    ListModel {
-        id: lastListModel
-    }
-
-    function checkModelsEqual() {
-        if (lastListModel.count != gradModel.count)
-            return false;
-
-        for (let i = 0; i < lastListModel.count; ++i) {
-            let savedEntry = lastListModel.get(i);
-            let newEntry = gradModel.get(i);
-
-            if (savedEntry.pos !== newEntry.pos || savedEntry.bigGrad !== newEntry.bigGrad || savedEntry.color !== newEntry.color)
-                return false;
-        }
-
-        return true;
-    }
-
-    ColorDialog {
-        id: colorDialog
-        title: "Please choose a color"
-        modality: Qt.WindowModal
-        onAccepted: function() {
-            view.itemAtIndex(activeIndex).activeColor = colorDialog.color;
-            gradModel.get(activeIndex).color = colorDialog.color.toString();
-            activeIndex = -1;
-            unsavedChanges = !checkModelsEqual();
-        }
-        onRejected: function() {
-            activeIndex = -1;
-        }
-        Component.onCompleted: color = "#FFFFFF"
-    }
+    required property GaugeDefinition gaugeDef
 
     Menu {
         id: contextMenu
         MenuItem {
             text: "Insert"
-            onTriggered: function() {
-                gradModel.insert(activeIndex, { "pos": 0, "bigGrad": false, "color": "#ffffff" });
-                unsavedChanges = !checkModelsEqual();
+            onTriggered: {
+                gaugeDef.gradModel.insertNewRow(activeIndex);
             }
         }
         MenuItem {
             text: "Delete"
-            onTriggered: function() {
-                gradModel.remove(activeIndex);
-                unsavedChanges = !checkModelsEqual();
+            onTriggered: {
+                gaugeDef.gradModel.deleteRow(activeIndex);
             }
         }
-        onClosed: activeIndex = -1;
+        onAboutToHide: activeIndex = -1;
     }
 
-    function updateModel(gaugeObject) {
-        gradModel.clear();
-        lastListModel.clear();
+    ColumnLayout {
+        anchors.fill: parent
+        anchors.margins: 10
 
-        for (let i = 0; i < gaugeObject.numGrads(); i++) {
-            let gradPos = gaugeObject.gradValAt(i);
-            let isBigGrad = gaugeObject.gradIsBigAt(i);
-            let gradColor = gaugeObject.gradColorAt(i).toString();
+        spacing: 0
 
-            gradModel.append({ "pos": gradPos, "bigGrad": isBigGrad, "color": gradColor });
-            lastListModel.append({ "pos": gradPos, "bigGrad": isBigGrad, "color": gradColor });
-        }
-        unsavedChanges = false;
-    }
-
-    function fillModel(_gradDist, _gradStart)
-    {
-        gradModel.clear();
-        for (let i = _gradStart; i < maxValue; i += _gradDist) {
-            gradModel.append({ "pos": i, "bigGrad": false, "color": "#ffffff" });
-            if (gradModel.count > 250)
-                break;
-        }
-        unsavedChanges = !checkModelsEqual();
-    }
-
-    function saveData(gaugeObject) {
-        gaugeObject.setNumGrads(gradModel.count);
-        lastListModel.clear();
-
-        for (let i = 0; i < gradModel.count; i++) {
-            let grad = gradModel.get(i);
-            gaugeObject.setGradAt(i, grad.pos, grad.bigGrad, grad.color);
-            lastListModel.append({ "pos": grad.pos, "bigGrad": grad.bigGrad, "color": grad.color });
-        }
-        unsavedChanges = false;
-    }
-
-    signal colorTriggered(int idx)
-
-    signal isBigChanged(int idx, bool newVal)
-    signal posChanged(int idx, real newVal)
-
-
-    property real maxValue: 100
-
-    ListModel {
-        id: gradModel
-    }
-
-    onColorTriggered: function(idx) {
-        activeIndex = idx;
-        colorDialog.open();
-    }
-
-    onIsBigChanged: function(idx, newVal) {
-        gradModel.get(idx).bigGrad = newVal;
-        unsavedChanges = !checkModelsEqual();
-    }
-
-    onPosChanged: function(idx, newVal) {
-        gradModel.get(idx).pos = newVal;
-        unsavedChanges = !checkModelsEqual();
-    }
-
-
-    Column {
-        x: 10
         Text {
-            height: 20
-            width: 196
+            Layout.fillWidth: true
+            Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
+
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
+
+            font.family: "Roboto"
+            font.pointSize: 11
             font.bold: true
+
+            color: Material.foreground
+
             text: "Graduations"
-            font.pixelSize: 12
         }
-        Item {
-            height: 20
-            width: 206
+
+        RowLayout {
+            Layout.fillWidth: true
+            Layout.leftMargin: 5
+            Layout.rightMargin: 5
 
             Text {
-                anchors.horizontalCenter: parent.left
-                anchors.horizontalCenterOffset: 40
-                anchors.verticalCenter: parent.verticalCenter
+                Layout.fillWidth: true
+                Layout.preferredWidth: 70
+                Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
+
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+
+                font.family: "Roboto"
+                font.pointSize: 11
+
+                color: Material.foreground
+
                 text: "Position"
-                font.pixelSize: 11
             }
+
+            Item {
+                Layout.preferredWidth: 10
+                Layout.fillWidth: true
+            }
+
             Text {
-                anchors.horizontalCenter: parent.left
-                anchors.horizontalCenterOffset: 118
-                anchors.verticalCenter: parent.verticalCenter
+                Layout.fillWidth: true
+                Layout.preferredWidth: 34
+                Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
+
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+
+                font.family: "Roboto"
+                font.pointSize: 11
+
+                color: Material.foreground
+
                 text: "Big"
-                font.pixelSize: 11
             }
+
+            Item {
+                Layout.preferredWidth: 10
+                Layout.fillWidth: true
+            }
+
             Text {
-                anchors.horizontalCenter: parent.left
-                anchors.horizontalCenterOffset: 176
-                anchors.verticalCenter: parent.verticalCenter
+                Layout.fillWidth: true
+                Layout.preferredWidth: 30
+                Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
+
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+
+                font.family: "Roboto"
+                font.pointSize: 11
+
+                color: Material.foreground
+
                 text: "Color"
-                font.pixelSize: 11
             }
+
         }
 
+        MouseArea {
+            Layout.fillWidth: true
+            Layout.fillHeight: true
 
-        ScrollView {
-            y: 20
-            width: 206
-            height: 205
-            clip: true
+            acceptedButtons: Qt.RightButton
+            propagateComposedEvents: true
 
-            background: MouseArea {
-                anchors.fill: parent
-                acceptedButtons: Qt.RightButton
-                propagateComposedEvents: true
-                onClicked: function(mouse) {
-                    activeIndex = view.indexAt(mouse.x, mouse.y);
-                    if (activeIndex != -1)
-                        contextMenu.popup();
-                }
+            onClicked: function(mouse) {
+                activeIndex = view.indexAt(mouse.x, mouse.y);
+                if (activeIndex != -1)
+                    contextMenu.popup();
             }
 
-            ScrollBar.vertical.policy: view.contentHeight > height ? ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
-            ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
-            Component.onCompleted: function() {
-                //ScrollBar.vertical.contentItem.color = "#aeaeae"
-            }
             ListView {
                 id: view
-                model: gradModel
-                interactive: true
-                spacing: 5
+
                 anchors.fill: parent
 
-                MouseArea {
-                    anchors.fill: parent
-                    onClicked: forceActiveFocus(rootItem)
-                    z: -1
-                }
+                clip: true
 
-                delegate: GradRow {
-                    idx: index
-                    position: pos
-                    isBig: bigGrad
-                    activeColor: color
-                    Component.onCompleted: function() {
-                        colorActivated.connect(root.colorTriggered);
-                        bigChanged.connect(root.isBigChanged);
-                        posChanged.connect(root.posChanged);
-                        resetCursors();
+                model: gaugeDef.gradModel
+                interactive: true
+                spacing: 5
+
+                ScrollBar.vertical: ScrollBar {
+                    parent: view.parent
+                    anchors.top: view.top
+                    anchors.left: view.right
+                    anchors.bottom: view.bottom
+
+                    policy: view.contentHeight > view.height ? ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
+
+                    width: 10
+
+                    contentItem: Rectangle {
+                        implicitWidth: 6
+                        implicitHeight: 100
+                        radius: width / 2
+                        color: Material.accent
                     }
                 }
 
-
-
+                delegate: GradRow {
+                    width: view.width
+                }
             }
         }
 
-    }
+        RowLayout {
+            Layout.fillWidth: true
+            Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
+            Layout.bottomMargin: -3
 
-    Button {
-        id: addRowButton
-        y: 250
-        x: 15
-        width: 88
-        height: 20
-        padding: 2
-        enabled: gradModel.count < 250
+            Button {
+                Layout.preferredWidth: 100
+                Layout.fillWidth: true
+                Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
 
-        onReleased: {
-            gradModel.append({ "pos": 0, "bigGrad": false, "color": "#ffffff" });
-            unsavedChanges = !checkModelsEqual();
+                enabled: view.count < 10
+
+                text: "Add"
+
+                onReleased: function() {
+                    gaugeDef.gradModel.appendNewRow();
+                }
+            }
+
+            Button {
+                Layout.preferredWidth: 100
+                Layout.fillWidth: true
+                Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
+
+                enabled: view.count > 0
+
+                text: "Remove"
+
+                onReleased: function() {
+                    gaugeDef.gradModel.deleteRow(gaugeDef.gradModel.rowCount() - 1);
+                }
+            }
         }
 
-        background: Rectangle {
-            anchors.fill: parent
-            color: addRowButton.enabled ? (addRowButton.hovered ? Qt.darker("#00b4ff", 1.1) : "#00b4ff") : Qt.darker("#00b4ff", 2)
-        }
+        Button {
+            Layout.fillWidth: true
+            Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
+            Layout.topMargin: -3
+            Layout.bottomMargin: -3
 
-        contentItem: Text {
-            anchors.centerIn: parent
-            horizontalAlignment: Text.AlignHCenter
-            text: "Add"
-            font.bold: true
-            color: addRowButton.enabled ? (addRowButton.hovered ? Qt.darker("white", 1.1) : "white") : Qt.darker("white", 2)
-            font.pixelSize: 11
-        }
-
-    }
-
-    Button {
-        id: removeRowButton
-        y: 250
-        x: 113
-        width: 88
-        height: 20
-        padding: 2
-
-        enabled: gradModel.count > 0
-
-        onReleased: {
-            gradModel.remove(gradModel.count - 1);
-            unsavedChanges = !checkModelsEqual();
-        }
-
-        background: Rectangle {
-            anchors.fill: parent
-            color: removeRowButton.enabled ? (removeRowButton.hovered ? Qt.darker("#00b4ff", 1.1) : "#00b4ff") : Qt.darker("#00b4ff", 2)
-        }
-
-        contentItem: Text {
-            anchors.centerIn: parent
-            horizontalAlignment: Text.AlignHCenter
-            text: "Remove"
-            font.bold: true
-            color: removeRowButton.enabled ? (removeRowButton.hovered ? Qt.darker("white", 1.1) : "white") : Qt.darker("white", 2)
-            font.pixelSize: 11
-        }
-
-    }
-
-    Text {
-        id: gradDistText
-        anchors.top: addRowButton.bottom
-        anchors.topMargin: 5
-        anchors.horizontalCenter: addRowButton.horizontalCenter
-        text: "Grad Distance"
-        font.pixelSize: 11
-    }
-
-    TextField {
-        id: gradDist
-        anchors.top: gradDistText.bottom
-        anchors.topMargin: 5
-        anchors.horizontalCenter: addRowButton.horizontalCenter
-        width: 88
-        height: 20
-        text: "10.0"
-        selectByMouse: true
-        validator: DoubleValidator{ bottom: 0.000001 }
-        padding: 2
-        font.pixelSize: 11
-    }
-
-    Text {
-        id: gradStartText
-        anchors.top: removeRowButton.bottom
-        anchors.topMargin: 5
-        anchors.horizontalCenter: removeRowButton.horizontalCenter
-        text: "Grad Start"
-        font.pixelSize: 11
-    }
-
-    TextField {
-        id: gradStart
-        anchors.top: gradStartText.bottom
-        anchors.topMargin: 5
-        anchors.horizontalCenter: removeRowButton.horizontalCenter
-        width: 88
-        height: 20
-        text: "0.0"
-        selectByMouse: true
-        validator: DoubleValidator{}
-        padding: 2
-        font.pixelSize: 11
-
-    }
-
-    Button {
-        anchors.top: gradDist.bottom
-        anchors.topMargin: 5
-        x: 15
-        width: 186
-        height: 20
-        padding: 2
-        enabled: gradDist.acceptableInput && gradStart.acceptableInput
-        onClicked: fillModel(parseFloat(gradDist.text), parseFloat(gradStart.text))
-
-        background: Rectangle {
-            anchors.fill: parent
-            color: parent.enabled ? (parent.hovered ? Qt.darker("#00b4ff", 1.1) : "#00b4ff") : Qt.darker("#00b4ff", 2)
-        }
-
-        contentItem: Text {
-            anchors.centerIn: parent
-            horizontalAlignment: Text.AlignHCenter
             text: "Generate"
-            font.bold: true
-            color: parent.enabled ? (parent.hovered ? Qt.darker("white", 1.1) : "white") : Qt.darker("white", 2)
-            font.pixelSize: 11
+
+            onClicked: function() {
+                popup.open();
+            }
         }
     }
+
+    Popup {
+        id: popup
+
+        anchors.centerIn: Overlay.overlay
+
+        modal: true
+        focus: true
+        closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
+
+        GridLayout {
+            columns: 3
+            columnSpacing: 10
+
+            Text {
+                Layout.preferredWidth: 70
+                Layout.fillWidth: true
+                Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
+
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+
+                font.family: "Roboto"
+                font.pointSize: 11
+                font.bold: true
+
+                color: Material.foreground
+
+                text: "Start"
+            }
+
+            Text {
+                Layout.preferredWidth: 70
+                Layout.fillWidth: true
+                Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
+
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+
+                font.family: "Roboto"
+                font.pointSize: 11
+                font.bold: true
+
+                color: Material.foreground
+
+                text: "End"
+            }
+
+            Text {
+                Layout.preferredWidth: 70
+                Layout.fillWidth: true
+                Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
+
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+
+                font.family: "Roboto"
+                font.pointSize: 11
+                font.bold: true
+
+                color: Material.foreground
+
+                text: "Step"
+            }
+
+            TextField {
+                id: startText
+
+                Layout.preferredWidth: 70
+                Layout.fillWidth: true
+
+                leftPadding: 5
+                rightPadding: 5
+
+                font.pointSize: 11
+
+                selectByMouse: true
+                validator: DoubleValidator{ }
+
+                text: "0"
+
+                onTextEdited: function() {
+                    const completeVal = Number(startText.text);
+
+                    if (isNaN(completeVal)) {
+                        console.log(startText.text + " is not a number");
+                        startText.undo();
+                        return;
+                    }
+                }
+            }
+
+            TextField {
+                id: endText
+
+                Layout.preferredWidth: 70
+                Layout.fillWidth: true
+
+                leftPadding: 5
+                rightPadding: 5
+
+                font.pointSize: 11
+
+                selectByMouse: true
+                validator: DoubleValidator{ }
+
+                text: "100"
+
+                onTextEdited: function() {
+                    const completeVal = Number(endText.text);
+
+                    if (isNaN(completeVal)) {
+                        console.log(endText.text + " is not a number");
+                        endText.undo();
+                        return;
+                    }
+                }
+            }
+
+            TextField {
+                id: stepText
+
+                Layout.preferredWidth: 70
+                Layout.fillWidth: true
+
+                leftPadding: 5
+                rightPadding: 5
+
+                font.pointSize: 11
+
+                selectByMouse: true
+                validator: DoubleValidator{ }
+
+                text: "10"
+
+                onTextEdited: function() {
+                    const completeVal = Number(stepText.text);
+
+                    if (isNaN(completeVal)) {
+                        console.log(stepText.text + " is not a number");
+                        stepText.undo();
+                        return;
+                    }
+                }
+            }
+
+            RowLayout {
+                Layout.columnSpan: 3
+                Layout.fillWidth: true
+
+                Button {
+                    Layout.preferredWidth: 100
+                    Layout.fillWidth: true
+                    Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
+
+                    text: "Cancel"
+
+                    onClicked: function() {
+                        popup.close();
+                    }
+                }
+
+                Button {
+                    Layout.preferredWidth: 100
+                    Layout.fillWidth: true
+                    Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
+
+                    enabled: parseFloat(startText.text) < parseFloat(endText.text) && parseFloat(stepText.text) > 0 && (parseFloat(endText.text) - parseFloat(startText.text)) / parseFloat(stepText.text) < 256
+
+                    text: "Go"
+
+                    onClicked: function() {
+                        gaugeDef.gradModel.generate(parseFloat(startText.text), parseFloat(endText.text), parseFloat(stepText.text));
+                        popup.close();
+                    }
+                }
+            }
+        }
+    }
+
 }

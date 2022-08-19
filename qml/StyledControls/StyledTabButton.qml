@@ -1,5 +1,6 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
+import QtQuick.Controls.Material 2.15
 
 Button {
     id: root
@@ -18,7 +19,7 @@ Button {
             font.pixelSize: 15
             font.bold: true
             text: root.text
-            color: "white"
+            color: Material.foreground//"white"
             opacity: isActiveItem ? 1 : 0.82
         }
 

@@ -7,8 +7,7 @@ import Definition 1.0
 
 GridLayout {
     id: checkBoxes
-    width: 198
-    height: 233
+
     rowSpacing: 0
     columns: 2
 
@@ -162,6 +161,29 @@ GridLayout {
         checked: AircraftDefinition.singleTank
     }
 
+    Text {
+        color: Material.foreground
+        text: "(Second) Engine Temp"
+        verticalAlignment: Text.AlignVCenter
+        Layout.topMargin: 10
+        font.pointSize: 11
+
+        font.family: "Roboto"
+        Layout.fillWidth: true
+        textFormat: Text.PlainText
+    }
+
+    CheckBox {
+        id: hasSecondaryTempBox
+        topPadding: 8
+        bottomPadding: 8
+
+        spacing: 0
+        Layout.topMargin: 10
+
+        checked: AircraftDefinition.hasSecondaryTempGauge
+    }
+
 
 
     Binding {
@@ -204,5 +226,11 @@ GridLayout {
         target: AircraftDefinition
         property: "singleTank"
         value: singleTankBox.checked
+    }
+
+    Binding {
+        target: AircraftDefinition
+        property: "hasSecondaryTempGauge"
+        value: hasSecondaryTempBox.checked
     }
 }

@@ -2,32 +2,27 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Controls.Material 2.15
 import QtQuick.Layouts 1.15
+import QtQuick.Dialogs 1.3
 
 import Definition 1.0
 import TypeEnums 1.0
 
 import "../StyledControls"
+import "../MyControls" as MyControls
 
-Item {
+ColumnLayout {
     id: root
-    width: 630
-    height: childrenRect.height
+    spacing: 0
 
 
     required property GaugeDefinition gaugeDef
     required property int gaugeType
     required property bool isSecondaryTemp
 
-    Row {
-        id: topRow
-
-        x: 10
-        y: 10
+    RowLayout {
         spacing: 10
 
         Text {
-            anchors.verticalCenter: titleText.verticalCenter
-
             font.family: "Roboto"
             font.pointSize: 11
 
@@ -38,24 +33,28 @@ Item {
 
         TextField {
             id: titleText
-            width: 150
+            Layout.preferredWidth: 150
+
+            leftPadding: 5
+            rightPadding: 5
 
             font.pointSize: 11
 
             selectByMouse: true
+            maximumLength: 64
 
             text: root.gaugeDef.title
 
-            onTextChanged: function() {
+            onTextEdited: function() {
                 root.gaugeDef.title = titleText.text;
             }
         }
 
+        Item {
+            Layout.fillWidth: true
+        }
+
         Text {
-            anchors.verticalCenter: minValField.verticalCenter
-
-            leftPadding: 10
-
             font.family: "Roboto"
             font.pointSize: 11
 
@@ -67,20 +66,42 @@ Item {
         TextField {
             id: minValField
 
-            width: 80
+            Layout.preferredWidth: 100
+
+            leftPadding: 5
+            rightPadding: 5
 
             font.pointSize: 11
 
-            validator: DoubleValidator { top: root.gaugeDef.maxValue }
             selectByMouse: true
 
             text: root.gaugeDef.minValue
 
-            onTextChanged: function() {
-                if (acceptableInput)
-                {
-                    root.gaugeDef.minValue = parseFloat(minValField.text);
+            onEditingFinished: function() {
+                if (minValField.text === "" || minValField.text === "-" || !minValField.acceptableInput) {
+                    const minVal = root.gaugeDef.minValue;
+                    root.gaugeDef.minValue = minVal;
                 }
+            }
+
+            onTextEdited: function() {
+                if (minValField.text === "" || minValField.text === "-")
+                    return;
+
+                const completeVal = Number(minValField.text);
+
+                if (isNaN(completeVal)) {
+                    console.log(minValField.text + " is not a number");
+                    minValField.undo();
+                    return;
+                }
+                if (completeVal > root.gaugeDef.maxValue) {
+                    console.log(minValField.text + " is greater than max");
+                    minValField.undo();
+                    return;
+                }
+
+                root.gaugeDef.minValue = completeVal;
             }
 
             Component.onCompleted: function() {
@@ -88,11 +109,11 @@ Item {
             }
         }
 
+        Item {
+            Layout.fillWidth: true
+        }
+
         Text {
-            anchors.verticalCenter: maxValField.verticalCenter
-
-            leftPadding: 10
-
             font.family: "Roboto"
             font.pointSize: 11
 
@@ -104,11 +125,13 @@ Item {
         TextField {
             id: maxValField
 
-            width: 80
+            Layout.preferredWidth: 100
+
+            leftPadding: 5
+            rightPadding: 5
 
             font.pointSize: 11
 
-            validator: DoubleValidator { bottom: root.gaugeDef.minValue }
             selectByMouse: true
 
             text: root.gaugeDef.maxValue
@@ -117,20 +140,40 @@ Item {
                 ensureVisible(0);
             }
 
-            onTextChanged: function() {
-                if (acceptableInput)
-                {
-                    root.gaugeDef.maxValue = parseFloat(maxValField.text);
+            onEditingFinished: function() {
+                if (maxValField.text === "" || maxValField.text === "-" || !maxValField.acceptableInput) {
+                    const maxVal = root.gaugeDef.maxValue;
+                    root.gaugeDef.maxValue = maxVal;
                 }
             }
+
+            onTextEdited: function() {
+                if (maxValField.text === "" || maxValField.text === "-")
+                    return;
+
+                const completeVal = Number(maxValField.text);
+
+                if (isNaN(completeVal)) {
+                    console.log(maxValField.text + " is not a number");
+                    maxValField.undo();
+                    return;
+                }
+                if (completeVal > root.gaugeDef.minValue) {
+                    console.log(maxValField.text + " is smaller than min");
+                    maxValField.undo();
+                    return;
+                }
+
+                root.gaugeDef.maxValue = completeVal;
+            }
+        }
+
+        Item {
+            Layout.fillWidth: true
         }
 
 
         Text {
-            anchors.verticalCenter: noTextSwitch.verticalCenter
-
-            leftPadding: 10
-
             font.family: "Roboto"
             font.pointSize: 11
 
@@ -142,8 +185,6 @@ Item {
         CheckBox {
             id: noTextSwitch
 
-            anchors.verticalCenter: maxValField.verticalCenter
-
             spacing: 0
             bottomPadding: 8
             topPadding: 8
@@ -154,16 +195,11 @@ Item {
         }
     }
 
-    Row {
-        id: botRow
-        x: 10
-        anchors.top: topRow.bottom
+    RowLayout {
         spacing: 10
 
         Text {
             text: "Unit"
-
-            anchors.verticalCenter: unitBox.verticalCenter
 
             font.family: "Roboto"
             font.pointSize: 11
@@ -171,10 +207,10 @@ Item {
             color: Material.foreground
         }
 
-        ComboBox {
+        MyControls.UnitBox {
             id: unitBox
 
-            width: 150
+            Layout.preferredWidth: 150
             model: root.gaugeDef.unitModel
 
             textRole: "longText"
@@ -183,7 +219,7 @@ Item {
             font.pointSize: 11
 
             Component.onCompleted: function() {
-                currentIndex = unitBox.indexOfValue(root.gaugeDef.unit)
+                unitBox.currentIndex = unitBox.indexOfValue(root.gaugeDef.unit)
             }
 
             Connections {
@@ -202,15 +238,19 @@ Item {
         TextField {
             id: unitText
 
-            width: 70
+            Layout.preferredWidth: 70
+
+            leftPadding: 5
+            rightPadding: 5
 
             font.pointSize: 11
 
             selectByMouse: true
+            maximumLength: 16
 
             text: root.gaugeDef.unitString
 
-            onTextChanged: function() {
+            onTextEdited: function() {
                 root.gaugeDef.unitString = unitText.text;
             }
 
@@ -219,18 +259,16 @@ Item {
             }
         }
 
+        Item {
+            Layout.fillWidth: true
+        }
 
         Text {
-            text: "Increment"
-
             font.family: "Roboto"
             font.pointSize: 11
 
-            anchors.verticalCenter: incrementVal.verticalCenter
-
             color: noTextSwitch.checked ? Material.hintTextColor : Material.foreground
-
-            leftPadding: 10
+            text: "Increment"
         }
 
         TextField {
@@ -238,7 +276,10 @@ Item {
 
             enabled: !noTextSwitch.checked
 
-            width: 70
+            Layout.preferredWidth: 70
+
+            leftPadding: 5
+            rightPadding: 5
 
             validator: DoubleValidator{}
             selectByMouse: true
@@ -246,35 +287,48 @@ Item {
 
             text: root.gaugeDef.textIncrement
 
-            onTextChanged: function() {
-                if (acceptableInput)
-                {
-                    root.gaugeDef.textIncrement = parseFloat(incrementVal.text);
+            onEditingFinished: function() {
+                if (incrementVal.text === "" || incrementVal.text === "-" || !incrementVal.acceptableInput) {
+                    const val = root.gaugeDef.textIncrement;
+                    root.gaugeDef.textIncrement = val;
                 }
+            }
+
+            onTextEdited: function() {
+                if (incrementVal.text === "" || incrementVal.text === "-")
+                    return;
+
+                const completeVal = Number(incrementVal.text);
+
+                if (isNaN(completeVal)) {
+                    console.log(incrementVal.text + " is not a number");
+                    incrementVal.undo();
+                    return;
+                }
+                if (completeVal < 0) {
+                    console.log("incrementval cannot be negative");
+                    incrementVal.undo();
+                    return;
+                }
+
+                root.gaugeDef.textIncrement = completeVal;
             }
 
             Component.onCompleted: function() {
                 ensureVisible(0);
             }
+        }
 
-            // background: Rectangle {
-            //     border.width: parent.activeFocus ? 2 : 1
-            //     color: parent.palette.base
-            //     border.color: parent.activeFocus ? parent.palette.highlight : parent.isValid ? parent.palette.mid : "red"
-            // }
+        Item {
+            Layout.fillWidth: true
         }
 
         Text {
-            text: "Precision"
-
             font.family: "Roboto"
             font.pointSize: 11
 
-            anchors.verticalCenter: numDecimalsVal.verticalCenter
-
             color: noTextSwitch.checked ? Material.hintTextColor : Material.foreground
-
-            leftPadding: 10
+            text: "Precision"
         }
 
         TextField {
@@ -282,7 +336,10 @@ Item {
 
             enabled: !noTextSwitch.checked
 
-            width: 70
+            Layout.preferredWidth: 70
+
+            leftPadding: 5
+            rightPadding: 5
 
             font.pointSize: 11
 
@@ -291,15 +348,38 @@ Item {
 
             text: root.gaugeDef.textNumDigits
 
-            // background: Rectangle {
-            //     border.width: parent.activeFocus ? 2 : 1
-            //     color: parent.palette.base
-            //     border.color: parent.activeFocus ? parent.palette.highlight : parent.isValid ? parent.palette.mid : "red"
-            // }
+            onTextEdited: function() {
+                if (numDecimalsVal.text === "" || numDecimalsVal.text === "-")
+                    return;
+
+                const completeVal = Number(numDecimalsVal.text);
+
+                if (isNaN(completeVal)) {
+                    console.log(numDecimalsVal.text + " is not a number");
+                    numDecimalsVal.undo();
+                    return;
+                }
+                if (!Number.isInteger(completeVal)) {
+                    console.log(numDecimalsVal.text + " is not an integer");
+                    numDecimalsVal.undo();
+                    return;
+                }
+                if (completeVal < 0) {
+                    console.log("precision cannot be negative");
+                    numDecimalsVal.undo();
+                    return;
+                }
+
+                root.gaugeDef.textNumDigits = completeVal;
+            }
 
             onEditingFinished: function() {
+                if (numDecimalsVal.text === "" || numDecimalsVal.text === "-" || !numDecimalsVal.acceptableInput) {
+                    const val = root.gaugeDef.textNumDigits;
+                    root.gaugeDef.textNumDigits = val;
+                }
                 if (parseInt(numDecimalsVal.text) > 0) {
-                    incrementVal.text = 1 / Math.pow(10, parseInt(numDecimalsVal.text));
+                    root.gaugeDef.textIncrement = 1 / Math.pow(10, parseInt(numDecimalsVal.text));
                     root.gaugeDef.textNumDigits = parseInt(numDecimalsVal.text);
                 }
             }
@@ -307,14 +387,216 @@ Item {
             Component.onCompleted: function() {
                 ensureVisible(0);
             }
-
-            property bool isValid: !enabled || (acceptableInput && length > 0)
         }
     }
 
-    Row {
-        x: 10
-        anchors.top: botRow.bottom
+    RowLayout {
+        spacing: 5
+
+        Text {
+            font.pointSize: 11
+            font.family: "Roboto"
+
+            color: Material.foreground
+
+            text: "Low Red Blink"
+        }
+
+        CheckBox {
+            id: lowEnabledBox
+
+            topPadding: 8
+            bottomPadding: 8
+            spacing: 0
+
+            text: ""
+
+            checked: root.gaugeDef.hasMinRedBlink
+        }
+
+        TextField {
+            id: lowThresholdField
+
+            enabled: lowEnabledBox.checked
+
+            Layout.preferredWidth: 80
+
+            leftPadding: 5
+            rightPadding: 5
+
+            validator: DoubleValidator { }
+
+            font.pointSize: 11
+
+            inputMethodHints: Qt.ImhFormattedNumbersOnly
+            selectByMouse: true
+
+            placeholderText: "Threshold"
+            text: root.gaugeDef.minRedBlinkThreshold
+
+            onEditingFinished: function() {
+                if (lowThresholdField.text === "" || lowThresholdField.text === "-" || !lowThresholdField.acceptableInput) {
+                    const val = root.gaugeDef.minRedBlinkThreshold;
+                    root.gaugeDef.minRedBlinkThreshold = val;
+                }
+            }
+
+            onTextEdited: function() {
+                if (lowThresholdField.text === "" || lowThresholdField.text === "-")
+                    return;
+
+                const completeVal = Number(lowThresholdField.text);
+
+                if (isNaN(completeVal)) {
+                    console.log(lowThresholdField.text + " is not a number");
+                    lowThresholdField.undo();
+                    return;
+                }
+
+                root.gaugeDef.minRedBlinkThreshold = completeVal;
+            }
+
+            Component.onCompleted: function() {
+                ensureVisible(0);
+            }
+        }
+
+        Item {
+            Layout.fillWidth: true
+        }
+
+        Text {
+            font.pointSize: 11
+            font.family: "Roboto"
+
+            color: Material.foreground
+
+            text: "High Red Blink"
+        }
+
+        CheckBox {
+            id: highEnabledBox
+
+            topPadding: 8
+            bottomPadding: 8
+            spacing: 0
+
+            text: ""
+
+            checked: root.gaugeDef.hasMaxRedBlink
+        }
+
+        TextField {
+            id: highThresholdField
+
+            enabled: highEnabledBox.checked
+
+            Layout.preferredWidth: 80
+
+            leftPadding: 5
+            rightPadding: 5
+
+            validator: DoubleValidator { }
+
+            font.pointSize: 11
+
+            inputMethodHints: Qt.ImhFormattedNumbersOnly
+            selectByMouse: true
+
+            placeholderText: "Threshold"
+            text: root.gaugeDef.maxRedBlinkThreshold
+
+            onEditingFinished: function() {
+                if (highThresholdField.text === "" || highThresholdField.text === "-" || !highThresholdField.acceptableInput) {
+                    const val = root.gaugeDef.maxRedBlinkThreshold;
+                    root.gaugeDef.maxRedBlinkThreshold = val;
+                }
+            }
+
+            onTextEdited: function() {
+                if (highThresholdField.text === "" || highThresholdField.text === "-")
+                    return;
+
+                const completeVal = Number(highThresholdField.text);
+
+                if (isNaN(completeVal)) {
+                    console.log(highThresholdField.text + " is not a number");
+                    highThresholdField.undo();
+                    return;
+                }
+
+                root.gaugeDef.maxRedBlinkThreshold = completeVal;
+            }
+
+            Component.onCompleted: function() {
+                ensureVisible(0);
+            }
+        }
+
+
+        Item {
+            Layout.fillWidth: true
+        }
+
+        Text {
+            font.family: "Roboto"
+            font.pointSize: 11
+
+            color: Material.foreground
+
+            text: "Force Text Color"
+        }
+
+        CheckBox {
+            id: forceColorBox
+
+            spacing: 0
+            bottomPadding: 8
+            topPadding: 8
+
+            font.pointSize: 11
+
+            checked: root.gaugeDef.forceTextColor
+        }
+
+        Rectangle {
+            Layout.preferredWidth: 34
+            Layout.preferredHeight: 34
+
+            visible: root.gaugeDef.forceTextColor
+
+            color: root.gaugeDef.textForcedColor
+
+            border.width: 1
+            border.color: "black"
+
+            MouseArea {
+                anchors.fill: parent
+                cursorShape: Qt.PointingHandCursor
+                acceptedButtons: Qt.LeftButton
+                hoverEnabled: true
+
+                onClicked: function(mouse) {
+                    colorDialog.open();
+                    mouse.accepted = true;
+                }
+            }
+
+            ColorDialog {
+                id: colorDialog
+                title: "Please choose a color"
+                modality: Qt.WindowModal
+                onAccepted: function() {
+                    root.gaugeDef.textForcedColor = colorDialog.color;
+                }
+                Component.onCompleted: color = "#FFFFFF"
+            }
+        }
+
+
+    }
+
+    RowLayout {
         spacing: 10
 
         Text {
@@ -322,7 +604,7 @@ Item {
 
             visible: root.gaugeType == SwitchingGaugeType.ENGINE_TEMP || root.isSecondaryTemp
 
-            anchors.verticalCenter: typeBox.verticalCenter
+            // anchors.verticalCenter: typeBox.verticalCenter
 
             font.family: "Roboto"
             font.pointSize: 11
@@ -348,16 +630,16 @@ Item {
 
             Component.onCompleted: function() {
                 if (root.gaugeType == SwitchingGaugeType.ENGINE_TEMP)
-                    currentIndex = indexOfValue(AircraftDefinition.engineTempType);
+                    typeBox.currentIndex = typeBox.indexOfValue(AircraftDefinition.engineTempType);
                 else if (root.isSecondaryTemp)
-                    currentIndex = indexOfValue(AircraftDefinition.secondaryTempType);
+                    typeBox.currentIndex = typeBox.indexOfValue(AircraftDefinition.secondaryTempType);
             }
 
             Connections {
                 enabled: root.gaugeType === SwitchingGaugeType.ENGINE_TEMP
                 target: AircraftDefinition
                 function onEngineTempTypeChanged() {
-                    currentIndex = indexOfValue(AircraftDefinition.engineTempType);
+                    typeBox.currentIndex = typeBox.indexOfValue(AircraftDefinition.engineTempType);
                 }
             }
 
@@ -365,7 +647,7 @@ Item {
                 enabled: root.isSecondaryTemp
                 target: AircraftDefinition
                 function onSecondaryTempTypeChanged() {
-                    currentIndex = indexOfValue(AircraftDefinition.secondaryTempType);
+                    typeBox.currentIndex = typeBox.indexOfValue(AircraftDefinition.secondaryTempType);
                 }
             }
 
@@ -384,14 +666,10 @@ Item {
 
             visible: root.gaugeType == SwitchingGaugeType.POWER && unitBox.currentText === "Percent"
 
-            anchors.verticalCenter: maxPowerValue.verticalCenter
-
             font.family: "Roboto"
             font.pointSize: 11
 
             color: Material.foreground
-
-            leftPadding: 10
         }
 
         TextField {
@@ -401,6 +679,9 @@ Item {
 
             width: 70
 
+            leftPadding: 5
+            rightPadding: 5
+
             font.pointSize: 11
 
             selectByMouse: true
@@ -409,15 +690,49 @@ Item {
 
             validator: DoubleValidator{}
 
-            onTextChanged: function() {
-                if (maxPowerValue.acceptableInput) {
-                    AircraftDefinition.maxPower = parseFloat(maxPowerValue.text);
+            onEditingFinished: function() {
+                if (maxPowerValue.text === "" || maxPowerValue.text === "-" || !maxPowerValue.acceptableInput) {
+                    const val = AircraftDefinition.maxPower;
+                    AircraftDefinition.maxPower = val;
                 }
+            }
+
+            onTextEdited: function() {
+                if (maxPowerValue.text === "" || maxPowerValue.text === "-")
+                    return;
+
+                const completeVal = Number(maxPowerValue.text);
+
+                if (isNaN(completeVal)) {
+                    console.log(maxPowerValue.text + " is not a number");
+                    maxPowerValue.undo();
+                    return;
+                }
+                if (completeVal < 0) {
+                    console.log("power cannot be negative");
+                    maxPowerValue.undo();
+                    return;
+                }
+
+                AircraftDefinition.maxPower = completeVal;
             }
 
             Component.onCompleted: function() {
                 ensureVisible(0);
             }
+        }
+
+        Text {
+            text: "hp (l)"
+
+            Layout.leftMargin: -10
+
+            visible: root.gaugeType == SwitchingGaugeType.POWER && unitBox.currentText === "Percent"
+
+            font.family: "Roboto"
+            font.pointSize: 11
+
+            color: Material.foreground
         }
 
 
@@ -426,14 +741,10 @@ Item {
 
             visible: root.gaugeType == SwitchingGaugeType.TORQUE && AircraftDefinition.type === AircraftType.PROP && unitBox.currentText === "Percent"
 
-            anchors.verticalCenter: maxTorqueValue.verticalCenter
-
             font.family: "Roboto"
             font.pointSize: 11
 
             color: Material.foreground
-
-            leftPadding: 10
         }
 
         TextField {
@@ -443,6 +754,9 @@ Item {
 
             width: 70
 
+            leftPadding: 5
+            rightPadding: 5
+
             font.pointSize: 11
 
             selectByMouse: true
@@ -451,72 +765,31 @@ Item {
 
             validator: DoubleValidator{}
 
-            onTextChanged: function() {
-                if (maxTorqueValue.acceptableInput) {
-                    AircraftDefinition.maxTorque = parseFloat(maxTorqueValue.text);
+            onEditingFinished: function() {
+                if (maxTorqueValue.text === "" || maxTorqueValue.text === "-" || !maxTorqueValue.acceptableInput) {
+                    const val = AircraftDefinition.maxTorque;
+                    AircraftDefinition.maxTorque = val;
                 }
             }
 
-            Component.onCompleted: function() {
-                ensureVisible(0);
-            }
-        }
-    }
+            onTextEdited: function() {
+                if (maxTorqueValue.text === "" || maxTorqueValue.text === "-")
+                    return;
 
-    GridLayout {
-        anchors.right: parent.right
-        anchors.top: botRow.bottom
+                const completeVal = Number(maxTorqueValue.text);
 
-        columns: 3
-
-        Text {
-            Layout.fillWidth: true
-
-            font.pointSize: 11
-            font.family: "Roboto"
-
-            color: Material.foreground
-
-            text: "Low Red Blink"
-        }
-
-        CheckBox {
-            id: lowEnabledBox
-
-            Layout.fillWidth: true
-            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-
-            topPadding: 8
-            bottomPadding: 8
-            spacing: 0
-
-            text: ""
-
-            checked: root.gaugeDef.hasMinRedBlink
-        }
-
-        TextField {
-            id: lowThresholdField
-
-            enabled: lowEnabledBox.checked
-
-            Layout.fillWidth: true
-            Layout.preferredWidth: 80
-
-            validator: DoubleValidator { }
-
-            font.pointSize: 11
-
-            inputMethodHints: Qt.ImhFormattedNumbersOnly
-
-            placeholderText: "Threshold"
-            text: root.gaugeDef.minRedBlinkThreshold
-
-            onTextChanged: function() {
-                if (lowThresholdField.acceptableInput)
-                {
-                    root.gaugeDef.minRedBlinkThreshold = parseFloat(lowThresholdField.text);
+                if (isNaN(completeVal)) {
+                    console.log(maxTorqueValue.text + " is not a number");
+                    maxTorqueValue.undo();
+                    return;
                 }
+                if (completeVal < 0) {
+                    console.log("torque cannot be negative");
+                    maxTorqueValue.undo();
+                    return;
+                }
+
+                AircraftDefinition.maxTorque = completeVal;
             }
 
             Component.onCompleted: function() {
@@ -525,60 +798,20 @@ Item {
         }
 
         Text {
-            Layout.fillWidth: true
+            text: "N·M"
 
-            font.pointSize: 11
+            Layout.leftMargin: -10
+
+            visible: root.gaugeType == SwitchingGaugeType.TORQUE && AircraftDefinition.type === AircraftType.PROP && unitBox.currentText === "Percent"
+
             font.family: "Roboto"
+            font.pointSize: 11
 
             color: Material.foreground
-
-            text: "High Red Blink"
-        }
-
-        CheckBox {
-            id: highEnabledBox
-
-            Layout.fillWidth: true
-            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-
-            topPadding: 8
-            bottomPadding: 8
-            spacing: 0
-
-            text: ""
-
-            checked: root.gaugeDef.hasMaxRedBlink
-        }
-
-        TextField {
-            id: highThresholdField
-
-            enabled: highEnabledBox.checked
-
-            Layout.fillWidth: true
-            Layout.preferredWidth: 80
-
-            validator: DoubleValidator { }
-
-            font.pointSize: 11
-
-            inputMethodHints: Qt.ImhFormattedNumbersOnly
-
-            placeholderText: "Threshold"
-            text: root.gaugeDef.maxRedBlinkThreshold
-
-            onTextChanged: function() {
-                if (highThresholdField.acceptableInput)
-                {
-                    root.gaugeDef.maxRedBlinkThreshold = parseFloat(highThresholdField.text);
-                }
-            }
-
-            Component.onCompleted: function() {
-                ensureVisible(0);
-            }
         }
     }
+
+
 
 
 
@@ -598,6 +831,12 @@ Item {
         target: root.gaugeDef
         property: "hasMaxRedBlink"
         value: highEnabledBox.checked
+    }
+
+    Binding {
+        target: root.gaugeDef
+        property: "forceTextColor"
+        value: forceColorBox.checked
     }
 
 }

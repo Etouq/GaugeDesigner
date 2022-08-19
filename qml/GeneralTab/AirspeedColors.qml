@@ -8,20 +8,20 @@ import Definition 1.0
 GroupBox {
 
     title: "Airspeed Colors"
-    topPadding: 5
-    leftPadding: 5
-    rightPadding: 5
-    bottomPadding: 5
+    topPadding: checkBox.height
+
+    spacing: 0
 
     label: CheckBox {
         id: checkBox
-        x: -3
+        leftPadding: 5
+        bottomPadding: 15
+        rightPadding: 0
+        topPadding: 0
         checked: !AircraftDefinition.noColors
         text: parent.title
         font.pointSize: 11
     }
-
-    Component.onCompleted: label.anchors.bottom = background.top
 
     GridLayout {
         id: gridLayout
@@ -102,12 +102,39 @@ GroupBox {
             Layout.fillWidth: true
             Layout.preferredWidth: 100
 
+            leftPadding: 5
+            rightPadding: 5
+
             font.pointSize: 11
 
             inputMethodHints: Qt.ImhFormattedNumbersOnly
+            selectByMouse: true
 
             placeholderText: "End"
             text: AircraftDefinition.lowLimit
+
+            onEditingFinished: function() {
+                if (lowLimitField.text === "" || lowLimitField.text === "-") {
+                    const val = AircraftDefinition.lowLimit;
+                    AircraftDefinition.lowLimit = val + 5;
+                    AircraftDefinition.lowLimit = val;
+                }
+            }
+
+            onTextEdited: function() {
+                if (lowLimitField.text === "" || lowLimitField.text === "-")
+                    return;
+
+                const completeVal = Number(lowLimitField.text);
+
+                if(isNaN(completeVal)) {
+                    console.log(lowLimitField.text + " is not a number");
+                    lowLimitField.undo();
+                    return;
+                }
+
+                AircraftDefinition.lowLimit = completeVal;
+            }
         }
 
         CheckBox {
@@ -151,12 +178,39 @@ GroupBox {
             Layout.fillWidth: true
             Layout.preferredWidth: 100
 
+            leftPadding: 5
+            rightPadding: 5
+
             font.pointSize: 11
 
             inputMethodHints: Qt.ImhFormattedNumbersOnly
+            selectByMouse: true
 
             placeholderText: "Start"
             text: AircraftDefinition.flapsBegin
+
+            onEditingFinished: function() {
+                if (flapsStartField.text === "" || flapsStartField.text === "-") {
+                    const val = AircraftDefinition.flapsBegin;
+                    AircraftDefinition.flapsBegin = val + 5;
+                    AircraftDefinition.flapsBegin = val;
+                }
+            }
+
+            onTextEdited: function() {
+                if (flapsStartField.text === "" || flapsStartField.text === "-")
+                    return;
+
+                const completeVal = Number(flapsStartField.text);
+
+                if(isNaN(completeVal)) {
+                    console.log(flapsStartField.text + " is not a number");
+                    flapsStartField.undo();
+                    return;
+                }
+
+                AircraftDefinition.flapsBegin = completeVal;
+            }
         }
 
         TextField {
@@ -167,12 +221,39 @@ GroupBox {
             Layout.fillWidth: true
             Layout.preferredWidth: 100
 
+            leftPadding: 5
+            rightPadding: 5
+
             font.pointSize: 11
 
             inputMethodHints: Qt.ImhFormattedNumbersOnly
+            selectByMouse: true
 
             placeholderText: "End"
             text: AircraftDefinition.flapsEnd
+
+            onEditingFinished: function() {
+                if (flapsEndField.text === "" || flapsEndField.text === "-") {
+                    const val = AircraftDefinition.flapsEnd;
+                    AircraftDefinition.flapsEnd = val + 5;
+                    AircraftDefinition.flapsEnd = val;
+                }
+            }
+
+            onTextEdited: function() {
+                if (flapsEndField.text === "" || flapsEndField.text === "-")
+                    return;
+
+                const completeVal = Number(flapsEndField.text);
+
+                if(isNaN(completeVal)) {
+                    console.log(flapsEndField.text + " is not a number");
+                    flapsEndField.undo();
+                    return;
+                }
+
+                AircraftDefinition.flapsEnd = completeVal;
+            }
         }
 
         CheckBox {
@@ -212,12 +293,39 @@ GroupBox {
             Layout.fillWidth: true
             Layout.preferredWidth: 100
 
+            leftPadding: 5
+            rightPadding: 5
+
             font.pointSize: 11
 
             inputMethodHints: Qt.ImhFormattedNumbersOnly
+            selectByMouse: true
 
             placeholderText: "Start"
             text: AircraftDefinition.greenBegin
+
+            onEditingFinished: function() {
+                if (greenStartField.text === "" || greenStartField.text === "-") {
+                    const val = AircraftDefinition.greenBegin;
+                    AircraftDefinition.greenBegin = val + 5;
+                    AircraftDefinition.greenBegin = val;
+                }
+            }
+
+            onTextEdited: function() {
+                if (greenStartField.text === "" || greenStartField.text === "-")
+                    return;
+
+                const completeVal = Number(greenStartField.text);
+
+                if(isNaN(completeVal)) {
+                    console.log(greenStartField.text + " is not a number");
+                    greenStartField.undo();
+                    return;
+                }
+
+                AircraftDefinition.greenBegin = completeVal;
+            }
         }
 
 
@@ -229,12 +337,39 @@ GroupBox {
             Layout.fillWidth: true
             Layout.preferredWidth: 100
 
+            leftPadding: 5
+            rightPadding: 5
+
             font.pointSize: 11
 
             inputMethodHints: Qt.ImhFormattedNumbersOnly
+            selectByMouse: true
 
             placeholderText: "End"
             text: AircraftDefinition.greenEnd
+
+            onEditingFinished: function() {
+                if (greenEndField.text === "" || greenEndField.text === "-") {
+                    const val = AircraftDefinition.greenEnd;
+                    AircraftDefinition.greenEnd = val + 5;
+                    AircraftDefinition.greenEnd = val;
+                }
+            }
+
+            onTextEdited: function() {
+                if (greenEndField.text === "" || greenEndField.text === "-")
+                    return;
+
+                const completeVal = Number(greenEndField.text);
+
+                if(isNaN(completeVal)) {
+                    console.log(greenEndField.text + " is not a number");
+                    greenEndField.undo();
+                    return;
+                }
+
+                AircraftDefinition.greenEnd = completeVal;
+            }
         }
 
         CheckBox {
@@ -274,12 +409,39 @@ GroupBox {
             Layout.fillWidth: true
             Layout.preferredWidth: 100
 
+            leftPadding: 5
+            rightPadding: 5
+
             font.pointSize: 11
 
             inputMethodHints: Qt.ImhFormattedNumbersOnly
+            selectByMouse: true
 
             placeholderText: "Start"
             text: AircraftDefinition.yellowBegin
+
+            onEditingFinished: function() {
+                if (yellowStartField.text === "" || yellowStartField.text === "-") {
+                    const val = AircraftDefinition.yellowBegin;
+                    AircraftDefinition.yellowBegin = val + 5;
+                    AircraftDefinition.yellowBegin = val;
+                }
+            }
+
+            onTextEdited: function() {
+                if (yellowStartField.text === "" || yellowStartField.text === "-")
+                    return;
+
+                const completeVal = Number(yellowStartField.text);
+
+                if(isNaN(completeVal)) {
+                    console.log(yellowStartField.text + " is not a number");
+                    yellowStartField.undo();
+                    return;
+                }
+
+                AircraftDefinition.yellowBegin = completeVal;
+            }
         }
 
         TextField {
@@ -290,12 +452,39 @@ GroupBox {
             Layout.fillWidth: true
             Layout.preferredWidth: 100
 
+            leftPadding: 5
+            rightPadding: 5
+
             font.pointSize: 11
 
             inputMethodHints: Qt.ImhFormattedNumbersOnly
+            selectByMouse: true
 
             placeholderText: "End"
             text: AircraftDefinition.yellowEnd
+
+            onEditingFinished: function() {
+                if (yellowEndField.text === "" || yellowEndField.text === "-") {
+                    const val = AircraftDefinition.yellowEnd;
+                    AircraftDefinition.yellowEnd = val + 5;
+                    AircraftDefinition.yellowEnd = val;
+                }
+            }
+
+            onTextEdited: function() {
+                if (yellowEndField.text === "" || yellowEndField.text === "-")
+                    return;
+
+                const completeVal = Number(yellowEndField.text);
+
+                if(isNaN(completeVal)) {
+                    console.log(yellowEndField.text + " is not a number");
+                    yellowEndField.undo();
+                    return;
+                }
+
+                AircraftDefinition.yellowEnd = completeVal;
+            }
         }
 
         CheckBox {
@@ -335,12 +524,39 @@ GroupBox {
             Layout.fillWidth: true
             Layout.preferredWidth: 100
 
+            leftPadding: 5
+            rightPadding: 5
+
             font.pointSize: 11
 
             inputMethodHints: Qt.ImhFormattedNumbersOnly
+            selectByMouse: true
 
             placeholderText: "Start"
             text: AircraftDefinition.redBegin
+
+            onEditingFinished: function() {
+                if (redStartField.text === "" || redStartField.text === "-") {
+                    const val = AircraftDefinition.redBegin;
+                    AircraftDefinition.redBegin = val + 5;
+                    AircraftDefinition.redBegin = val;
+                }
+            }
+
+            onTextEdited: function() {
+                if (redStartField.text === "" || redStartField.text === "-")
+                    return;
+
+                const completeVal = Number(redStartField.text);
+
+                if(isNaN(completeVal)) {
+                    console.log(redStartField.text + " is not a number");
+                    redStartField.undo();
+                    return;
+                }
+
+                AircraftDefinition.redBegin = completeVal;
+            }
         }
 
         TextField {
@@ -351,12 +567,39 @@ GroupBox {
             Layout.fillWidth: true
             Layout.preferredWidth: 100
 
+            leftPadding: 5
+            rightPadding: 5
+
             font.pointSize: 11
 
             inputMethodHints: Qt.ImhFormattedNumbersOnly
+            selectByMouse: true
 
             placeholderText: "End"
             text: AircraftDefinition.redEnd
+
+            onEditingFinished: function() {
+                if (redEndField.text === "" || redEndField.text === "-") {
+                    const val = AircraftDefinition.redEnd;
+                    AircraftDefinition.redEnd = val + 5;
+                    AircraftDefinition.redEnd = val;
+                }
+            }
+
+            onTextEdited: function() {
+                if (redEndField.text === "" || redEndField.text === "-")
+                    return;
+
+                const completeVal = Number(redEndField.text);
+
+                if(isNaN(completeVal)) {
+                    console.log(redEndField.text + " is not a number");
+                    redEndField.undo();
+                    return;
+                }
+
+                AircraftDefinition.redEnd = completeVal;
+            }
         }
 
         CheckBox {
@@ -396,12 +639,39 @@ GroupBox {
             Layout.fillWidth: true
             Layout.preferredWidth: 100
 
+            leftPadding: 5
+            rightPadding: 5
+
             font.pointSize: 11
 
             inputMethodHints: Qt.ImhFormattedNumbersOnly
+            selectByMouse: true
 
             placeholderText: "Start"
             text: AircraftDefinition.highLimit
+
+            onEditingFinished: function() {
+                if (highLimitField.text === "" || highLimitField.text === "-") {
+                    const val = AircraftDefinition.highLimit;
+                    AircraftDefinition.highLimit = val + 5;
+                    AircraftDefinition.highLimit = val;
+                }
+            }
+
+            onTextEdited: function() {
+                if (highLimitField.text === "" || highLimitField.text === "-")
+                    return;
+
+                const completeVal = Number(highLimitField.text);
+
+                if(isNaN(completeVal)) {
+                    console.log(highLimitField.text + " is not a number");
+                    highLimitField.undo();
+                    return;
+                }
+
+                AircraftDefinition.highLimit = completeVal;
+            }
         }
 
         Item {
@@ -551,10 +821,3 @@ GroupBox {
         value: highDynamicBox.checked
     }
 }
-
-/*##^##
-Designer {
-    D{i:0;height:296;width:424}D{i:5}D{i:7}D{i:8}D{i:12}D{i:15}D{i:16}D{i:17}D{i:18}D{i:22}
-D{i:27}D{i:32}D{i:33}D{i:34}D{i:35}D{i:36}D{i:37}D{i:2}
-}
-##^##*/

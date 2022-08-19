@@ -1,11 +1,11 @@
 import QtQuick 2.15
 import QtQuick.Shapes 1.15
+import Mfd.Engine 1.0
 
 Shape {
     id: main
 
-    property real yStart: 0
-
+    required property real yStart
 
     ShapePath {
         id: wing
@@ -55,13 +55,15 @@ Shape {
         }
     }
 
+
     Shape {
         id: flaps
         transform: Rotation {
-            angle: gaugeInterface.flapsAngle
+            angle: EngineMisc.flapsAngle
             origin.x: 269.8124972
             origin.y: main.yStart + 28.05
         }
+
         ShapePath {
             fillColor: "white"
             strokeColor: "transparent"
@@ -87,22 +89,22 @@ Shape {
 
     Text {
         id: flapsText
-        visible: gaugeInterface.showFlapsText
+        visible: EngineMisc.showFlapsText
         anchors.left: parent.left
-        anchors.leftMargin: 360.5624972
+        anchors.leftMargin: 350.5624972
         anchors.baseline: parent.top
         anchors.baselineOffset: main.yStart + 39.6
         color: "white"
         font.pixelSize: 23
         font.family: "Roboto Mono"
         font.bold: true
-        text: gaugeInterface.flapsValue
+        text: EngineMisc.flapsValue
     }
 
     Shape {
         id: spoilers
         transform: Rotation {
-            angle: gaugeInterface.spoilersAngle
+            angle: EngineMisc.spoilersAngle
             origin.x: 188.9624972
             origin.y: main.yStart + 1.275
         }
@@ -131,7 +133,7 @@ Shape {
 
     Text {
         id: spoilersText
-        visible: gaugeInterface.showSpoilersText
+        visible: EngineMisc.showSpoilersText
         anchors.left: parent.left
         anchors.leftMargin: 233.5124972
         anchors.baseline: parent.top
@@ -140,7 +142,7 @@ Shape {
         font.pixelSize: 23
         font.family: "Roboto Mono"
         font.bold: true
-        text: gaugeInterface.spoilersValue
+        text: EngineMisc.spoilersValue
     }
 
 
