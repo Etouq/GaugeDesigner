@@ -30,8 +30,8 @@ void GaugeElement::setGaugeParameters(const definitions::GaugeDefinition &gaugeD
     // d_cursorPosOffset = (sweepAngle * def.minValue) / (def.maxValue - def.minValue) + d_startAngle;
     // d_cursorPosFactor = sweepAngle / (def.maxValue - def.minValue);
 
-    const double sweepAngle = endAngle - startAngle - 360 * std::floor((endAngle - startAngle) / 360.0);
-    d_cursorPosOffset = startAngle - (sweepAngle * gaugeDef.minValue) / (gaugeDef.maxValue - gaugeDef.minValue);
+    const double sweepAngle = d_endAngle - d_startAngle - 360 * std::floor((d_endAngle - d_startAngle) / 360.0);
+    d_cursorPosOffset = d_startAngle - (sweepAngle * gaugeDef.minValue) / (gaugeDef.maxValue - gaugeDef.minValue);
     d_cursorPosFactor = sweepAngle / (gaugeDef.maxValue - gaugeDef.minValue);
 
     // double sweepAngle = fmod(360.0 + fmod(startAngle - endAngle, 360.0), 360.0);
