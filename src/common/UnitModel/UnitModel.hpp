@@ -147,8 +147,8 @@ private:
 
     inline static const std::vector<UnitEntry> d_power = {
         { static_cast<int>(Units::PERCENT), "Percent", "%", "Percent" },
-        { static_cast<int>(Units::HP_METRIC), "Horsepower (M)", "hp", "Power" },
         { static_cast<int>(Units::HP_IMPERIAL), "Horsepower (l)", "hp", "Power" },
+        { static_cast<int>(Units::HP_METRIC), "Horsepower (M)", "hp", "Power" },
         { static_cast<int>(Units::WATT), "watt", "W", "Power" },
         { static_cast<int>(Units::KILOWATT), "Kilowatt", "KW", "Power" },
         { static_cast<int>(Units::FT_LBF_HOUR), "foot-pounds p/h", "Ft·lbf/h", "Power" },

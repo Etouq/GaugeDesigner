@@ -122,8 +122,8 @@ enum class Units : uint8_t
     USTONNE_PER_SECOND,
     UKTONNE_PER_SECOND,
     // power
-    HP_METRIC, // default
-    HP_IMPERIAL, // also mechanical hp
+    HP_IMPERIAL, // default, also called mechanical hp
+    HP_METRIC,
     WATT,
     KILOWATT,
     FT_LBF_HOUR,
