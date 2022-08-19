@@ -17,17 +17,17 @@ const QString &QmlGaugeDefinition::unitString() const
 
 double QmlGaugeDefinition::minValue() const
 {
-    return d_definition->minValue;
+    return std::round(d_definition->minValue * 1e10) * 1e-10;
 }
 
 double QmlGaugeDefinition::maxValue() const
 {
-    return d_definition->maxValue;
+    return std::round(d_definition->maxValue * 1e10) * 1e-10;
 }
 
 double QmlGaugeDefinition::textIncrement() const
 {
-    return d_definition->textIncrement;
+    return std::round(d_definition->textIncrement * 1e10) * 1e-10;
 }
 
 int QmlGaugeDefinition::textNumDigits() const
@@ -52,7 +52,7 @@ bool QmlGaugeDefinition::hasMinRedBlink() const
 
 double QmlGaugeDefinition::minRedBlinkThreshold() const
 {
-    return d_definition->minRedBlinkThreshold;
+    return std::round(d_definition->minRedBlinkThreshold * 1e10) * 1e-10;
 }
 
 bool QmlGaugeDefinition::hasMaxRedBlink() const
@@ -62,7 +62,7 @@ bool QmlGaugeDefinition::hasMaxRedBlink() const
 
 double QmlGaugeDefinition::maxRedBlinkThreshold() const
 {
-    return d_definition->maxRedBlinkThreshold;
+    return std::round(d_definition->maxRedBlinkThreshold * 1e10) * 1e-10;
 }
 
 bool QmlGaugeDefinition::noText() const

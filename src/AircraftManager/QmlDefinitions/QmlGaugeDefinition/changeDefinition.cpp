@@ -1,9 +1,13 @@
 #include "QmlGaugeDefinition.hpp"
 
-void QmlGaugeDefinition::changeDefinition(definitions::GaugeDefinition *newDefinition, UnitModel *newModel, bool fromNewAircraft)
+void QmlGaugeDefinition::changeDefinition(definitions::GaugeDefinition *newDefinition, UnitModel *newModel, bool fromNewAircraft, bool fromSavedAircraft)
 {
     d_definition = newDefinition;
     d_unitModel = newModel;
+
+    d_colorZoneModel.changeData(newDefinition->colorZones);
+    d_gradModel.changeData(newDefinition->grads);
+    d_textGradModel.changeData(newDefinition->textGrads);
 
     emit unitModelChanged();
 
@@ -30,8 +34,16 @@ void QmlGaugeDefinition::changeDefinition(definitions::GaugeDefinition *newDefin
 
     if (fromNewAircraft)
     {
-        d_lastSavedDefinition = *newDefinition;
-        d_unsavedChanges = false;
+        if (fromSavedAircraft)
+        {
+            d_lastSavedDefinition = *newDefinition;
+            d_unsavedChanges = false;
+        }
+        else
+        {
+            d_lastSavedDefinition = definitions::GaugeDefinition();
+            d_unsavedChanges = true;
+        }
     }
     else
         d_unsavedChanges = *d_definition != d_lastSavedDefinition;

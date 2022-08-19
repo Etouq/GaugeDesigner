@@ -37,12 +37,12 @@ QmlTemperatureGaugeType QmlAircraftDefinition::engineTempType() const
 
 double QmlAircraftDefinition::maxPower() const
 {
-    return d_definition.maxPower;
+    return std::round(d_definition.maxPower * 1e10) * 1e-10;
 }
 
 double QmlAircraftDefinition::maxTorque() const
 {
-    return d_definition.maxTorque;
+    return std::round(d_definition.maxTorque * 1e10) * 1e-10;
 }
 
 bool QmlAircraftDefinition::hasApu() const
@@ -97,52 +97,52 @@ bool QmlAircraftDefinition::singleTank() const
 
 float QmlAircraftDefinition::lowLimit() const
 {
-    return d_definition.lowLimit;
+    return std::round(d_definition.lowLimit * 1e6) * 1e-6;
 }
 
 float QmlAircraftDefinition::flapsBegin() const
 {
-    return d_definition.flapsBegin;
+    return std::round(d_definition.flapsBegin * 1e6) * 1e-6;
 }
 
 float QmlAircraftDefinition::flapsEnd() const
 {
-    return d_definition.flapsEnd;
+    return std::round(d_definition.flapsEnd * 1e6) * 1e-6;
 }
 
 float QmlAircraftDefinition::greenBegin() const
 {
-    return d_definition.greenBegin;
+    return std::round(d_definition.greenBegin * 1e6) * 1e-6;
 }
 
 float QmlAircraftDefinition::greenEnd() const
 {
-    return d_definition.greenEnd;
+    return std::round(d_definition.greenEnd * 1e6) * 1e-6;
 }
 
 float QmlAircraftDefinition::yellowBegin() const
 {
-    return d_definition.yellowBegin;
+    return std::round(d_definition.yellowBegin * 1e6) * 1e-6;
 }
 
 float QmlAircraftDefinition::yellowEnd() const
 {
-    return d_definition.yellowEnd;
+    return std::round(d_definition.yellowEnd * 1e6) * 1e-6;
 }
 
 float QmlAircraftDefinition::redBegin() const
 {
-    return d_definition.redBegin;
+    return std::round(d_definition.redBegin * 1e6) * 1e-6;
 }
 
 float QmlAircraftDefinition::redEnd() const
 {
-    return d_definition.redEnd;
+    return std::round(d_definition.redEnd * 1e6) * 1e-6;
 }
 
 float QmlAircraftDefinition::highLimit() const
 {
-    return d_definition.highLimit;
+    return std::round(d_definition.highLimit * 1e6) * 1e-6;
 }
 
 bool QmlAircraftDefinition::noColors() const

@@ -3,6 +3,10 @@
 
 #include <QObject>
 #include <QSettings>
+#include <QDir>
+#include <QDebug>
+#include <QUuid>
+#include <QImage>
 
 #include <unordered_map>
 
@@ -15,9 +19,17 @@ class AircraftManager : public QObject
 {
     Q_OBJECT
 
+    Q_PROPERTY(QString currentThumbnailPath READ currentThumbnailPath NOTIFY currentThumbnailPathChanged)
+    Q_PROPERTY(bool unsavedThumbnail READ unsavedThumbnail NOTIFY unsavedThumbnailChanged)
+
 public:
 
     AircraftManager();
+
+    bool unsavedThumbnail() const
+    {
+        return d_unsavedThumbnail;
+    }
 
     Q_INVOKABLE int getNumJets() const
     {
@@ -56,16 +68,89 @@ public:
 
     Q_INVOKABLE QString getImagePath(const QString &key) const
     {
-        return "file:///" + d_dataRoot + "/Thumbnails/" + key + ".png";
+        if (QDir().exists(d_dataRoot + "/Thumbnails/" + key + ".png"))
+            return "file:///" + d_dataRoot + "/Thumbnails/" + key + ".png";
+
+        return "qrc:/DefaultImage.png";
     }
-    Q_INVOKABLE void selectAircraft(const QString &key)
+
+    Q_INVOKABLE void selectAircraft(const QString &key);
+    Q_INVOKABLE void copyAircraft(const QString &key);
+    Q_INVOKABLE void newAircraft();
+    Q_INVOKABLE void deleteAircraft(const QString &key)
     {
-        QSettings settings;
-        settings.setValue("lastChosenDefinition", key);
+        if (d_definitions.empty())
+            return;
 
-        d_currentDefinitionKey = key;
+        if (d_definitions.size() <= 1)
+            newAircraft();
+        else if (key == d_currentDefinitionKey && d_definitions.begin()->first != key)
+            selectAircraft(d_definitions.begin()->first);
+        else if (key == d_currentDefinitionKey)
+            selectAircraft(d_definitions.end()->first);
 
-        emit aircraftSelected(d_definitions.at(key));
+        d_definitions.erase(key);
+
+        if (QDir().exists(d_dataRoot + "/Definitions/" + key + ".fdc"))
+        {
+            QDir().remove(d_dataRoot + "/Definitions/" + key + ".fdc");
+        }
+
+        if (QDir().exists(d_dataRoot + "/Thumbnails/" + key + ".png"))
+        {
+            QDir().remove(d_dataRoot + "/Thumbnails/" + key + ".png");
+        }
+
+        d_jetKeys.clear();
+        d_propKeys.clear();
+        d_turbopropKeys.clear();
+
+        for (const auto &entry : d_definitions)
+        {
+            if (entry.first == key)
+                continue;
+
+            switch(entry.second.type)
+            {
+                case AircraftType::JET:
+                    d_jetKeys.append(entry.first);
+                    break;
+                case AircraftType::PROP:
+                    d_propKeys.append(entry.first);
+                    break;
+                case AircraftType::TURBOPROP:
+                    d_turbopropKeys.append(entry.first);
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        std::sort(d_jetKeys.begin(), d_jetKeys.end(), [this](const QString &lhs, const QString &rhs) {
+            return d_definitions.at(lhs).name.toUpper().localeAwareCompare(d_definitions.at(rhs).name.toUpper()) < 0;
+        });
+        std::sort(d_propKeys.begin(), d_propKeys.end(), [this](const QString &lhs, const QString &rhs) {
+            return d_definitions.at(lhs).name.toUpper().localeAwareCompare(d_definitions.at(rhs).name.toUpper()) < 0;
+        });
+        std::sort(d_turbopropKeys.begin(), d_turbopropKeys.end(), [this](const QString &lhs, const QString &rhs) {
+            return d_definitions.at(lhs).name.toUpper().localeAwareCompare(d_definitions.at(rhs).name.toUpper()) < 0;
+        });
+
+    }
+
+    Q_INVOKABLE void selectImage(const QString &path)
+    {
+        d_currentDefinitionImagePath = path;
+
+        const QImage newImage(d_currentDefinitionImagePath);
+
+        if (bool unsavedThumbnail = newImage != d_lastSavedThumbnail; d_unsavedThumbnail != unsavedThumbnail)
+        {
+            d_unsavedThumbnail = unsavedThumbnail;
+            emit unsavedThumbnailChanged();
+        }
+
+        emit currentThumbnailPathChanged();
     }
 
     Q_INVOKABLE bool isCurrentAircraft(const QString &key) const
@@ -80,10 +165,19 @@ public:
 
     Q_INVOKABLE void saveCurrentDefinition();
 
+    Q_INVOKABLE void previewCurrentDefinition()
+    {
+        emit previewAircraft(d_currentQmlDefinition.getDefinition());
+    }
+
+    QString currentThumbnailPath() const;
 
 signals:
 
-    void aircraftSelected(const definitions::AircraftDefinition &definition);
+    void previewAircraft(const definitions::AircraftDefinition &definition);
+    void currentThumbnailPathChanged();
+
+    void unsavedThumbnailChanged();
 
 private:
 
@@ -101,6 +195,10 @@ private:
     QStringList d_jetKeys;
     QStringList d_propKeys;
     QStringList d_turbopropKeys;
+
+    QImage d_lastSavedThumbnail;
+
+    bool d_unsavedThumbnail = false;
 
 };
 

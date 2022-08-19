@@ -56,5 +56,14 @@ void QmlAircraftDefinition::setGauge3Type(QmlSwitchingGaugeType gauge3Type)
                         gaugeTypeToModel(d_definition.gauge3Type));
     emit gauge3TypeChanged();
 
+    if (type == SwitchingGaugeType::NONE && d_definition.gauge4Type != SwitchingGaugeType::NONE)
+    {
+        d_definition.gauge4Type = SwitchingGaugeType::NONE;
+        d_gauge4.changeType(d_definition.gauge4Type,
+                            d_definition.engineTempType,
+                            gaugeTypeToModel(d_definition.gauge4Type));
+        emit gauge4TypeChanged();
+    }
+
     checkForUnsavedChanges();
 }

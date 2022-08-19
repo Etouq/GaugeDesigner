@@ -1,4 +1,7 @@
 #include "QmlAircraftDefinition.hpp"
+#include "common/GaugeModels/ColorZoneModel/ColorZoneModel.hpp"
+#include "common/GaugeModels/GradModel/GradModel.hpp"
+#include "common/GaugeModels/TextGradModel/TextGradModel.hpp"
 #include <QQmlEngine>
 
 QmlAircraftDefinition::QmlAircraftDefinition(const definitions::AircraftDefinition &definition, QObject *parent)
@@ -28,8 +31,15 @@ QmlAircraftDefinition::QmlAircraftDefinition(const definitions::AircraftDefiniti
 
     qRegisterMetaType<QmlGaugeDefinition*>("QmlGaugeDefinition*");
     qRegisterMetaType<UnitModel*>("UnitModel*");
+    qRegisterMetaType<ColorZoneModel*>("ColorZoneModel*");
+    qRegisterMetaType<GradModel*>("GradModel*");
+    qRegisterMetaType<TextGradModel*>("TextGradModel*");
+
     qmlRegisterUncreatableType<QmlGaugeDefinition>("Definition", 1, 0, "GaugeDefinition", "Bad Boy");
     qmlRegisterUncreatableType<UnitModel>("Definition", 1, 0, "UnitModel", "Bad Boy");
+    qmlRegisterUncreatableType<ColorZoneModel>("Definition", 1, 0, "ColorZoneModel", "Bad Boy");
+    qmlRegisterUncreatableType<GradModel>("Definition", 1, 0, "GradModel", "Bad Boy");
+    qmlRegisterUncreatableType<TextGradModel>("Definition", 1, 0, "TextGradModel", "Bad Boy");
 
     QQmlEngine::setObjectOwnership(&d_gauge1, QQmlEngine::CppOwnership);
     QQmlEngine::setObjectOwnership(&d_gauge2, QQmlEngine::CppOwnership);

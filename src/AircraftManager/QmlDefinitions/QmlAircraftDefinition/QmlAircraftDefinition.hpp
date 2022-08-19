@@ -70,7 +70,12 @@ public:
 
     explicit QmlAircraftDefinition(const definitions::AircraftDefinition &definition, QObject *parent = nullptr);
 
-    void changeDefinition(const definitions::AircraftDefinition &newDefinition);
+    const definitions::AircraftDefinition &getDefinition() const
+    {
+        return d_definition;
+    }
+
+    void changeDefinition(const definitions::AircraftDefinition &newDefinition, bool fromSavedAircraft = false);
 
     Q_INVOKABLE QmlGaugeDefinition *gauge1()
     {
@@ -230,6 +235,24 @@ public:
     void setHasYellowSpeed(bool hasYellowSpeed);
     void setHasRedSpeed(bool hasRedSpeed);
     void setHasHighLimit(bool hasHighLimit);
+
+    void aircraftSaved()
+    {
+        d_lastSavedDefinition = d_definition;
+        d_unsavedChanges = false;
+
+        d_gauge1.aircraftSaved();
+        d_gauge2.aircraftSaved();
+        d_gauge3.aircraftSaved();
+        d_gauge4.aircraftSaved();
+        d_fuelQtyGauge.aircraftSaved();
+        d_fuelFlowGauge.aircraftSaved();
+        d_oilTempGauge.aircraftSaved();
+        d_secondaryTempGauge.aircraftSaved();
+        d_oilPressGauge.aircraftSaved();
+
+        emit unsavedChangesChanged();
+    }
 
 signals:
 
