@@ -8,7 +8,7 @@
 namespace definitions
 {
 
-static constexpr double EPSILON = 1e-5;
+static constexpr double DEF_EPS = 1e-5;
 
 // fileversion for aircraft definition files
 enum class FileVersion : uint16_t
@@ -20,18 +20,18 @@ enum class FileVersion : uint16_t
 
 struct ColorZone
 {
-    double start;
-    double end;
-    QColor color;
+    double start = 0;
+    double end = 100;
+    QColor color = Qt::darkGreen;
 
     bool operator==(const ColorZone &rhs) const
     {
-        return std::abs(start - rhs.start) <= EPSILON && std::abs(end - rhs.end) <= EPSILON && color == rhs.color;
+        return std::abs(start - rhs.start) <= DEF_EPS && std::abs(end - rhs.end) <= DEF_EPS && color == rhs.color;
     }
 
     bool operator!=(const ColorZone &rhs) const
     {
-        return std::abs(start - rhs.start) > EPSILON || std::abs(end - rhs.end) > EPSILON || color != rhs.color;
+        return std::abs(start - rhs.start) > DEF_EPS || std::abs(end - rhs.end) > DEF_EPS || color != rhs.color;
     }
 };
 
@@ -39,16 +39,16 @@ struct GradDef
 {
     double gradPos = 0;
     bool isBig = false;
-    QColor gradColor = "white";  // to allow for colorlines
+    QColor gradColor = Qt::white;  // to allow for colorlines
 
     bool operator==(const GradDef &rhs) const
     {
-        return std::abs(gradPos - rhs.gradPos) <= EPSILON && isBig == rhs.isBig && gradColor == rhs.gradColor;
+        return std::abs(gradPos - rhs.gradPos) <= DEF_EPS && isBig == rhs.isBig && gradColor == rhs.gradColor;
     }
 
     bool operator!=(const GradDef &rhs) const
     {
-        return std::abs(gradPos - rhs.gradPos) > EPSILON || isBig != rhs.isBig || gradColor != rhs.gradColor;
+        return std::abs(gradPos - rhs.gradPos) > DEF_EPS || isBig != rhs.isBig || gradColor != rhs.gradColor;
     }
 };
 
@@ -59,18 +59,18 @@ struct TextGradDef
 
     bool operator==(const TextGradDef &rhs) const
     {
-        return std::abs(textGradPos - rhs.textGradPos) <= EPSILON && gradText == rhs.gradText;
+        return std::abs(textGradPos - rhs.textGradPos) <= DEF_EPS && gradText == rhs.gradText;
     }
 
     bool operator!=(const TextGradDef &rhs) const
     {
-        return std::abs(textGradPos - rhs.textGradPos) > EPSILON || gradText != rhs.gradText;
+        return std::abs(textGradPos - rhs.textGradPos) > DEF_EPS || gradText != rhs.gradText;
     }
 };
 
 struct ReferenceSpeed
 {
-    uint16_t speed;
+    uint16_t speed = 85;
     QString designator;
 
     bool operator==(const ReferenceSpeed &rhs) const

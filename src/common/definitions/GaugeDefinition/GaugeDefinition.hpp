@@ -68,18 +68,18 @@ struct GaugeDefinition
     {
         return title == rhs.title
           && unitString == rhs.unitString
-          && std::abs(minValue - rhs.minValue) <= EPSILON
-          && std::abs(maxValue - rhs.maxValue) <= EPSILON
+          && std::abs(minValue - rhs.minValue) <= DEF_EPS
+          && std::abs(maxValue - rhs.maxValue) <= DEF_EPS
           && colorZones == rhs.colorZones
           && grads == rhs.grads
           && textGrads == rhs.textGrads
-          && (noText || (std::abs(textIncrement - rhs.textIncrement) <= EPSILON && textNumDigits == rhs.textNumDigits))
+          && (noText || (std::abs(textIncrement - rhs.textIncrement) <= DEF_EPS && textNumDigits == rhs.textNumDigits))
           && forceTextColor == rhs.forceTextColor
           && (!forceTextColor || textForcedColor == rhs.textForcedColor)
           && hasMinRedBlink == rhs.hasMinRedBlink
-          && (!hasMinRedBlink || std::abs(minRedBlinkThreshold - rhs.minRedBlinkThreshold) <= EPSILON)
+          && (!hasMinRedBlink || std::abs(minRedBlinkThreshold - rhs.minRedBlinkThreshold) <= DEF_EPS)
           && hasMaxRedBlink == rhs.hasMaxRedBlink
-          && (!hasMaxRedBlink || std::abs(maxRedBlinkThreshold - rhs.maxRedBlinkThreshold) <= EPSILON)
+          && (!hasMaxRedBlink || std::abs(maxRedBlinkThreshold - rhs.maxRedBlinkThreshold) <= DEF_EPS)
           && noText == rhs.noText
           && unit == rhs.unit;
     }
@@ -88,18 +88,18 @@ struct GaugeDefinition
     {
         return title != rhs.title
           || unitString != rhs.unitString
-          || std::abs(minValue - rhs.minValue) > EPSILON
-          || std::abs(maxValue - rhs.maxValue) > EPSILON
+          || std::abs(minValue - rhs.minValue) > DEF_EPS
+          || std::abs(maxValue - rhs.maxValue) > DEF_EPS
           || colorZones != rhs.colorZones
           || grads != rhs.grads
           || textGrads != rhs.textGrads
-          || (!noText && (std::abs(textIncrement - rhs.textIncrement) > EPSILON || textNumDigits != rhs.textNumDigits))
+          || (!noText && (std::abs(textIncrement - rhs.textIncrement) > DEF_EPS || textNumDigits != rhs.textNumDigits))
           || forceTextColor != rhs.forceTextColor
           || (forceTextColor && textForcedColor != rhs.textForcedColor)
           || hasMinRedBlink != rhs.hasMinRedBlink
-          || (hasMinRedBlink && std::abs(minRedBlinkThreshold - rhs.minRedBlinkThreshold) > EPSILON)
+          || (hasMinRedBlink && std::abs(minRedBlinkThreshold - rhs.minRedBlinkThreshold) > DEF_EPS)
           || hasMaxRedBlink != rhs.hasMaxRedBlink
-          || (hasMaxRedBlink && std::abs(maxRedBlinkThreshold - rhs.maxRedBlinkThreshold) > EPSILON)
+          || (hasMaxRedBlink && std::abs(maxRedBlinkThreshold - rhs.maxRedBlinkThreshold) > DEF_EPS)
           || noText != rhs.noText
           || unit != rhs.unit;
     }

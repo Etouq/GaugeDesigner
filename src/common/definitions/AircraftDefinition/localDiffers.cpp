@@ -47,7 +47,7 @@ bool AircraftDefinition::localDiffers(const AircraftDefinition &rhs) const
       || (gauge2Type == SwitchingGaugeType::POWER && secondGauge.unit == Units::PERCENT)
       || (gauge3Type == SwitchingGaugeType::POWER && thirdGauge.unit == Units::PERCENT)
       || (gauge4Type == SwitchingGaugeType::POWER && fourthGauge.unit == Units::PERCENT))
-      && std::abs(maxPower - rhs.maxPower) > EPSILON)
+      && std::abs(maxPower - rhs.maxPower) > DEF_EPS)
         return true;
 
     if (type == AircraftType::PROP &&
@@ -55,7 +55,7 @@ bool AircraftDefinition::localDiffers(const AircraftDefinition &rhs) const
       || (gauge2Type == SwitchingGaugeType::TORQUE && secondGauge.unit == Units::PERCENT)
       || (gauge3Type == SwitchingGaugeType::TORQUE && thirdGauge.unit == Units::PERCENT)
       || (gauge4Type == SwitchingGaugeType::TORQUE && fourthGauge.unit == Units::PERCENT))
-      && std::abs(maxTorque - rhs.maxTorque) > EPSILON)
+      && std::abs(maxTorque - rhs.maxTorque) > DEF_EPS)
         return true;
 
     if (!noColors)
@@ -68,23 +68,23 @@ bool AircraftDefinition::localDiffers(const AircraftDefinition &rhs) const
           || hasHighLimit != rhs.hasHighLimit)
             return true;
 
-        if (hasLowLimit && std::abs(lowLimit - rhs.lowLimit) > EPSILON)
+        if (hasLowLimit && std::abs(lowLimit - rhs.lowLimit) > DEF_EPS)
             return true;
 
         if (hasFlapsSpeed &&
-            (std::abs(flapsBegin - rhs.flapsBegin) > EPSILON || std::abs(flapsEnd - rhs.flapsEnd) > EPSILON))
+            (std::abs(flapsBegin - rhs.flapsBegin) > DEF_EPS || std::abs(flapsEnd - rhs.flapsEnd) > DEF_EPS))
             return true;
 
         if (hasGreenSpeed &&
-            (std::abs(greenBegin - rhs.greenBegin) > EPSILON || std::abs(greenEnd - rhs.greenEnd) > EPSILON))
+            (std::abs(greenBegin - rhs.greenBegin) > DEF_EPS || std::abs(greenEnd - rhs.greenEnd) > DEF_EPS))
             return true;
 
         if (hasYellowSpeed &&
-            (std::abs(yellowBegin - rhs.yellowBegin) > EPSILON || std::abs(yellowEnd - rhs.yellowEnd) > EPSILON))
+            (std::abs(yellowBegin - rhs.yellowBegin) > DEF_EPS || std::abs(yellowEnd - rhs.yellowEnd) > DEF_EPS))
             return true;
 
         if (hasRedSpeed &&
-            (std::abs(redBegin - rhs.redBegin) > EPSILON || std::abs(redEnd - rhs.redEnd) > EPSILON))
+            (std::abs(redBegin - rhs.redBegin) > DEF_EPS || std::abs(redEnd - rhs.redEnd) > DEF_EPS))
             return true;
 
         if (hasHighLimit)
@@ -92,7 +92,7 @@ bool AircraftDefinition::localDiffers(const AircraftDefinition &rhs) const
             if (dynamicBarberpole != rhs.dynamicBarberpole)
                 return true;
 
-            if (dynamicBarberpole && std::abs(highLimit - rhs.highLimit) > EPSILON)
+            if (dynamicBarberpole && std::abs(highLimit - rhs.highLimit) > DEF_EPS)
                 return true;
         }
     }

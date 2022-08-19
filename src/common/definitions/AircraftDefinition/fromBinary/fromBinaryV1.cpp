@@ -1,5 +1,7 @@
 #include "../AircraftDefinition.hpp"
+
 #include <QIODevice>
+
 
 namespace definitions
 {
@@ -108,10 +110,6 @@ AircraftDefinition AircraftDefinition::fromBinaryV1(QIODevice &data, FileVersion
     data.read(reinterpret_cast<char *>(&ret.hasRudderTrim), sizeof(ret.hasRudderTrim));
     data.read(reinterpret_cast<char *>(&ret.hasAileronTrim), sizeof(ret.hasAileronTrim));
 
-    data.read(reinterpret_cast<char *>(&ret.fuelQtyByWeight), sizeof(ret.fuelQtyByWeight));
-    data.read(reinterpret_cast<char *>(&ret.fuelFlowByWeight), sizeof(ret.fuelFlowByWeight));
-    ret.fuelQtyByWeight = !ret.fuelQtyByWeight;
-    ret.fuelFlowByWeight = !ret.fuelFlowByWeight;
 
     data.read(reinterpret_cast<char *>(&ret.numEngines), sizeof(ret.numEngines));
     data.read(reinterpret_cast<char *>(&stringSize), sizeof(stringSize));
@@ -130,6 +128,13 @@ AircraftDefinition AircraftDefinition::fromBinaryV1(QIODevice &data, FileVersion
 
     data.read(reinterpret_cast<char *>(&ret.noColors), sizeof(ret.noColors));
     data.read(reinterpret_cast<char *>(&ret.dynamicBarberpole), sizeof(ret.dynamicBarberpole));
+
+    ret.hasLowLimit = ret.lowLimit > DEF_EPS;
+    ret.hasFlapsSpeed = std::abs(ret.flapsBegin - ret.flapsEnd) > DEF_EPS && ret.flapsBegin > DEF_EPS && ret.flapsEnd > DEF_EPS;
+    ret.hasGreenSpeed = std::abs(ret.greenBegin - ret.greenEnd) > DEF_EPS && ret.greenBegin > DEF_EPS && ret.greenEnd > DEF_EPS;
+    ret.hasYellowSpeed = std::abs(ret.yellowBegin - ret.yellowEnd) > DEF_EPS && ret.yellowBegin > DEF_EPS && ret.yellowEnd > DEF_EPS;
+    ret.hasRedSpeed = std::abs(ret.redBegin - ret.redEnd) > DEF_EPS && ret.redBegin > DEF_EPS && ret.redEnd > DEF_EPS;
+    ret.hasHighLimit = ret.dynamicBarberpole || ret.highLimit > DEF_EPS;
 
     return ret;
 }

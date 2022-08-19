@@ -52,9 +52,6 @@ struct AircraftDefinition
     bool hasRudderTrim = false;
     bool hasAileronTrim = false;
 
-    bool fuelQtyByWeight = false;
-    bool fuelFlowByWeight = false;
-
     bool hasSecondaryTempGauge = false;
     TemperatureGaugeType secondaryTempType = TemperatureGaugeType::EGT;
 
@@ -88,6 +85,9 @@ struct AircraftDefinition
     QByteArray toBinary() const;
 
     AircraftConfig toConfig() const;
+
+    bool fuelQtyByWeight() const;
+    bool fuelFlowByWeight() const;
 
     static AircraftDefinition fromBinary(QIODevice &data, FileVersion version)
     {
