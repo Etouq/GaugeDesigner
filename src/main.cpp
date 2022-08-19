@@ -37,6 +37,10 @@ int main(int argc, char *argv[])
     AircraftManager aircraftManager;
     preview::PreviewManager previewManager;
 
+    QObject::connect(&aircraftManager, &AircraftManager::previewAircraft, &previewManager, &preview::PreviewManager::loadAircraft);
+
+    previewManager.loadAircraft(aircraftManager.getCurrentDefinition());
+
     setupQml();
 
     QQmlApplicationEngine engine;

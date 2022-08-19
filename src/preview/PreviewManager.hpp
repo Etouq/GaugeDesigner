@@ -18,11 +18,11 @@ class PreviewManager : public QObject
 {
     Q_OBJECT
 
+    Q_PROPERTY(QString layoutPath READ layoutPath NOTIFY layoutPathChanged)
+
 public:
 
     PreviewManager(QObject *parent = nullptr);
-
-    void loadAircraft(const definitions::AircraftDefinition &aircraft);
 
     Q_INVOKABLE void resetAnimation()
     {
@@ -43,11 +43,18 @@ public:
         d_miscElement.update(d_animationPct);
     }
 
+    const QString &layoutPath() const
+    {
+        return d_layoutPath;
+    }
+
 signals:
 
-    void gaugesLoaded(const QString &layoutPath);
+    void layoutPathChanged();
 
 public slots:
+
+    void loadAircraft(const definitions::AircraftDefinition &aircraft);
 
     void update()
     {
@@ -138,6 +145,8 @@ private:
 
     double d_animationPct = 0;
     double d_animationStep = 0.001;
+
+    QString d_layoutPath;
 };
 
 }  // namespace preview

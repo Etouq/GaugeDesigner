@@ -3,8 +3,12 @@ set(PROJECT_SOURCES
         src/setupQml.cpp
 
         src/AircraftManager/AircraftManager.cpp
+        src/AircraftManager/copyAircraft.cpp
+        src/AircraftManager/currentThumbnailPath.cpp
         src/AircraftManager/loadDefinitions.cpp
+        src/AircraftManager/newAircraft.cpp
         src/AircraftManager/saveCurrentDefinition.cpp
+        src/AircraftManager/selectAircraft.cpp
 
         src/AircraftManager/QmlDefinitions/QmlAircraftDefinition/changeDefinition.cpp
         src/AircraftManager/QmlDefinitions/QmlAircraftDefinition/getters.cpp
@@ -21,28 +25,35 @@ set(PROJECT_SOURCES
         src/AircraftManager/QmlDefinitions/QmlGaugeDefinition/changeType1.cpp
         src/AircraftManager/QmlDefinitions/QmlGaugeDefinition/changeType2.cpp
         src/AircraftManager/QmlDefinitions/QmlGaugeDefinition/getters.cpp
+        src/AircraftManager/QmlDefinitions/QmlGaugeDefinition/modelModified.cpp
         src/AircraftManager/QmlDefinitions/QmlGaugeDefinition/setters.cpp
 
         src/common/UnitModel/data.cpp
 
         src/common/definitions/AircraftDefinition/differs.cpp
+        src/common/definitions/AircraftDefinition/fuelFlowByWeight.cpp
+        src/common/definitions/AircraftDefinition/fuelQtyByWeight.cpp
         src/common/definitions/AircraftDefinition/localDiffers.cpp
         src/common/definitions/AircraftDefinition/toBinary.cpp
         src/common/definitions/AircraftDefinition/toConfig.cpp
+
         src/common/definitions/AircraftDefinition/fromBinary/fromBinaryV1.cpp
         src/common/definitions/AircraftDefinition/fromBinary/fromBinaryV2.cpp
         src/common/definitions/AircraftDefinition/fromBinary/fromBinaryV3.cpp
 
         src/common/definitions/GaugeDefinition/getEpsilon.cpp
         src/common/definitions/GaugeDefinition/toBinary.cpp
+
         src/common/definitions/GaugeDefinition/fromBinary/fromBinaryV1.cpp
         src/common/definitions/GaugeDefinition/fromBinary/fromBinaryV3.cpp
 
         src/preview/loadAircraft.cpp
         src/preview/PreviewManager.cpp
+
         src/preview/GaugeElement/setGaugeParameters1.cpp
         src/preview/GaugeElement/setGaugeParameters2.cpp
         src/preview/GaugeElement/update.cpp
+
         src/preview/MiscElement/updateFlaps.cpp
         src/preview/MiscElement/updateSpoilers.cpp
         src/preview/MiscElement/updateTrim.cpp
@@ -50,19 +61,36 @@ set(PROJECT_SOURCES
 
 set(PROJECT_HEADERS
         src/main.hpp
+
         src/AircraftManager/AircraftManager.hpp
+
         src/AircraftManager/QmlDefinitions/QmlAircraftDefinition/QmlAircraftDefinition.hpp
+
         src/AircraftManager/QmlDefinitions/QmlGaugeDefinition/QmlGaugeDefinition.hpp
+
         src/common/QmlEnums.hpp
         src/common/TypeEnums.hpp
         src/common/UnitConverter.hpp
         src/common/Units.hpp
+
+        src/common/GaugeModels/ColorZoneModel/ColorZoneModel.hpp
+
+        src/common/GaugeModels/GradModel/GradModel.hpp
+
+        src/common/GaugeModels/TextGradModel/TextGradModel.hpp
+
         src/common/UnitModel/UnitModel.hpp
+
         src/common/definitions/AircraftConfig.hpp
         src/common/definitions/BaseTypes.hpp
+
         src/common/definitions/AircraftDefinition/AircraftDefinition.hpp
+
         src/common/definitions/GaugeDefinition/GaugeDefinition.hpp
+
         src/preview/PreviewManager.hpp
+
         src/preview/GaugeElement/GaugeElement.hpp
+
         src/preview/MiscElement/MiscElement.hpp
 )
