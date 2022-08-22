@@ -7,10 +7,6 @@
 #include <QDebug>
 #include <QList>
 
-
-
-struct AircraftConfig;
-
 namespace definitions
 {
 
@@ -83,8 +79,6 @@ struct AircraftDefinition
     QList<ReferenceSpeed> refSpeedDefaults = { { 85, "R" }, { 100, "X" }, { 124, "Y" }, { 85, "AP" } };
 
     QByteArray toBinary() const;
-
-    AircraftConfig toConfig() const;
 
     bool fuelQtyByWeight() const;
     bool fuelFlowByWeight() const;

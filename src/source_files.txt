@@ -35,7 +35,6 @@ set(PROJECT_SOURCES
         src/common/definitions/AircraftDefinition/fuelQtyByWeight.cpp
         src/common/definitions/AircraftDefinition/localDiffers.cpp
         src/common/definitions/AircraftDefinition/toBinary.cpp
-        src/common/definitions/AircraftDefinition/toConfig.cpp
 
         src/common/definitions/AircraftDefinition/fromBinary/fromBinaryV1.cpp
         src/common/definitions/AircraftDefinition/fromBinary/fromBinaryV2.cpp
@@ -81,7 +80,6 @@ set(PROJECT_HEADERS
 
         src/common/UnitModel/UnitModel.hpp
 
-        src/common/definitions/AircraftConfig.hpp
         src/common/definitions/BaseTypes.hpp
 
         src/common/definitions/AircraftDefinition/AircraftDefinition.hpp
