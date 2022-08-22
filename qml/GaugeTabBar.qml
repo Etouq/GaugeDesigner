@@ -4,7 +4,7 @@ import QtQuick.Controls.Material 2.15
 import Definition 1.0
 import TypeEnums 1.0
 
-import "StyledControls"
+import "MyControls" as MyControls
 
 Rectangle {
     id: gaugeTabBar
@@ -75,28 +75,28 @@ Rectangle {
             property Item activeItem: generalTab
 
 
-            StyledTabButton {
+            MyControls.TabButton {
                 id: generalTab
                 isActiveItem: layout.activeItem == generalTab
                 text: "GENERAL"
                 onClicked: function() { layout.activeItem = generalTab; gaugeTabBar.activeIndex = 0; }
             }
 
-            StyledTabButton {
+            MyControls.TabButton {
                 id: gauge1Tab
                 isActiveItem: layout.activeItem == gauge1Tab
                 text: gaugeTypeToText(AircraftDefinition.gauge1Type)
                 onClicked: function() { layout.activeItem = gauge1Tab; gaugeTabBar.activeIndex = 1; }
             }
 
-            StyledTabButton {
+            MyControls.TabButton {
                 id: gauge2Tab
                 isActiveItem: layout.activeItem == gauge2Tab
                 text: gaugeTypeToText(AircraftDefinition.gauge2Type)
                 onClicked: function() { layout.activeItem = gauge2Tab; gaugeTabBar.activeIndex = 2; }
             }
 
-            StyledTabButton {
+            MyControls.TabButton {
                 id: gauge3Tab
                 isActiveItem: layout.activeItem == gauge3Tab
                 text: gaugeTypeToText(AircraftDefinition.gauge3Type)
@@ -104,7 +104,7 @@ Rectangle {
                 onClicked: function() { layout.activeItem = gauge3Tab; gaugeTabBar.activeIndex = 3; }
             }
 
-            StyledTabButton {
+            MyControls.TabButton {
                 id: gauge4Tab
                 isActiveItem: layout.activeItem == gauge4Tab
                 text: gaugeTypeToText(AircraftDefinition.gauge4Type)
@@ -112,36 +112,36 @@ Rectangle {
                 onClicked: function() { layout.activeItem = gauge4Tab; gaugeTabBar.activeIndex = 4; }
             }
 
-            StyledTabButton {
+            MyControls.TabButton {
                 id: fuelQtyTab
                 isActiveItem: layout.activeItem == fuelQtyTab
                 text: "FUEL QUANTITY"
                 onClicked: function() { layout.activeItem = fuelQtyTab; gaugeTabBar.activeIndex = 5; }
             }
 
-            StyledTabButton {
+            MyControls.TabButton {
                 id: fuelFlowTab
                 isActiveItem: layout.activeItem == fuelFlowTab
                 text: "FUEL FLOW"
                 onClicked: function() { layout.activeItem = fuelFlowTab; gaugeTabBar.activeIndex = 6; }
             }
 
-            StyledTabButton {
+            MyControls.TabButton {
                 id: oilTempTab
                 isActiveItem: layout.activeItem == oilTempTab
                 text: "OIL TEMPERATURE"
                 onClicked: function() { layout.activeItem = oilTempTab; gaugeTabBar.activeIndex = 7; }
             }
 
-            StyledTabButton {
+            MyControls.TabButton {
                 id: egtTab
                 isActiveItem: layout.activeItem == egtTab
-                text: "ENG TEMP"
+                text: "ENGINE TEMPERATURE"
                 visible: AircraftDefinition.hasSecondaryTempGauge
                 onClicked: function() { layout.activeItem = egtTab; gaugeTabBar.activeIndex = 8; }
             }
 
-            StyledTabButton {
+            MyControls.TabButton {
                 id: oilPressTab
                 isActiveItem: layout.activeItem == oilPressTab
                 text: "OIL PRESSURE"
@@ -150,11 +150,15 @@ Rectangle {
         }
 
         Rectangle {
+            x: layout.activeItem.x
+
             width: layout.activeItem.width
             height: 2
+
             anchors.bottom: layout.bottom
-            x: layout.activeItem.x
-            color: "white"
+
+            color: Material.foreground
+
             Behavior on x {
                 NumberAnimation { duration: 250 }
             }

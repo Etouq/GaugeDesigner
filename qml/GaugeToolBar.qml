@@ -7,25 +7,15 @@ import QtQml 2.15
 
 import Definition 1.0
 
-import "StyledControls"
-import "Dialogs"
+import "MyControls" as MyControls
 import "PreviewPopup"
 import "AircraftSelectionPopup"
 
 Rectangle {
     id: root
     height: 20
-    color: Qt.darker(Material.primary, 2)//"#0085cb"
+    color: Qt.darker(Material.primary, 2)
 
-
-
-    // Connections {
-    //     target: aircraftInterface
-    //     function onImageChanged() { unsavedImageChange = true; }
-    // }
-
-
-    signal saveDataClicked()
     signal positionResetNeeded()
 
     property string lastKey: ""
@@ -37,54 +27,40 @@ Rectangle {
     Row {
         anchors.fill: parent
 
-        StyledToolBarButton {
+        MyControls.ToolbarButton {
             id: newButton
             text: "New"
-            ToolTip {
-                text: "Create a new aircraft"
-                visible: parent.hovered
-                delay: 500
-            }
+            tooltipText: "Create a new aircraft"
+
             onClicked: function() {
                 AircraftManager.newAircraft();
             }
         }
-        StyledToolBarButton {
+        MyControls.ToolbarButton {
             id: openButton
             text: "Open"
-
-            ToolTip {
-                text: "Open an aircraft for editing"
-                visible: parent.hovered
-                delay: 500
-            }
+            tooltipText: "Open an aircraft for editing"
 
             onClicked: function() {
                 selectionPopup.aircraftSelected.connect(root.loadAircraft);
                 selectionPopup.show();
             }
         }
-        StyledToolBarButton {
+        MyControls.ToolbarButton {
             id: copyButton
             text: "Copy"
-            ToolTip {
-                text: "Copy an aircraft and edit that copy"
-                visible: parent.hovered
-                delay: 500
-            }
+            tooltipText: "Copy an aircraft and edit that copy"
+
             onClicked: function() {
                 selectionPopup.aircraftSelected.connect(root.copyAircraft);
                 selectionPopup.show();
             }
         }
-        StyledToolBarButton {
+        MyControls.ToolbarButton {
             id: saveButton
             text: AircraftDefinition.unsavedChanges || AircraftManager.unsavedThumbnail ? "Save*" : "Save"
-            ToolTip {
-                text: "Save the current aircraft"
-                visible: parent.hovered
-                delay: 500
-            }
+            tooltipText: "Save the current aircraft"
+
             onClicked: function() {
                 AircraftManager.saveCurrentDefinition();
             }
@@ -96,27 +72,20 @@ Rectangle {
                 }
             }
         }
-        StyledToolBarButton {
+        MyControls.ToolbarButton {
             id: deleteLocalButton
             text: "Delete"
-            ToolTip {
-                text: "Select an aircraft to delete"
-                visible: parent.hovered
-                delay: 500
-            }
+            tooltipText: "Select an aircraft to delete"
+
             onClicked: function() {
                 selectionPopup.aircraftSelected.connect(root.deleteAircraft);
                 selectionPopup.show();
             }
         }
-        StyledToolBarButton {
+        MyControls.ToolbarButton {
             id: previewButton
-            text: "Preview"
-            ToolTip {
-                text: "Create preview of the current gauge settings (also saves)"
-                visible: parent.hovered
-                delay: 500
-            }
+            tooltipText: "Create preview of the current gauge settings (also saves)"
+
             onClicked: function() {
                 AircraftManager.previewCurrentDefinition();
                 previewWindow.show();
