@@ -1,5 +1,8 @@
 #include "AircraftManager.hpp"
 
+#include <QUuid>
+
+
 using namespace definitions;
 
 void AircraftManager::newAircraft()
@@ -208,39 +211,39 @@ void AircraftManager::newAircraft()
                                       .unit = Units::KILOPASCAL };
 
     AircraftDefinition newDefinition{ .type = AircraftType::PROP,
-                            .name = "",
-                            .firstGauge = rpmGauge,
-                            .secondGauge = secondGauge,
-                            .fuelQtyGauge = fuelQtyGauge,
-                            .fuelFlowGauge = fuelFlowGauge,
-                            .oilTempGauge = oilTempGauge,
-                            .secondaryTempGauge = egtGauge,
-                            .oilPressGauge = oilPressGauge,
-                            .gauge1Type = SwitchingGaugeType::RPM,
-                            .gauge2Type = SwitchingGaugeType::POWER,
-                            .maxPower = 110,
-                            .hasApu = false,
-                            .hasFlaps = true,
-                            .hasSpoilers = false,
-                            .hasElevatorTrim = true,
-                            .hasRudderTrim = true,
-                            .hasAileronTrim = true,
-                            .hasSecondaryTempGauge = true,
-                            .secondaryTempType = TemperatureGaugeType::EGT,
-                            .numEngines = 1,
-                            .singleTank = false,
-                            .lowLimit = 0,
-                            .flapsBegin = 35,
-                            .flapsEnd = 85,
-                            .greenBegin = 40,
-                            .greenEnd = 111,
-                            .yellowBegin = 111,
-                            .yellowEnd = 148,
-                            .redBegin = 149,
-                            .redEnd = 152,
-                            .highLimit = 152,
-                            .noColors = false,
-                            .dynamicBarberpole = false };
+                                      .name = "",
+                                      .firstGauge = rpmGauge,
+                                      .secondGauge = secondGauge,
+                                      .fuelQtyGauge = fuelQtyGauge,
+                                      .fuelFlowGauge = fuelFlowGauge,
+                                      .oilTempGauge = oilTempGauge,
+                                      .secondaryTempGauge = egtGauge,
+                                      .oilPressGauge = oilPressGauge,
+                                      .gauge1Type = SwitchingGaugeType::RPM,
+                                      .gauge2Type = SwitchingGaugeType::POWER,
+                                      .maxPower = 110,
+                                      .hasApu = false,
+                                      .hasFlaps = true,
+                                      .hasSpoilers = false,
+                                      .hasElevatorTrim = true,
+                                      .hasRudderTrim = true,
+                                      .hasAileronTrim = true,
+                                      .hasSecondaryTempGauge = true,
+                                      .secondaryTempType = TemperatureGaugeType::EGT,
+                                      .numEngines = 1,
+                                      .singleTank = false,
+                                      .lowLimit = 0,
+                                      .flapsBegin = 35,
+                                      .flapsEnd = 85,
+                                      .greenBegin = 40,
+                                      .greenEnd = 111,
+                                      .yellowBegin = 111,
+                                      .yellowEnd = 148,
+                                      .redBegin = 149,
+                                      .redEnd = 152,
+                                      .highLimit = 152,
+                                      .noColors = false,
+                                      .dynamicBarberpole = false };
 
     d_currentDefinitionKey = newKey;
     d_currentDefinitionImagePath = d_dataRoot + "/Thumbnails/" + newKey + ".png";

@@ -1,5 +1,8 @@
 #include "AircraftManager.hpp"
 
+#include <QSettings>
+
+
 void AircraftManager::selectAircraft(const QString &key)
 {
     QSettings settings;

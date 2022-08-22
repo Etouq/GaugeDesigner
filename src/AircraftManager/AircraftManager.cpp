@@ -1,14 +1,15 @@
 #include "AircraftManager.hpp"
 
 #include <QDir>
-#include <QStandardPaths>
 #include <QQmlEngine>
-
+#include <QSettings>
+#include <QStandardPaths>
 
 AircraftManager::AircraftManager()
   : d_currentQmlDefinition(definitions::AircraftDefinition())
 {
-    d_dataRoot = QStandardPaths::writableLocation(QStandardPaths::HomeLocation) + "/AppData/Roaming/Flight Display Companion";
+    d_dataRoot =
+      QStandardPaths::writableLocation(QStandardPaths::HomeLocation) + "/AppData/Roaming/Flight Display Companion";
 
     QDir dataDirs(QStandardPaths::writableLocation(QStandardPaths::HomeLocation));
     dataDirs.mkpath("AppData/Roaming/Flight Display Companion/Definitions");
@@ -22,7 +23,7 @@ AircraftManager::AircraftManager()
 
     loadDefinitions();
 
-    if (d_currentDefinitionKey.isEmpty()) // no aircraft found at all
+    if (d_currentDefinitionKey.isEmpty())  // no aircraft found at all
     {
         newAircraft();
     }

@@ -1,5 +1,8 @@
 #include "AircraftManager.hpp"
 
+#include <QUuid>
+
+
 void AircraftManager::copyAircraft(const QString &key)
 {
     QString newKey = QUuid::createUuid().toString(QUuid::WithoutBraces);

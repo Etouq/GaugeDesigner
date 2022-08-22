@@ -5,10 +5,13 @@ set(PROJECT_SOURCES
         src/AircraftManager/AircraftManager.cpp
         src/AircraftManager/copyAircraft.cpp
         src/AircraftManager/currentThumbnailPath.cpp
+        src/AircraftManager/deleteAircraft.cpp
         src/AircraftManager/loadDefinitions.cpp
         src/AircraftManager/newAircraft.cpp
         src/AircraftManager/saveCurrentDefinition.cpp
         src/AircraftManager/selectAircraft.cpp
+        src/AircraftManager/selectImage.cpp
+        src/AircraftManager/updateKeys.cpp
 
         src/AircraftManager/QmlDefinitions/QmlAircraftDefinition/changeDefinition.cpp
         src/AircraftManager/QmlDefinitions/QmlAircraftDefinition/getters.cpp
