@@ -9,9 +9,7 @@ import Definition 1.0
 
 import "GeneralTab"
 import "GaugeTab"
-import "StyledControls"
 import "PreviewPopup"
-import "AircraftSelectionPopup"
 
 
 ApplicationWindow {
@@ -24,6 +22,19 @@ ApplicationWindow {
     MouseArea {
         anchors.fill: parent
         onClicked: forceActiveFocus(rootItem)
+    }
+
+    GaugeToolBar {
+        id: toolbar
+        anchors.top: parent.top
+        width: parent.width
+
+        onPositionResetNeeded: gaugeTabBar.resetPosition()
+    }
+
+    GaugeTabBar {
+        id: gaugeTabBar
+        anchors.top: toolbar.bottom
     }
 
     StackLayout {
@@ -88,17 +99,6 @@ ApplicationWindow {
     }
 
 
-    GaugeTabBar {
-        id: gaugeTabBar
-        anchors.top: toolbar.bottom
-    }
 
-    GaugeToolBar {
-        id: toolbar
-        anchors.top: parent.top
-        width: parent.width
-
-        onPositionResetNeeded: gaugeTabBar.resetPosition()
-    }
 
 }

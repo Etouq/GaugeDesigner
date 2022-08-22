@@ -4,8 +4,6 @@ import QtQuick.Controls 2.15
 
 import Preview 1.0
 
-import "../StyledControls"
-
 ApplicationWindow {
     id: root
     width: (height - animationToggle.height - 7.5) * 0.35

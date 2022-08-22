@@ -9,9 +9,6 @@
         <file>AircraftSelectionPopup/AircraftSelectionItem.qml</file>
         <file>AircraftSelectionPopup/AircraftSelectionPopup.qml</file>
 
-        <file>Dialogs/MultiSelectionDialog.qml</file>
-        <file>Dialogs/SingleSelectionDialog.qml</file>
-
         <file>GaugeTab/GaugeTab.qml</file>
         <file>GaugeTab/TopSection.qml</file>
 
@@ -28,8 +25,6 @@
         <file>GeneralTab/CheckBoxColumn.qml</file>
         <file>GeneralTab/GaugePickers.qml</file>
         <file>GeneralTab/GeneralTab.qml</file>
-        <file>GeneralTab/GroupBoxColumn.qml</file>
-        <file>GeneralTab/SwitchColumn.qml</file>
 
         <file>PreviewPopup/PreviewPopup.qml</file>
 
@@ -67,12 +62,7 @@
         <file>PreviewPopup/EngineDisplay/Gauges/Layouts/SingleEngine/TripleGauge.qml</file>
 
         <file>MyControls/UnitBox.qml</file>
-        <file>StyledControls/StyledComboBox.qml</file>
-        <file>StyledControls/StyledRadioButton.qml</file>
-        <file>StyledControls/StyledRadioButtonWithText.qml</file>
-        <file>StyledControls/StyledSwitch.qml</file>
-        <file>StyledControls/StyledSwitchWithText.qml</file>
-        <file>StyledControls/StyledTabButton.qml</file>
-        <file>StyledControls/StyledToolBarButton.qml</file>
+        <file>MyControls/ToolbarButton.qml</file>
+        <file>MyControls/TabButton.qml</file>
     </qresource>
 </RCC>
