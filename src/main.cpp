@@ -11,7 +11,6 @@
 #include <QtQml>
 #include <QLocale>
 
-
 int main(int argc, char *argv[])
 {
 
@@ -21,7 +20,7 @@ int main(int argc, char *argv[])
     app.setOrganizationName("MKootstra");
     app.setApplicationName("gaugeDesigner");
     app.setApplicationDisplayName("Gauge Designer");
-    app.setWindowIcon(QIcon("qrc:/DefaultImage.png"));
+    app.setWindowIcon(QIcon(":/gaugeDesignerIcon.ico"));
 
     QSurfaceFormat format;
     format.setSamples(8);
