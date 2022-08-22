@@ -43,7 +43,7 @@ Item {
             verticalAlignment: Text.AlignVCenter
 
             font.family: "Roboto"
-            font.pointSize: 11
+            font.pixelSize: 14
             font.bold: true
 
             color: Material.foreground
@@ -65,7 +65,7 @@ Item {
                 verticalAlignment: Text.AlignVCenter
 
                 font.family: "Roboto"
-                font.pointSize: 11
+                font.pixelSize: 14
 
                 color: Material.foreground
 
@@ -86,7 +86,7 @@ Item {
                 verticalAlignment: Text.AlignVCenter
 
                 font.family: "Roboto"
-                font.pointSize: 11
+                font.pixelSize: 14
 
                 color: Material.foreground
 
@@ -107,7 +107,7 @@ Item {
                 verticalAlignment: Text.AlignVCenter
 
                 font.family: "Roboto"
-                font.pointSize: 11
+                font.pixelSize: 14
 
                 color: Material.foreground
 

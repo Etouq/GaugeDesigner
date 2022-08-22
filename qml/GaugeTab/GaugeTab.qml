@@ -11,7 +11,6 @@ import TypeEnums 1.0
 import "ColorZoneTable"
 import "GradTable"
 import "TextGradTable"
-import "../StyledControls"
 
 Item {
     id: root

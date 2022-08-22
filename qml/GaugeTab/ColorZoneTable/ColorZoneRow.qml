@@ -31,15 +31,13 @@ Item {
 
         height: startText.height
 
-        // spacing: 10
-
         TextField {
             id: startText
 
             Layout.preferredWidth: 70
             Layout.fillWidth: true
 
-            font.pointSize: 11
+            font.pixelSize: 14
 
             selectByMouse: true
             validator: DoubleValidator{ }
@@ -86,7 +84,7 @@ Item {
             Layout.preferredWidth: 70
             Layout.fillWidth: true
 
-            font.pointSize: 11
+            font.pixelSize: 14
 
             selectByMouse: true
             validator: DoubleValidator{ }

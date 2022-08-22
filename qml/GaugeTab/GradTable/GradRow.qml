@@ -39,7 +39,7 @@ Item {
             leftPadding: 5
             rightPadding: 5
 
-            font.pointSize: 11
+            font.pixelSize: 14
 
             selectByMouse: true
             validator: DoubleValidator{ }

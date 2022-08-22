@@ -15,7 +15,7 @@ GridLayout {
         color: Material.foreground
         text: "Flaps"
         verticalAlignment: Text.AlignVCenter
-        font.pointSize: 11
+        font.pixelSize: 14
         Layout.fillWidth: true
         textFormat: Text.PlainText
         font.family: "Roboto"
@@ -35,7 +35,7 @@ GridLayout {
         text: "Spoilers"
         verticalAlignment: Text.AlignVCenter
         textFormat: Text.PlainText
-        font.pointSize: 11
+        font.pixelSize: 14
         Layout.fillWidth: true
         font.family: "Roboto"
     }
@@ -56,7 +56,7 @@ GridLayout {
         text: "Elevator Trim"
         verticalAlignment: Text.AlignVCenter
         Layout.topMargin: 10
-        font.pointSize: 11
+        font.pixelSize: 14
 
         font.family: "Roboto"
         Layout.fillWidth: true
@@ -77,7 +77,7 @@ GridLayout {
         color: Material.foreground
         text: "Rudder Trim"
         verticalAlignment: Text.AlignVCenter
-        font.pointSize: 11
+        font.pixelSize: 14
 
         font.family: "Roboto"
         Layout.fillWidth: true
@@ -98,7 +98,7 @@ GridLayout {
         color: Material.foreground
         text: "Aileron Trim"
         verticalAlignment: Text.AlignVCenter
-        font.pointSize: 11
+        font.pixelSize: 14
 
         font.family: "Roboto"
         Layout.fillWidth: true
@@ -120,7 +120,7 @@ GridLayout {
         text: "APU"
         verticalAlignment: Text.AlignVCenter
         Layout.topMargin: 10
-        font.pointSize: 11
+        font.pixelSize: 14
 
         font.family: "Roboto"
         Layout.fillWidth: true
@@ -143,7 +143,7 @@ GridLayout {
         text: "Single Fuel Tank"
         verticalAlignment: Text.AlignVCenter
         Layout.topMargin: 10
-        font.pointSize: 11
+        font.pixelSize: 14
 
         font.family: "Roboto"
         Layout.fillWidth: true
@@ -166,7 +166,7 @@ GridLayout {
         text: "(Second) Engine Temp"
         verticalAlignment: Text.AlignVCenter
         Layout.topMargin: 10
-        font.pointSize: 11
+        font.pixelSize: 14
 
         font.family: "Roboto"
         Layout.fillWidth: true

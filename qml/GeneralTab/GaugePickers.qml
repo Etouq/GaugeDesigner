@@ -43,7 +43,7 @@ RowLayout {
     Text {
 
         font.family: "Roboto"
-        font.pointSize: 11
+        font.pixelSize: 14
 
         color: Material.foreground
         text: "Main Gauges"

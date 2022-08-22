@@ -7,7 +7,6 @@ import QtQuick.Dialogs 1.3
 import Definition 1.0
 import TypeEnums 1.0
 
-import "../StyledControls"
 import "../MyControls" as MyControls
 
 ColumnLayout {
@@ -24,7 +23,7 @@ ColumnLayout {
 
         Text {
             font.family: "Roboto"
-            font.pointSize: 11
+            font.pixelSize: 14
 
             color: Material.foreground
 
@@ -38,7 +37,7 @@ ColumnLayout {
             leftPadding: 5
             rightPadding: 5
 
-            font.pointSize: 11
+            font.pixelSize: 14
 
             selectByMouse: true
             maximumLength: 64
@@ -56,7 +55,7 @@ ColumnLayout {
 
         Text {
             font.family: "Roboto"
-            font.pointSize: 11
+            font.pixelSize: 14
 
             color: Material.foreground
 
@@ -71,7 +70,7 @@ ColumnLayout {
             leftPadding: 5
             rightPadding: 5
 
-            font.pointSize: 11
+            font.pixelSize: 14
 
             selectByMouse: true
 
@@ -115,7 +114,7 @@ ColumnLayout {
 
         Text {
             font.family: "Roboto"
-            font.pointSize: 11
+            font.pixelSize: 14
 
             color: Material.foreground
 
@@ -130,7 +129,7 @@ ColumnLayout {
             leftPadding: 5
             rightPadding: 5
 
-            font.pointSize: 11
+            font.pixelSize: 14
 
             selectByMouse: true
 
@@ -175,7 +174,7 @@ ColumnLayout {
 
         Text {
             font.family: "Roboto"
-            font.pointSize: 11
+            font.pixelSize: 14
 
             color: Material.foreground
 
@@ -189,7 +188,7 @@ ColumnLayout {
             bottomPadding: 8
             topPadding: 8
 
-            font.pointSize: 11
+            font.pixelSize: 14
 
             checked: root.gaugeDef.noText
         }
@@ -202,7 +201,7 @@ ColumnLayout {
             text: "Unit"
 
             font.family: "Roboto"
-            font.pointSize: 11
+            font.pixelSize: 14
 
             color: Material.foreground
         }
@@ -216,7 +215,7 @@ ColumnLayout {
             textRole: "longText"
             valueRole: "unitId"
 
-            font.pointSize: 11
+            font.pixelSize: 14
 
             Component.onCompleted: function() {
                 unitBox.currentIndex = unitBox.indexOfValue(root.gaugeDef.unit)
@@ -243,7 +242,7 @@ ColumnLayout {
             leftPadding: 5
             rightPadding: 5
 
-            font.pointSize: 11
+            font.pixelSize: 14
 
             selectByMouse: true
             maximumLength: 16
@@ -265,7 +264,7 @@ ColumnLayout {
 
         Text {
             font.family: "Roboto"
-            font.pointSize: 11
+            font.pixelSize: 14
 
             color: noTextSwitch.checked ? Material.hintTextColor : Material.foreground
             text: "Increment"
@@ -283,7 +282,7 @@ ColumnLayout {
 
             validator: DoubleValidator{}
             selectByMouse: true
-            font.pointSize: 11
+            font.pixelSize: 14
 
             text: root.gaugeDef.textIncrement
 
@@ -325,7 +324,7 @@ ColumnLayout {
 
         Text {
             font.family: "Roboto"
-            font.pointSize: 11
+            font.pixelSize: 14
 
             color: noTextSwitch.checked ? Material.hintTextColor : Material.foreground
             text: "Precision"
@@ -341,7 +340,7 @@ ColumnLayout {
             leftPadding: 5
             rightPadding: 5
 
-            font.pointSize: 11
+            font.pixelSize: 14
 
             validator: IntValidator { bottom: 0; top: 5 }
             selectByMouse: true
@@ -394,7 +393,7 @@ ColumnLayout {
         spacing: 5
 
         Text {
-            font.pointSize: 11
+            font.pixelSize: 14
             font.family: "Roboto"
 
             color: Material.foreground
@@ -426,7 +425,7 @@ ColumnLayout {
 
             validator: DoubleValidator { }
 
-            font.pointSize: 11
+            font.pixelSize: 14
 
             inputMethodHints: Qt.ImhFormattedNumbersOnly
             selectByMouse: true
@@ -466,7 +465,7 @@ ColumnLayout {
         }
 
         Text {
-            font.pointSize: 11
+            font.pixelSize: 14
             font.family: "Roboto"
 
             color: Material.foreground
@@ -498,7 +497,7 @@ ColumnLayout {
 
             validator: DoubleValidator { }
 
-            font.pointSize: 11
+            font.pixelSize: 14
 
             inputMethodHints: Qt.ImhFormattedNumbersOnly
             selectByMouse: true
@@ -540,7 +539,7 @@ ColumnLayout {
 
         Text {
             font.family: "Roboto"
-            font.pointSize: 11
+            font.pixelSize: 14
 
             color: Material.foreground
 
@@ -554,7 +553,7 @@ ColumnLayout {
             bottomPadding: 8
             topPadding: 8
 
-            font.pointSize: 11
+            font.pixelSize: 14
 
             checked: root.gaugeDef.forceTextColor
         }
@@ -607,7 +606,7 @@ ColumnLayout {
             // anchors.verticalCenter: typeBox.verticalCenter
 
             font.family: "Roboto"
-            font.pointSize: 11
+            font.pixelSize: 14
 
             color: Material.foreground
         }
@@ -623,7 +622,7 @@ ColumnLayout {
             textRole: "text"
             valueRole: "value"
 
-            font.pointSize: 11
+            font.pixelSize: 14
 
             currentIndex: 0
 
@@ -667,7 +666,7 @@ ColumnLayout {
             visible: root.gaugeType == SwitchingGaugeType.POWER && unitBox.currentText === "Percent"
 
             font.family: "Roboto"
-            font.pointSize: 11
+            font.pixelSize: 14
 
             color: Material.foreground
         }
@@ -682,7 +681,7 @@ ColumnLayout {
             leftPadding: 5
             rightPadding: 5
 
-            font.pointSize: 11
+            font.pixelSize: 14
 
             selectByMouse: true
 
@@ -730,7 +729,7 @@ ColumnLayout {
             visible: root.gaugeType == SwitchingGaugeType.POWER && unitBox.currentText === "Percent"
 
             font.family: "Roboto"
-            font.pointSize: 11
+            font.pixelSize: 14
 
             color: Material.foreground
         }
@@ -742,7 +741,7 @@ ColumnLayout {
             visible: root.gaugeType == SwitchingGaugeType.TORQUE && AircraftDefinition.type === AircraftType.PROP && unitBox.currentText === "Percent"
 
             font.family: "Roboto"
-            font.pointSize: 11
+            font.pixelSize: 14
 
             color: Material.foreground
         }
@@ -757,7 +756,7 @@ ColumnLayout {
             leftPadding: 5
             rightPadding: 5
 
-            font.pointSize: 11
+            font.pixelSize: 14
 
             selectByMouse: true
 
@@ -805,7 +804,7 @@ ColumnLayout {
             visible: root.gaugeType == SwitchingGaugeType.TORQUE && AircraftDefinition.type === AircraftType.PROP && unitBox.currentText === "Percent"
 
             font.family: "Roboto"
-            font.pointSize: 11
+            font.pixelSize: 14
 
             color: Material.foreground
         }

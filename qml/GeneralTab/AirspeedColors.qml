@@ -20,7 +20,7 @@ GroupBox {
         topPadding: 0
         checked: !AircraftDefinition.noColors
         text: parent.title
-        font.pointSize: 11
+        font.pixelSize: 14
     }
 
     GridLayout {
@@ -40,7 +40,7 @@ GroupBox {
             Layout.fillWidth: true
             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
             font.family: "Roboto"
-            font.pointSize: 11
+            font.pixelSize: 14
             color: enabled ? Material.foreground : Material.hintTextColor
         }
 
@@ -52,7 +52,7 @@ GroupBox {
             Layout.fillWidth: true
             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
             font.family: "Roboto"
-            font.pointSize: 11
+            font.pixelSize: 14
             color: enabled ? Material.foreground : Material.hintTextColor
         }
 
@@ -63,7 +63,7 @@ GroupBox {
             Layout.fillWidth: true
             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
             font.family: "Roboto"
-            font.pointSize: 11
+            font.pixelSize: 14
             color: enabled ? Material.foreground : Material.hintTextColor
         }
 
@@ -71,7 +71,7 @@ GroupBox {
             text: "Dynamic"
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
-            font.pointSize: 11
+            font.pixelSize: 14
             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
             font.family: "Roboto"
             Layout.fillWidth: true
@@ -83,7 +83,7 @@ GroupBox {
             color: enabled ? Material.foreground : Material.hintTextColor
             text: "Lower Barberpole"
             Layout.fillWidth: true
-            font.pointSize: 11
+            font.pixelSize: 14
             font.family: "Roboto"
         }
 
@@ -105,7 +105,7 @@ GroupBox {
             leftPadding: 5
             rightPadding: 5
 
-            font.pointSize: 11
+            font.pixelSize: 14
 
             inputMethodHints: Qt.ImhFormattedNumbersOnly
             selectByMouse: true
@@ -162,7 +162,7 @@ GroupBox {
 
             Layout.fillWidth: true
 
-            font.pointSize: 11
+            font.pixelSize: 14
             font.family: "Roboto"
 
             color: enabled ? Material.foreground : Material.hintTextColor
@@ -181,7 +181,7 @@ GroupBox {
             leftPadding: 5
             rightPadding: 5
 
-            font.pointSize: 11
+            font.pixelSize: 14
 
             inputMethodHints: Qt.ImhFormattedNumbersOnly
             selectByMouse: true
@@ -224,7 +224,7 @@ GroupBox {
             leftPadding: 5
             rightPadding: 5
 
-            font.pointSize: 11
+            font.pixelSize: 14
 
             inputMethodHints: Qt.ImhFormattedNumbersOnly
             selectByMouse: true
@@ -280,7 +280,7 @@ GroupBox {
             enabled: greenEnabledBox.checked
             color: enabled ? Material.foreground : Material.hintTextColor
             text: "Green"
-            font.pointSize: 11
+            font.pixelSize: 14
             font.family: "Roboto"
             Layout.fillWidth: true
         }
@@ -296,7 +296,7 @@ GroupBox {
             leftPadding: 5
             rightPadding: 5
 
-            font.pointSize: 11
+            font.pixelSize: 14
 
             inputMethodHints: Qt.ImhFormattedNumbersOnly
             selectByMouse: true
@@ -340,7 +340,7 @@ GroupBox {
             leftPadding: 5
             rightPadding: 5
 
-            font.pointSize: 11
+            font.pixelSize: 14
 
             inputMethodHints: Qt.ImhFormattedNumbersOnly
             selectByMouse: true
@@ -396,7 +396,7 @@ GroupBox {
             enabled: yellowEnabledBox.checked
             color: enabled ? Material.foreground : Material.hintTextColor
             text: "Yellow"
-            font.pointSize: 11
+            font.pixelSize: 14
             font.family: "Roboto"
             Layout.fillWidth: true
         }
@@ -412,7 +412,7 @@ GroupBox {
             leftPadding: 5
             rightPadding: 5
 
-            font.pointSize: 11
+            font.pixelSize: 14
 
             inputMethodHints: Qt.ImhFormattedNumbersOnly
             selectByMouse: true
@@ -455,7 +455,7 @@ GroupBox {
             leftPadding: 5
             rightPadding: 5
 
-            font.pointSize: 11
+            font.pixelSize: 14
 
             inputMethodHints: Qt.ImhFormattedNumbersOnly
             selectByMouse: true
@@ -511,7 +511,7 @@ GroupBox {
             enabled: redEnabledBox.checked
             color: enabled ? Material.foreground : Material.hintTextColor
             text: "Red"
-            font.pointSize: 11
+            font.pixelSize: 14
             font.family: "Roboto"
             Layout.fillWidth: true
         }
@@ -527,7 +527,7 @@ GroupBox {
             leftPadding: 5
             rightPadding: 5
 
-            font.pointSize: 11
+            font.pixelSize: 14
 
             inputMethodHints: Qt.ImhFormattedNumbersOnly
             selectByMouse: true
@@ -570,7 +570,7 @@ GroupBox {
             leftPadding: 5
             rightPadding: 5
 
-            font.pointSize: 11
+            font.pixelSize: 14
 
             inputMethodHints: Qt.ImhFormattedNumbersOnly
             selectByMouse: true
@@ -626,7 +626,7 @@ GroupBox {
             enabled: highEnabledBox.checked
             color: enabled ? Material.foreground : Material.hintTextColor
             text: "Upper Barberpole"
-            font.pointSize: 11
+            font.pixelSize: 14
             font.family: "Roboto"
             Layout.fillWidth: true
         }
@@ -642,7 +642,7 @@ GroupBox {
             leftPadding: 5
             rightPadding: 5
 
-            font.pointSize: 11
+            font.pixelSize: 14
 
             inputMethodHints: Qt.ImhFormattedNumbersOnly
             selectByMouse: true

@@ -44,7 +44,7 @@ Item {
             verticalAlignment: Text.AlignVCenter
 
             font.family: "Roboto"
-            font.pointSize: 11
+            font.pixelSize: 14
             font.bold: true
 
             color: Material.foreground
@@ -66,7 +66,7 @@ Item {
                 verticalAlignment: Text.AlignVCenter
 
                 font.family: "Roboto"
-                font.pointSize: 11
+                font.pixelSize: 14
 
                 color: Material.foreground
 
@@ -87,7 +87,7 @@ Item {
                 verticalAlignment: Text.AlignVCenter
 
                 font.family: "Roboto"
-                font.pointSize: 11
+                font.pixelSize: 14
 
                 color: Material.foreground
 
@@ -108,7 +108,7 @@ Item {
                 verticalAlignment: Text.AlignVCenter
 
                 font.family: "Roboto"
-                font.pointSize: 11
+                font.pixelSize: 14
 
                 color: Material.foreground
 
@@ -235,7 +235,7 @@ Item {
                 verticalAlignment: Text.AlignVCenter
 
                 font.family: "Roboto"
-                font.pointSize: 11
+                font.pixelSize: 14
                 font.bold: true
 
                 color: Material.foreground
@@ -252,7 +252,7 @@ Item {
                 verticalAlignment: Text.AlignVCenter
 
                 font.family: "Roboto"
-                font.pointSize: 11
+                font.pixelSize: 14
                 font.bold: true
 
                 color: Material.foreground
@@ -269,7 +269,7 @@ Item {
                 verticalAlignment: Text.AlignVCenter
 
                 font.family: "Roboto"
-                font.pointSize: 11
+                font.pixelSize: 14
                 font.bold: true
 
                 color: Material.foreground
@@ -286,7 +286,7 @@ Item {
                 leftPadding: 5
                 rightPadding: 5
 
-                font.pointSize: 11
+                font.pixelSize: 14
 
                 selectByMouse: true
                 validator: DoubleValidator{ }
@@ -313,7 +313,7 @@ Item {
                 leftPadding: 5
                 rightPadding: 5
 
-                font.pointSize: 11
+                font.pixelSize: 14
 
                 selectByMouse: true
                 validator: DoubleValidator{ }
@@ -340,7 +340,7 @@ Item {
                 leftPadding: 5
                 rightPadding: 5
 
-                font.pointSize: 11
+                font.pixelSize: 14
 
                 selectByMouse: true
                 validator: DoubleValidator{ }
