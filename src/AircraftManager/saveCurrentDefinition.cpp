@@ -5,7 +5,7 @@
 
 void AircraftManager::saveCurrentDefinition()
 {
-    if (d_currentDefinitionKey.isEmpty())
+    if (d_currentDefinitionKey.isEmpty() || !d_definitions.contains(d_currentDefinitionKey))
         return;
 
     static constexpr definitions::FileVersion version = definitions::FileVersion::V3;
