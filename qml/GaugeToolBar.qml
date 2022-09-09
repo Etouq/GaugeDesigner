@@ -84,7 +84,8 @@ Rectangle {
         }
         MyControls.ToolbarButton {
             id: previewButton
-            tooltipText: "Create preview of the current gauge settings (also saves)"
+            text: "Preview"
+            tooltipText: "Create preview of the current gauge settings"
 
             onClicked: function() {
                 AircraftManager.previewCurrentDefinition();
