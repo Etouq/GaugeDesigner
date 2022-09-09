@@ -14,6 +14,8 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
+set(APP_ICON_RESOURCE_WINDOWS "${CMAKE_CURRENT_SOURCE_DIR}/resources/icon.rc")
+
 
 include(src/source_files.txt)
 
@@ -30,7 +32,10 @@ add_executable(
     ${PROJECT_SOURCES}
     resources/resources.qrc
     qml/qml.qrc
+    ${APP_ICON_RESOURCE_WINDOWS}
 )
+
+set_target_properties(${_PROJECT_NAME} PROPERTIES OUTPUT_NAME "Gauge Designer")
 
 #qt_add_qml_module(${_PROJECT_NAME}
 #    URI qml
